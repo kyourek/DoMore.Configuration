@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Domore.Configuration</id>
-    <version>1.0.0-alpha.7</version>
+    <version>1.0.0-alpha.8</version>
     <authors>Ken Yourek</authors>
     <description>Do more configuration</description>
     <projectUrl>https://github.com/kyourek/Domore.Configuration</projectUrl>
