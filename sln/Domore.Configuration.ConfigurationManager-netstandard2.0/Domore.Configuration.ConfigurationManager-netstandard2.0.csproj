@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Domore</RootNamespace>
+    <AssemblyName>Domore.Configuration.ConfigurationManager</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domore.Configuration-netstandard2.0\Domore.Configuration-netstandard2.0.csproj" />
+  </ItemGroup>
+  <Import Project="..\Domore.Configuration.ConfigurationManager\Domore.Configuration.ConfigurationManager.projitems" Label="Shared" />
+</Project>

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>9ce7183f-974d-4580-9a00-1a70fb5fee8d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Domore</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationBlockFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Converter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Key.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Parser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Property.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationBlockFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationBlockItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\AssemblyCompany.cs">
+      <Link>Properties\AssemblyCompany.cs</Link>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)..\AssemblyCopyright.cs">
+      <Link>Properties\AssemblyCopyright.cs</Link>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)..\AssemblyVersion.cs">
+      <Link>Properties\AssemblyVersion.cs</Link>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)..\ComVisible.cs">
+      <Link>Properties\ComVisible.cs</Link>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+</Project>

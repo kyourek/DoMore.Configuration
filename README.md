@@ -1,1 +1,1 @@
-# DoMore.Configuration
+# Domore.Configuration
