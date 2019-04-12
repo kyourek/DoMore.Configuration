@@ -5,15 +5,15 @@
     <version>1.0.0-alpha.11</version>
     <authors>Ken Yourek</authors>
     <description>Do more configuration</description>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/kyourek/Domore.Configuration</projectUrl>
-    <licenseUrl>https://raw.githubusercontent.com/kyourek/Domore.Configuration/master/LICENSE</licenseUrl>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System" />
+      <frameworkAssembly assemblyName="System" targetFramework="net40"/>
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="Domore.Configuration-net40/bin/Domore.Configuration.dll" target="lib/net40" />
-    <file src="Domore.Configuration-netcoreapp2.0/bin/Domore.Configuration.dll" target="lib/netcoreapp2.0" />
-    <file src="Domore.Configuration-netstandard2.0/bin/Domore.Configuration.dll" target="lib/netstandard2.0" />
+    <file src="Domore.Configuration-net40/bin/Domore.Configuration.dll" target="lib/net40"/>
+    <file src="Domore.Configuration-netcoreapp2.0/bin/Domore.Configuration.dll" target="lib/netcoreapp2.0"/>
+    <file src="Domore.Configuration-netstandard2.0/bin/Domore.Configuration.dll" target="lib/netstandard2.0"/>
   </files>
 </package>
