@@ -49,6 +49,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{3FAA09E4
 		Domore.Configuration.nuspec = Domore.Configuration.nuspec
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "release", "release", "{C8B1F9A1-86F7-4C40-9C13-87EC1B830314}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Release", "Domore.Release\Domore.Release.csproj", "{CEB65741-53B7-4CB1-975E-09B4C17426C6}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Domore.Configuration.Test\Domore.Configuration.Test.projitems*{17af8465-b481-4d5f-81c2-914e777022ed}*SharedItemsImports = 4
@@ -105,6 +109,10 @@ Global
 		{E0B8D927-5CE4-49FD-8158-D5D3203FD020}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0B8D927-5CE4-49FD-8158-D5D3203FD020}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0B8D927-5CE4-49FD-8158-D5D3203FD020}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEB65741-53B7-4CB1-975E-09B4C17426C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEB65741-53B7-4CB1-975E-09B4C17426C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB65741-53B7-4CB1-975E-09B4C17426C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEB65741-53B7-4CB1-975E-09B4C17426C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +132,7 @@ Global
 		{927ED15D-84AE-4D86-B814-28DBE68A50A7} = {9D69B4CE-B498-4650-86EC-13AD0FFAA3C3}
 		{50BCA5D1-D62F-480C-830A-C0BA0110FDDD} = {927ED15D-84AE-4D86-B814-28DBE68A50A7}
 		{E0B8D927-5CE4-49FD-8158-D5D3203FD020} = {927ED15D-84AE-4D86-B814-28DBE68A50A7}
+		{CEB65741-53B7-4CB1-975E-09B4C17426C6} = {C8B1F9A1-86F7-4C40-9C13-87EC1B830314}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0CCF879-418A-463A-BCD6-96DEFBD56F6F}
