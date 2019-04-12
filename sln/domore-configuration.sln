@@ -43,6 +43,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.Test-n
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.ConfigurationManager.Test-netcoreapp2.0", "Domore.Configuration.ConfigurationManager.Test-netcorea\Domore.Configuration.ConfigurationManager.Test-netcoreapp2.0.csproj", "{E0B8D927-5CE4-49FD-8158-D5D3203FD020}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{3FAA09E4-6870-47D0-B7E8-E3FCA9F88B5E}"
+	ProjectSection(SolutionItems) = preProject
+		Domore.Configuration.ConfigurationManager.nuspec = Domore.Configuration.ConfigurationManager.nuspec
+		Domore.Configuration.nuspec = Domore.Configuration.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Domore.Configuration.Test\Domore.Configuration.Test.projitems*{17af8465-b481-4d5f-81c2-914e777022ed}*SharedItemsImports = 4

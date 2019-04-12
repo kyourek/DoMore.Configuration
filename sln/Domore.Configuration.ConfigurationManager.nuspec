@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Domore.Configuration.ConfigurationManager</id>
+    <version>1.0.0</version>
+    <authors>Ken Yourek</authors>
+    <description>Do more configuration with App.config</description>
+    <projectUrl>https://github.com/kyourek/Domore.Configuration</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/kyourek/Domore.Configuration/master/LICENSE</licenseUrl>
+    <dependencies>
+      <dependency id="Domore.Configuration" version="1.0.0" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="Domore.Configuration.ConfigurationManager-net40/bin/Domore.Configuration.ConfigurationManager.dll" target="lib/net40" />
+    <file src="Domore.Configuration.ConfigurationManager-netcoreapp2.0/bin/Domore.Configuration.ConfigurationManager.dll" target="lib/netcoreapp2.0" />
+    <file src="Domore.Configuration.ConfigurationManager-netstandard2.0/bin/Domore.Configuration.ConfigurationManager.dll" target="lib/netstandard2.0" />
+  </files>
+</package>
