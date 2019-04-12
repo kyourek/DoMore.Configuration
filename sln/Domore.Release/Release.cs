@@ -2,10 +2,13 @@
 using System.Linq;
 
 namespace Domore {
+    using Configuration;
     using ReleaseActions;
 
     internal class Release {
-        public Release(string[] args) {
+        public Release(IConfigurationContainer conf, string[] args) {
+            conf = conf ?? new AppConfigContainer();
+
             string arg(string name) => args?
                 .FirstOrDefault(a => a.StartsWith("-" + name + "="))?
                 .Split('=')[1];
@@ -28,6 +31,9 @@ namespace Domore {
                 };
 
                 foreach (var action in actions) {
+                    conf.Configure(action, "ReleaseAction");
+                    conf.Configure(action);
+
                     if (arg(action.GetType().Name) != "no") {
                         action.Context = context;
                         action.Log = s => Console.WriteLine(s);

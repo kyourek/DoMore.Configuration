@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -48,11 +49,17 @@ namespace Domore {
         public string Stage { get; set; }
         public Action<string> Log { get; set; }
 
+        ReleaseContext _Context;
         public ReleaseContext Context {
             get => _Context ?? (_Context = new ReleaseContext());
             set => _Context = value;
         }
-        ReleaseContext _Context;
+
+        IDictionary<string, string> _Paths;
+        public IDictionary<string, string> Paths {
+            get => _Paths ?? (_Paths = new Dictionary<string, string>());
+            set => _Paths = value;
+        }
 
         public abstract void Work();
     }
