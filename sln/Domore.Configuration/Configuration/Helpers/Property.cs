@@ -57,11 +57,8 @@ namespace Domore.Configuration.Helpers {
         }
 
         private class ObjectProperty {
-            public object Object { get { return _Object; } }
-            private readonly object _Object;
-
-            public string Key { get { return _Key; } }
-            private readonly string _Key;
+            public object Object { get; }
+            public string Key { get; }
 
             public Converter Converter {
                 get { return _Converter ?? (_Converter = new Converter()); }
@@ -159,9 +156,9 @@ namespace Domore.Configuration.Helpers {
             }
 
             public ObjectProperty(object @object, string key) {
-                if (null == @object) throw new ArgumentNullException("object");
-                _Key = key;
-                _Object = @object;
+                if (null == @object) throw new ArgumentNullException(nameof(@object));
+                Key = key;
+                Object = @object;
             }
 
             public void SetValue(IConfigurationBlock block, string key) {

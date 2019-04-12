@@ -34,47 +34,11 @@ namespace Domore.Configuration {
         }
 
         [Test]
-        [TestCase("what's up", "what's up")]
-        public void String_GetsStringValueByIndex(string value, string expected) {
-            Subject.Content = "phrase =" + value;
-            Assert.AreEqual(expected, Subject.String(0));
-        }
-
-        [Test]
-        [TestCase("5263", 5263)]
-        public void Integer_GetsIntegerValueByKey(string value, int expected) {
-            Subject.Content = "value =" + value;
-            Assert.AreEqual(expected, Subject.Integer("value"));
-        }
-
-        [Test]
-        [TestCase("5.263")]
-        public void Integer_ThrowsExceptionIfValueIsNotAnInteger(string value) {
-            Subject.Content = "value =" + value;
-            Assert.Throws<FormatException>(() => Subject.Integer("value"));
-        }
-
-        [Test]
-        [TestCase("52.63", 52.63)]
-        public void Number_GetsNumericValue(string value, double expected) {
-            Subject.Content = "value =" + value;
-            Assert.AreEqual(expected, Subject.Number(0));
-        }
-
-        [Test]
-        [TestCase("52.63a")]
-        public void Number_ThrowsExceptionIfValueIsNotNumeric(string value) {
-            Subject.Content = "value =" + value;
-            Assert.Throws<FormatException>(() => Subject.Number("value"));
-        }
-
-        [Test]
         [TestCase("true", true)]
         [TestCase("FALsE", false)]
         public void Value_GetsBooleanValue(string value, bool expected) {
-            var b = default(bool);
             Subject.Content = "v=" + value;
-            Assert.AreEqual(expected, Subject.Value("v", out b));
+            Assert.AreEqual(expected, Subject.Value("v", out bool b));
             Assert.AreEqual(expected, b);
         }
 
@@ -87,7 +51,7 @@ namespace Domore.Configuration {
         [Test]
         public void Value_ReturnsDefaultIntegerIfKeyNotFound() {
             Subject.Content = "v1 = 5";
-            var actual = Subject.Value<int>("v2", def: 100);
+            var actual = Subject.Value("v2", def: 100);
             var expected = 100;
             Assert.AreEqual(expected, actual);
         }
@@ -95,7 +59,7 @@ namespace Domore.Configuration {
         [Test]
         public void Value_ReturnsActualIntegerIfKeyFound() {
             Subject.Content = "v1 = 5;v2 = 31";
-            var actual = Subject.Value<int>("v2", def: 100);
+            var actual = Subject.Value("v2", def: 100);
             var expected = 31;
             Assert.AreEqual(expected, actual);
         }
@@ -103,8 +67,7 @@ namespace Domore.Configuration {
         [Test]
         public void Value_ReturnsDefaultNumberIfKeyNotFound() {
             Subject.Content = "val1 = somestr\n num2 = 12.34";
-            var d = default(double);
-            var actual = Subject.Value("num1", out d, def: 34.56);
+            var actual = Subject.Value("num1", out double d, def: 34.56);
             var expected = 34.56;
             Assert.AreEqual(expected, actual);
             Assert.AreEqual(expected, d);
@@ -113,8 +76,7 @@ namespace Domore.Configuration {
         [Test]
         public void Value_ReturnsActualNumberIfKeyFound() {
             Subject.Content = "val1 = somestr\n num1 = 12.34";
-            var d = default(double);
-            var actual = Subject.Value("num1", out d);
+            var actual = Subject.Value("num1", out double d);
             var expected = 12.34;
             Assert.AreEqual(expected, actual);
             Assert.AreEqual(expected, d);
@@ -164,9 +126,7 @@ namespace Domore.Configuration {
 
         private class Configure_SetsObjectPropertyProperties_Class {
             public double D { get; set; }
-
-            public Inner Mine { get { return _Mine; } }
-            private Inner _Mine = new Inner();
+            public Inner Mine { get; } = new Inner();
 
             public class Inner {
                 public string S { get; set; }
@@ -187,7 +147,6 @@ namespace Domore.Configuration {
 
         private class Configure_SetsPropertyValueOfTypeType_Class {
             public Type TypeProperty { get; set; }
-
             public class TheType {
             }
         }
@@ -200,9 +159,7 @@ namespace Domore.Configuration {
         }
 
         private class Configure_CreatesNewInstanceOfPropertyFromType_Class {
-            public Collection Coll { get { return _Coll; } }
-            private readonly Collection _Coll = new Collection();
-
+            public Collection Coll { get; } = new Collection();
             public class Collection {
                 public readonly Dictionary<int, TheParentType> Dict = new Dictionary<int, TheParentType>();
 
@@ -211,10 +168,8 @@ namespace Domore.Configuration {
                     set { Dict[key] = value; }
                 }
             }
-
             public class TheParentType {
             }
-
             public class TheChildType : TheParentType {
             }
         }

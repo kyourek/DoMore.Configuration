@@ -23,30 +23,9 @@ namespace Domore.Configuration {
         event EventHandler Changed;
 
         [DispId(5)]
-        string String(object key);
+        string Value(object key);
 
         [DispId(6)]
-        string StringOrDefault(object key, string def);
-
-        [DispId(7)]
-        int Integer(object key);
-
-        [DispId(8)]
-        int IntegerOrDefault(object key, int def);
-
-        [DispId(9)]
-        double Number(object key);
-
-        [DispId(10)]
-        double NumberOrDefault(object key, double def);
-
-        [DispId(11)]
-        bool Boolean(object key);
-
-        [DispId(12)]
-        bool BooleanOrDefault(object key, bool def);
-
-        [DispId(13)]
         object Configure(object obj, string key = null);
 
         [ComVisible(false)]

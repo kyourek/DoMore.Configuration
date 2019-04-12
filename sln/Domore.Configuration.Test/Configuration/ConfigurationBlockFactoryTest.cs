@@ -140,60 +140,6 @@ namespace Domore.Configuration {
         }
 
         [Test]
-        public void StringValue_IsOriginalValue() {
-            var config = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n Val 3 = 3.14";
-            var block = Subject.CreateConfigurationBlock(config);
-            var item = block.Item("val3");
-            Assert.AreEqual(item.OriginalValue, item.StringValue);
-        }
-
-        [Test]
-        public void IntegerValue_ConvertsToInt() {
-            var config = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n Val 3 = 4";
-            var block = Subject.CreateConfigurationBlock(config);
-            var item = block.Item("val3");
-            Assert.AreEqual(4, item.IntegerValue);
-        }
-
-        [Test]
-        public void IntegerValue_ThrowsExceptionIfNotAnInteger() {
-            var config = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n Val 3 = 3.14";
-            var block = Subject.CreateConfigurationBlock(config);
-            var item = block.Item("val3");
-            var error = default(Exception);
-            try {
-                var i = item.IntegerValue;
-            }
-            catch (Exception ex) {
-                error = ex;
-            }
-            Assert.IsNotNull(error);
-        }
-
-        [Test]
-        public void NumberValue_ConvertsToDouble() {
-            var config = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n Val 3 = 3.14";
-            var block = Subject.CreateConfigurationBlock(config);
-            var item = block.Item("val3");
-            Assert.AreEqual(3.14, item.NumberValue);
-        }
-
-        [Test]
-        public void NumberValue_ThrowsExceptionIfNotNumeric() {
-            var config = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n Val 3 = 3.14";
-            var block = Subject.CreateConfigurationBlock(config);
-            var item = block.Item("val2");
-            var error = default(Exception);
-            try {
-                var i = item.NumberValue;
-            }
-            catch (Exception ex) {
-                error = ex;
-            }
-            Assert.IsNotNull(error);
-        }
-
-        [Test]
         public void Item_CanBeSeparatedBySemicolon() {
             var config = "val1 = hello, world!;val2 = goodbye, earth..?; Val 3 = 3.14  ";
             var block = Subject.CreateConfigurationBlock(config);

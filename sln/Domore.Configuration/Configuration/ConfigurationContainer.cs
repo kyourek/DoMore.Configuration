@@ -90,40 +90,12 @@ namespace Domore.Configuration {
             OnChanged(EventArgs.Empty);
         }
 
-        public string String(object key) {
-            return Value<string>(key);
-        }
-
-        public string StringOrDefault(object key, string def) {
-            return Value<string>(key, def);
-        }
-
-        public int Integer(object key) {
-            return Value<int>(key);
-        }
-
-        public int IntegerOrDefault(object key, int def) {
-            return Value<int>(key, def);
-        }
-
-        public double Number(object key) {
-            return Value<double>(key);
-        }
-
-        public double NumberOrDefault(object key, double def) {
-            return Value<double>(key, def);
-        }
-
-        public bool Boolean(object key) {
-            return Value<bool>(key);
-        }
-
-        public bool BooleanOrDefault(object key, bool def) {
-            return Value<bool>(key, def);
+        public string Value(object key) {
+            return Block.Item(key).OriginalValue;
         }
 
         public T Value<T>(object key) {
-            return (T)Convert.ChangeType(Block.Item(key).StringValue, typeof(T));
+            return (T)Convert.ChangeType(Value(key), typeof(T));
         }
 
         public T Value<T>(object key, T def) {

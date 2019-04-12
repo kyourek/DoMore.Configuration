@@ -17,17 +17,5 @@ namespace Domore.Configuration {
 
         [DispId(3)]
         string OriginalValue { get; }
-
-        [DispId(4)]
-        string StringValue { get; }
-
-        [DispId(5)]
-        int IntegerValue { get; }
-
-        [DispId(6)]
-        double NumberValue { get; }
-
-        [DispId(7)]
-        bool BooleanValue { get; }
     }
 }

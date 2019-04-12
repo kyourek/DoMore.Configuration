@@ -115,25 +115,6 @@ namespace Domore.Configuration {
             public string NormalizedKey { get; }
             public string OriginalValue { get; }
 
-            public string StringValue {
-                get { return OriginalValue; }
-            }
-
-            public int IntegerValue {
-                get { return _IntegerValue ?? (_IntegerValue = int.Parse(OriginalValue)).Value; }
-            }
-            private int? _IntegerValue;
-
-            public double NumberValue {
-                get { return _NumberValue ?? (_NumberValue = double.Parse(OriginalValue)).Value; }
-            }
-            private double? _NumberValue;
-
-            public bool BooleanValue {
-                get { return _BooleanValue ?? (_BooleanValue = bool.Parse(OriginalValue)).Value; }
-            }
-            private bool? _BooleanValue;
-
             public ConfigurationBlockItem(string originalKey, string normalizedKey, string originalValue) {
                 OriginalKey = originalKey;
                 NormalizedKey = normalizedKey;
