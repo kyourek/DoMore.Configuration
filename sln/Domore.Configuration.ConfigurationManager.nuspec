@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Domore.Configuration.ConfigurationManager</id>
-    <version>1.0.0-alpha.4</version>
+    <version>1.0.0-alpha.5</version>
     <authors>Ken Yourek</authors>
     <description>Do more configuration with App.config</description>
     <projectUrl>https://github.com/kyourek/Domore.Configuration</projectUrl>
     <licenseUrl>https://raw.githubusercontent.com/kyourek/Domore.Configuration/master/LICENSE</licenseUrl>
     <dependencies>
-      <dependency id="Domore.Configuration" version="1.0.0-alpha.4" />
+      <dependency id="Domore.Configuration" version="1.0.0-alpha.5" />
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" />
