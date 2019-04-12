@@ -24,7 +24,7 @@ namespace Domore {
                     new Build(),
                     new Pack(),
                     new Tag(),
-                    //new Push()
+                    new Push()
                 };
 
                 foreach (var action in actions) {
