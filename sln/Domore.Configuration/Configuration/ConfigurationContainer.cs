@@ -1,33 +1,30 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Domore.Configuration {
-    using Helpers;
-
     [Guid("D695CFB3-BA77-4F4D-A7E8-290CBC279B77")]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class ConfigurationContainer : IConfigurationContainer {
-        private static readonly object DefaultContentLocker = new object();
+        private static readonly object StaticDefaultContentLocker = new object();
 
-        private static string _DefaultContent;
-        private string DefaultContent {
+        private string StaticDefaultContent {
             get {
-                if (_DefaultContent == null) {
-                    lock (DefaultContentLocker) {
-                        if (_DefaultContent == null) {
-                            _DefaultContent = GetDefaultContent();
+                if (_StaticDefaultContent == null) {
+                    lock (StaticDefaultContentLocker) {
+                        if (_StaticDefaultContent == null) {
+                            _StaticDefaultContent = DefaultContent();
                         }
                     }
                 }
-                return _DefaultContent;
+                return _StaticDefaultContent;
             }
         }
+        private static string _StaticDefaultContent;
 
-        protected virtual string GetDefaultContent() {
+        protected virtual string DefaultContent() {
             var proc = Process.GetCurrentProcess();
             var procFile = proc.MainModule.FileName;
             var confFile = Path.ChangeExtension(procFile, ".conf");
@@ -55,7 +52,7 @@ namespace Domore.Configuration {
         public string Content {
             get {
                 if (_Content == null) {
-                    _Content = DefaultContent;
+                    _Content = StaticDefaultContent;
                 }
                 return _Content;
             }

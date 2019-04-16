@@ -11,8 +11,8 @@ namespace Domore.Configuration {
     public class AppConfigContainer : ConfigurationContainer {
         private static readonly App App = new App();
 
-        protected override string GetDefaultContent() {
-            var value = base.GetDefaultContent();
+        protected override string DefaultContent() {
+            var value = base.DefaultContent();
             return string.IsNullOrWhiteSpace(value)
                 ? string.Join(Environment.NewLine, App
                     .Settings

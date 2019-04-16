@@ -33,15 +33,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.Config
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netcoreapp2.0", "netcoreapp2.0", "{9D69B4CE-B498-4650-86EC-13AD0FFAA3C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration-netcoreapp2.0", "Domore.Configuration-netcoreapp2.0\Domore.Configuration-netcoreapp2.0.csproj", "{D9523C6B-1D5A-4DFA-9D9C-C42A5006BBE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Configuration-netcoreapp2.0", "Domore.Configuration-netcoreapp2.0\Domore.Configuration-netcoreapp2.0.csproj", "{D9523C6B-1D5A-4DFA-9D9C-C42A5006BBE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.ConfigurationManager-netcoreapp2.0", "Domore.Configuration.ConfigurationManager-netcoreapp2.0\Domore.Configuration.ConfigurationManager-netcoreapp2.0.csproj", "{DEB0E4C2-FE9E-44BA-94CC-DC3F25EE2D7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Configuration.ConfigurationManager-netcoreapp2.0", "Domore.Configuration.ConfigurationManager-netcoreapp2.0\Domore.Configuration.ConfigurationManager-netcoreapp2.0.csproj", "{DEB0E4C2-FE9E-44BA-94CC-DC3F25EE2D7B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{927ED15D-84AE-4D86-B814-28DBE68A50A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.Test-netcoreapp2.0", "Domore.Configuration.Test-netcoreapp2.0\Domore.Configuration.Test-netcoreapp2.0.csproj", "{50BCA5D1-D62F-480C-830A-C0BA0110FDDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Configuration.Test-netcoreapp2.0", "Domore.Configuration.Test-netcoreapp2.0\Domore.Configuration.Test-netcoreapp2.0.csproj", "{50BCA5D1-D62F-480C-830A-C0BA0110FDDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.ConfigurationManager.Test-netcoreapp2.0", "Domore.Configuration.ConfigurationManager.Test-netcorea\Domore.Configuration.ConfigurationManager.Test-netcoreapp2.0.csproj", "{E0B8D927-5CE4-49FD-8158-D5D3203FD020}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Configuration.ConfigurationManager.Test-netcoreapp2.0", "Domore.Configuration.ConfigurationManager.Test-netcorea\Domore.Configuration.ConfigurationManager.Test-netcoreapp2.0.csproj", "{E0B8D927-5CE4-49FD-8158-D5D3203FD020}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{3FAA09E4-6870-47D0-B7E8-E3FCA9F88B5E}"
 	ProjectSection(SolutionItems) = preProject
@@ -51,7 +51,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{3FAA09E4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "release", "release", "{C8B1F9A1-86F7-4C40-9C13-87EC1B830314}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Release", "Domore.Release\Domore.Release.csproj", "{CEB65741-53B7-4CB1-975E-09B4C17426C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Release", "Domore.Release\Domore.Release.csproj", "{CEB65741-53B7-4CB1-975E-09B4C17426C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{2926C83F-8283-41A9-80AA-592F02A6635D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.Sample-netcoreapp2.0", "Domore.Configuration.Sample-netcoreapp2.0\Domore.Configuration.Sample-netcoreapp2.0.csproj", "{66AFF294-C1D7-4781-ABFC-75C2C93B6D66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.Sample-net40", "Domore.Configuration.Sample-net40\Domore.Configuration.Sample-net40.csproj", "{819094F7-F0A1-4BC8-A004-12916F01FEF5}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -113,6 +119,14 @@ Global
 		{CEB65741-53B7-4CB1-975E-09B4C17426C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEB65741-53B7-4CB1-975E-09B4C17426C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEB65741-53B7-4CB1-975E-09B4C17426C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66AFF294-C1D7-4781-ABFC-75C2C93B6D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66AFF294-C1D7-4781-ABFC-75C2C93B6D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66AFF294-C1D7-4781-ABFC-75C2C93B6D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66AFF294-C1D7-4781-ABFC-75C2C93B6D66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{819094F7-F0A1-4BC8-A004-12916F01FEF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{819094F7-F0A1-4BC8-A004-12916F01FEF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{819094F7-F0A1-4BC8-A004-12916F01FEF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{819094F7-F0A1-4BC8-A004-12916F01FEF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -133,6 +147,8 @@ Global
 		{50BCA5D1-D62F-480C-830A-C0BA0110FDDD} = {927ED15D-84AE-4D86-B814-28DBE68A50A7}
 		{E0B8D927-5CE4-49FD-8158-D5D3203FD020} = {927ED15D-84AE-4D86-B814-28DBE68A50A7}
 		{CEB65741-53B7-4CB1-975E-09B4C17426C6} = {C8B1F9A1-86F7-4C40-9C13-87EC1B830314}
+		{66AFF294-C1D7-4781-ABFC-75C2C93B6D66} = {2926C83F-8283-41A9-80AA-592F02A6635D}
+		{819094F7-F0A1-4BC8-A004-12916F01FEF5} = {2926C83F-8283-41A9-80AA-592F02A6635D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0CCF879-418A-463A-BCD6-96DEFBD56F6F}
