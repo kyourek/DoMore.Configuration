@@ -6,9 +6,7 @@ namespace Domore {
     using ReleaseActions;
 
     internal class Release {
-        public Release(IConfigurationContainer conf, string[] args) {
-            conf = conf ?? new AppConfigContainer();
-
+        public Release(string[] args) {
             string arg(string name) => args?
                 .FirstOrDefault(a => a.StartsWith("-" + name + "="))?
                 .Split('=')[1];
@@ -21,6 +19,7 @@ namespace Domore {
                 }
 
                 var solutionDirectory = arg("SolutionDirectory");
+                var configuration = (IConfigurationContainer)new AppConfigContainer();
                 var context = new ReleaseContext();
                 var actions = new ReleaseAction[] {
                     new Bump(),
@@ -31,8 +30,8 @@ namespace Domore {
                 };
 
                 foreach (var action in actions) {
-                    conf.Configure(action, "ReleaseAction");
-                    conf.Configure(action);
+                    configuration.Configure(action, "ReleaseAction");
+                    configuration.Configure(action);
 
                     if (arg(action.GetType().Name) != "no") {
                         action.Context = context;

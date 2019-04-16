@@ -57,7 +57,7 @@ namespace Domore {
 
         IDictionary<string, string> _Paths;
         public IDictionary<string, string> Paths {
-            get => _Paths ?? (_Paths = new Dictionary<string, string>());
+            get => _Paths ?? (_Paths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
             set => _Paths = value;
         }
 
