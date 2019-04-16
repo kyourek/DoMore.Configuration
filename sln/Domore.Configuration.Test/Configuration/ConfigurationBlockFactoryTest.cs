@@ -6,8 +6,8 @@ using NUnit.Framework;
 namespace Domore.Configuration {
     [TestFixture]
     public class ConfigurationBlockFactoryTest {
-        private string TempFileName;
-        private ConfigurationBlockFactory Subject;
+        string TempFileName;
+        ConfigurationBlockFactory Subject;
 
         [SetUp]
         public void SetUp() {

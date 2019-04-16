@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{819094F7-F0A1-4BC8-A004-12916F01FEF5}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Domore.Configuration.Sample</RootNamespace>
+    <RootNamespace>Domore</RootNamespace>
     <AssemblyName>Domore.Configuration.Sample</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -56,5 +56,12 @@
       <Name>Domore.Configuration-net40</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Domore.Configuration.Sample.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="..\Domore.Configuration.Sample\Domore.Configuration.Sample.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

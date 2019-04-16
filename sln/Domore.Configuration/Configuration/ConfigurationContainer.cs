@@ -8,9 +8,10 @@ namespace Domore.Configuration {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class ConfigurationContainer : IConfigurationContainer {
-        private static readonly object StaticDefaultContentLocker = new object();
+        static readonly object StaticDefaultContentLocker = new object();
 
-        private string StaticDefaultContent {
+        static string _StaticDefaultContent;
+        string StaticDefaultContent {
             get {
                 if (_StaticDefaultContent == null) {
                     lock (StaticDefaultContentLocker) {
@@ -22,7 +23,6 @@ namespace Domore.Configuration {
                 return _StaticDefaultContent;
             }
         }
-        private static string _StaticDefaultContent;
 
         protected virtual string DefaultContent() {
             var proc = Process.GetCurrentProcess();
@@ -49,6 +49,7 @@ namespace Domore.Configuration {
 
         public event EventHandler Changed;
 
+        string _Content;
         public string Content {
             get {
                 if (_Content == null) {
@@ -63,8 +64,8 @@ namespace Domore.Configuration {
                 }
             }
         }
-        private string _Content;
 
+        IConfigurationBlockFactory _BlockFactory;
         public IConfigurationBlockFactory BlockFactory {
             get { return _BlockFactory ?? (_BlockFactory = new ConfigurationBlockFactory()); }
             set {
@@ -74,13 +75,12 @@ namespace Domore.Configuration {
                 }
             }
         }
-        private IConfigurationBlockFactory _BlockFactory;
 
+        IConfigurationBlock _Block;
         public IConfigurationBlock Block {
             get { return _Block ?? (_Block = BlockFactory.CreateConfigurationBlock(Content)); }
             private set { _Block = value; }
         }
-        private IConfigurationBlock _Block;
 
         public void Reset() {
             Block = null;

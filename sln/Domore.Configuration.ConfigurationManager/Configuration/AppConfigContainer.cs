@@ -9,14 +9,14 @@ namespace Domore.Configuration {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class AppConfigContainer : ConfigurationContainer {
-        private static readonly App App = new App();
+        static readonly App App = new App();
 
         protected override string DefaultContent() {
             var value = base.DefaultContent();
             return string.IsNullOrWhiteSpace(value)
                 ? string.Join(Environment.NewLine, App
                     .Settings
-                    .Select(pair => string.Join(" = ", pair.Key, pair.Value)))
+                    .Select(pair => $"{pair.Key} = {pair.Value}"))
                 : value;
         }
 

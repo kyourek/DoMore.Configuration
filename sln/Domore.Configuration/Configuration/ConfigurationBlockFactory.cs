@@ -16,13 +16,13 @@ namespace Domore.Configuration {
             return new ConfigurationBlock(configuration);
         }
 
-        private class ConfigurationBlock : IConfigurationBlock {
-            private ConfigurationBlockItem.Collection Items {
+        class ConfigurationBlock : IConfigurationBlock {
+            ConfigurationBlockItem.Collection _Items;
+            ConfigurationBlockItem.Collection Items {
                 get { return _Items ?? (_Items = CreateItems(ConfigurationContent)); }
             }
-            private ConfigurationBlockItem.Collection _Items;
 
-            private static string GetConfigurationContent(string configuration) {
+            static string GetConfigurationContent(string configuration) {
                 if (configuration == null) {
                     return string.Empty;
                 }
@@ -32,7 +32,7 @@ namespace Domore.Configuration {
                 return configuration;
             }
 
-            private static ConfigurationBlockItem.Collection CreateItems(string configurationContent) {
+            static ConfigurationBlockItem.Collection CreateItems(string configurationContent) {
                 if (null == configurationContent) throw new ArgumentNullException(nameof(configurationContent));
 
                 var content = configurationContent.Trim();
@@ -55,10 +55,10 @@ namespace Domore.Configuration {
 
             public string Configuration { get; }
 
+            string _ConfigurationContent;
             public string ConfigurationContent {
                 get { return _ConfigurationContent ?? (_ConfigurationContent = GetConfigurationContent(Configuration)); }
             }
-            private string _ConfigurationContent;
 
             public int ItemCount {
                 get { return Items.Count; }
@@ -110,7 +110,7 @@ namespace Domore.Configuration {
             }
         }
 
-        private class ConfigurationBlockItem : IConfigurationBlockItem {
+        class ConfigurationBlockItem : IConfigurationBlockItem {
             public string OriginalKey { get; }
             public string NormalizedKey { get; }
             public string OriginalValue { get; }
@@ -126,7 +126,7 @@ namespace Domore.Configuration {
             }
 
             public class Collection : KeyedCollection<string, ConfigurationBlockItem> {
-                private void Add(IEnumerable<ConfigurationBlockItem> items) {
+                void Add(IEnumerable<ConfigurationBlockItem> items) {
                     if (null == items) throw new ArgumentNullException(nameof(items));
                     foreach (var item in items) {
                         var key = GetKeyForItem(item);

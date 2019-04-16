@@ -7,8 +7,8 @@ using NUnit.Framework;
 namespace Domore.Configuration {
     [TestFixture]
     public class ConfigurationContainerTest {
-        private string TempFileName;
-        private IConfigurationContainer Subject;
+        string TempFileName;
+        IConfigurationContainer Subject;
 
         [SetUp]
         public void SetUp() {

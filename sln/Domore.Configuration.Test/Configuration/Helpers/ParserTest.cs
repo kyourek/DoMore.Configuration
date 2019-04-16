@@ -3,7 +3,7 @@
 namespace Domore.Configuration.Helpers {
     [TestFixture]
     public class ParserTest {
-        private Parser Subject;
+        Parser Subject;
 
         [SetUp]
         public void SetUp() {

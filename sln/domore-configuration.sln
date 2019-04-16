@@ -55,16 +55,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Release", "Domore.Re
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{2926C83F-8283-41A9-80AA-592F02A6635D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.Sample-netcoreapp2.0", "Domore.Configuration.Sample-netcoreapp2.0\Domore.Configuration.Sample-netcoreapp2.0.csproj", "{66AFF294-C1D7-4781-ABFC-75C2C93B6D66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Configuration.Sample-netcoreapp2.0", "Domore.Configuration.Sample-netcoreapp2.0\Domore.Configuration.Sample-netcoreapp2.0.csproj", "{66AFF294-C1D7-4781-ABFC-75C2C93B6D66}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.Sample-net40", "Domore.Configuration.Sample-net40\Domore.Configuration.Sample-net40.csproj", "{819094F7-F0A1-4BC8-A004-12916F01FEF5}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Domore.Configuration.Sample", "Domore.Configuration.Sample\Domore.Configuration.Sample.shproj", "{A1901CC3-7B2F-4091-A84E-6EC6599AA3C1}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Domore.Configuration.Test\Domore.Configuration.Test.projitems*{17af8465-b481-4d5f-81c2-914e777022ed}*SharedItemsImports = 4
 		Domore.Configuration.ConfigurationManager.Test\Domore.Configuration.ConfigurationManager.Test.projitems*{1cb0f8aa-5891-489c-8bb3-365bfbc0c255}*SharedItemsImports = 4
 		Domore.Configuration.ConfigurationManager\Domore.Configuration.ConfigurationManager.projitems*{7d23781a-e9cc-49a6-bc23-881e54e1edc2}*SharedItemsImports = 13
+		Domore.Configuration.Sample\Domore.Configuration.Sample.projitems*{819094f7-f0a1-4bc8-a004-12916f01fef5}*SharedItemsImports = 4
 		Domore.Configuration\Domore.Configuration.projitems*{9ce7183f-974d-4580-9a00-1a70fb5fee8d}*SharedItemsImports = 13
+		Domore.Configuration.Sample\Domore.Configuration.Sample.projitems*{a1901cc3-7b2f-4091-a84e-6ec6599aa3c1}*SharedItemsImports = 13
 		Domore.Configuration.ConfigurationManager\Domore.Configuration.ConfigurationManager.projitems*{bc4dc1ea-b4fa-48d9-ad4c-c6432e1600f8}*SharedItemsImports = 4
 		Domore.Configuration\Domore.Configuration.projitems*{e5717466-9682-4408-a3cb-9e90353607a5}*SharedItemsImports = 4
 		Domore.Configuration.ConfigurationManager.Test\Domore.Configuration.ConfigurationManager.Test.projitems*{e77a3a8b-7244-41a3-9d8d-b6eafe7e50f9}*SharedItemsImports = 13

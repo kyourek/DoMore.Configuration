@@ -2,7 +2,7 @@
 using System.ComponentModel;
 
 namespace Domore.Configuration.Helpers {
-    internal class Converter {
+    class Converter {
         public object Convert(Type type, string value) {
             return TypeDescriptor.GetConverter(type).ConvertFrom(value);
         }
@@ -12,8 +12,7 @@ namespace Domore.Configuration.Helpers {
             if (null == block) throw new ArgumentNullException(nameof(block));
 
             var conv = TypeDescriptor.GetConverter(type);
-            var conf = conv as ConfigurationTypeConverter;
-            if (conf != null) {
+            if (conv is ConfigurationTypeConverter conf) {
                 conf.Configuration.Content = block.ConfigurationContent;
             }
 
