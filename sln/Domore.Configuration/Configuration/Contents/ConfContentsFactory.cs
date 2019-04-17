@@ -4,12 +4,12 @@ using System.IO;
 
 namespace Domore.Configuration.Contents {
     class ConfContentsFactory : FileContentsFactory {
-        static string _ConfFile;
-        static string ConfFile {
+        string _ConfFile;
+        string ConfFile {
             get => _ConfFile ?? (_ConfFile = GetConfFile());
         }
 
-        static string GetConfFile() {
+        string GetConfFile() {
             var proc = Process.GetCurrentProcess();
             var procFile = proc.MainModule.FileName;
             var confFile = Path.ChangeExtension(procFile, ".conf");

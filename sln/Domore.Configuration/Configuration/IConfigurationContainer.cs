@@ -14,18 +14,21 @@ namespace Domore.Configuration {
         object Content { get; set; }
 
         [DispId(2)]
-        IConfigurationBlockFactory BlockFactory { get; set; }
+        IConfigurationContentsFactory ContentsFactory { get; set; }
 
         [DispId(3)]
-        IConfigurationBlock Block { get; }
+        IConfigurationBlockFactory BlockFactory { get; set; }
 
         [DispId(4)]
-        event EventHandler ContentsChanged;
+        IConfigurationBlock Block { get; }
 
         [DispId(5)]
-        string Value(object key);
+        event EventHandler ContentsChanged;
 
         [DispId(6)]
+        string Value(object key);
+
+        [DispId(7)]
         object Configure(object obj, string key = null);
 
         [ComVisible(false)]

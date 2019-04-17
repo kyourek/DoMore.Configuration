@@ -3,7 +3,8 @@
 
     class Program {
         static void Main() {
-            new Sample { Configuration = new AppSettingsContainer() }.Run();
+            ConfigurationDefault.ContentsFactory = new AppSettingsFactory();
+            new Sample().Run();
         }
     }
 }

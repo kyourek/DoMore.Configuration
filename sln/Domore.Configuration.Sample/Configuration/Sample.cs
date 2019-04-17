@@ -4,16 +4,9 @@ using System.Linq;
 
 namespace Domore.Configuration {
     class Sample {
-        IConfigurationContainer _Configuration;
-        public IConfigurationContainer Configuration {
-            get { return _Configuration ?? (_Configuration = new ConfigurationContainer()); }
-            set { _Configuration = value; }
-        }
-
         public void Run() {
-            var conf = Configuration;
-            var alien = conf.Configure(new Alien());
-            var visitor = conf.Configure(new Visitor());
+            var alien = ConfigurationDefault.Configure(new Alien());
+            var visitor = ConfigurationDefault.Configure(new Visitor());
             Console.WriteLine($"A: {alien.Greeting}, {visitor.HomePlanet}!");
             Console.WriteLine($"A: Welcome to {alien.HomePlanet}.");
             Console.WriteLine($"V: Thanks! I also toured {string.Join(", ", visitor.TourDestinations.Values)}");
