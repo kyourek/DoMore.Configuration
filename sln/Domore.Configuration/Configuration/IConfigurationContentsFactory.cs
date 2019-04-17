@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Domore.Configuration {
-    [Guid("22BDB2A4-ADD8-4EB1-A5B5-EA155BB49220")]
+    [Guid("315A04EF-483C-4665-80AE-F9EC4FDBD2D2")]
     [ComVisible(true)]
 #if NETCOREAPP
     [InterfaceType(ComInterfaceType.InterfaceIsIInspectable)]
 #else
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
 #endif
-    public interface IAppConfigContainer : IConfigurationContainer {
+    public interface IConfigurationContentsFactory {
         [DispId(1)]
-        string ExePath { get; set; }
+        IEnumerable<KeyValuePair<string, string>> CreateConfigurationContents(object content);
     }
 }

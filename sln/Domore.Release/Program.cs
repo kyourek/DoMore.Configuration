@@ -1,6 +1,6 @@
 ﻿namespace Domore {
-    internal class Program {
-        private static void Main(string[] args) {
+    class Program {
+        static void Main(string[] args) {
             new Release(args);
         }
     }

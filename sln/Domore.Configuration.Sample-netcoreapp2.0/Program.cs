@@ -3,7 +3,7 @@
 
     class Program {
         static void Main() {
-            new Sample { Configuration = new AppConfigContainer() }.Run();
+            new Sample { Configuration = new AppSettingsContainer() }.Run();
         }
     }
 }

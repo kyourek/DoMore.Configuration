@@ -5,7 +5,7 @@ namespace Domore {
     using Configuration;
     using ReleaseActions;
 
-    internal class Release {
+    class Release {
         public Release(string[] args) {
             string arg(string name) => args?
                 .FirstOrDefault(a => a.StartsWith("-" + name + "="))?

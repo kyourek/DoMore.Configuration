@@ -12,6 +12,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationBlockFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\FileContentsFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\TextContentsFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Converter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Key.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Parser.cs" />
@@ -32,6 +34,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\ComVisible.cs">
       <Link>Properties\ComVisible.cs</Link>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)..\InternalsVisibleTo.cs">
+      <Link>Properties\InternalsVisibleTo.cs</Link>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationContentsFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\ConfContentsFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>

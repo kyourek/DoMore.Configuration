@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -12,60 +11,26 @@ namespace Domore.Configuration {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class ConfigurationBlockFactory : IConfigurationBlockFactory {
-        public IConfigurationBlock CreateConfigurationBlock(string configuration) {
-            return new ConfigurationBlock(configuration);
+        public IConfigurationBlock CreateConfigurationBlock(object content, IConfigurationContentsFactory contentsFactory) {
+            return new ConfigurationBlock(content, contentsFactory);
         }
 
         class ConfigurationBlock : IConfigurationBlock {
             ConfigurationBlockItem.Collection _Items;
             ConfigurationBlockItem.Collection Items {
-                get { return _Items ?? (_Items = CreateItems(ConfigurationContent)); }
+                get => _Items ?? (_Items = ConfigurationBlockItem.Collection.Create(ContentsFactory.CreateConfigurationContents(Content)));
             }
 
-            static string GetConfigurationContent(string configuration) {
-                if (configuration == null) {
-                    return string.Empty;
-                }
-                if (File.Exists(configuration)) {
-                    return File.ReadAllText(configuration);
-                }
-                return configuration;
-            }
-
-            static ConfigurationBlockItem.Collection CreateItems(string configurationContent) {
-                if (null == configurationContent) throw new ArgumentNullException(nameof(configurationContent));
-
-                var content = configurationContent.Trim();
-                var separator = content.Contains("\n") 
-                    ? "\n" 
-                    : ";";
-
-                return new ConfigurationBlockItem.Collection(
-                    content
-                        .Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries)
-                        .Where(line => !string.IsNullOrWhiteSpace(line))
-                        .Select(line => line.Split(new[] { '=' }, 2, StringSplitOptions.RemoveEmptyEntries))
-                        .Where(array => array.Length == 2)
-                        .Select(array => new {
-                            Key = array[0].Trim(),
-                            Value = array[1].Trim()
-                        })
-                        .Select(item => new ConfigurationBlockItem(item.Key, Key.Normalize(item.Key), item.Value)));
-            }
-
-            public string Configuration { get; }
-
-            string _ConfigurationContent;
-            public string ConfigurationContent {
-                get { return _ConfigurationContent ?? (_ConfigurationContent = GetConfigurationContent(Configuration)); }
-            }
+            public object Content { get; }
+            public IConfigurationContentsFactory ContentsFactory { get; }
 
             public int ItemCount {
-                get { return Items.Count; }
+                get => Items.Count;
             }
 
-            public ConfigurationBlock(string configuration) {
-                Configuration = configuration;
+            public ConfigurationBlock(object content, IConfigurationContentsFactory contentsFactory) {
+                Content = content;
+                ContentsFactory = contentsFactory;
             }
 
             public bool ItemExists(object key) {
@@ -82,8 +47,7 @@ namespace Domore.Configuration {
             public IConfigurationBlockItem Item(object key) {
                 if (null == key) throw new ArgumentNullException(nameof(key));
 
-                if (key is int) {
-                    var index = (int)key;
+                if (key is int index) {
                     return Items[index];
                 }
 
@@ -106,7 +70,7 @@ namespace Domore.Configuration {
             }
 
             public override string ToString() {
-                return Configuration;
+                return string.Join(Environment.NewLine, Items);
             }
         }
 
@@ -122,11 +86,11 @@ namespace Domore.Configuration {
             }
 
             public override string ToString() {
-                return string.Join(" = ", OriginalKey, OriginalValue);
+                return $"{OriginalKey} = {OriginalValue}";
             }
 
-            public class Collection : KeyedCollection<string, ConfigurationBlockItem> {
-                void Add(IEnumerable<ConfigurationBlockItem> items) {
+            public class Collection : KeyedCollection<string, IConfigurationBlockItem> {
+                void Add(IEnumerable<IConfigurationBlockItem> items) {
                     if (null == items) throw new ArgumentNullException(nameof(items));
                     foreach (var item in items) {
                         var key = GetKeyForItem(item);
@@ -141,13 +105,18 @@ namespace Domore.Configuration {
                     }
                 }
 
-                protected override string GetKeyForItem(ConfigurationBlockItem item) {
+                protected override string GetKeyForItem(IConfigurationBlockItem item) {
                     if (null == item) throw new ArgumentNullException(nameof(item));
                     return item.NormalizedKey;
                 }
 
-                public Collection(IEnumerable<ConfigurationBlockItem> items) {
+                public Collection(IEnumerable<IConfigurationBlockItem> items) {
                     Add(items);
+                }
+
+                public static Collection Create(IEnumerable<KeyValuePair<string, string>> items) {
+                    if (null == items) throw new ArgumentNullException(nameof(items));
+                    return new Collection(items.Select(item => new ConfigurationBlockItem(item.Key, Key.Normalize(item.Key), item.Value)));
                 }
             }
         }

@@ -10,6 +10,6 @@ namespace Domore.Configuration {
 #endif
     public interface IConfigurationBlockFactory {
         [DispId(1)]
-        IConfigurationBlock CreateConfigurationBlock(string configuration);
+        IConfigurationBlock CreateConfigurationBlock(object content, IConfigurationContentsFactory contentsFactory);
     }
 }

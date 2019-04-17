@@ -11,26 +11,6 @@ namespace Domore.Configuration {
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
 #endif
     public class ConfigurationTypeConverter : TypeConverter {
-        void Configuration_Changed(object sender, EventArgs e) {
-            OnConfigurationChanged(e);
-        }
-
-        protected virtual void OnConfigurationChanged(EventArgs e) {
-            var handler = ConfigurationChanged;
-            if (handler != null) handler.Invoke(this, e);
-        }
-
-        public event EventHandler ConfigurationChanged;
-
-        IConfigurationContainer _Configuration;
-        public IConfigurationContainer Configuration {
-            get {
-                if (_Configuration == null) {
-                    _Configuration = new ConfigurationContainer();
-                    _Configuration.Changed += Configuration_Changed;
-                }
-                return _Configuration;
-            }
-        }
+        public IConfigurationBlock ConfigurationBlock { get; set; }
     }
 }

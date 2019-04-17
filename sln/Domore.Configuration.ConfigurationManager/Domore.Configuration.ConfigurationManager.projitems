@@ -9,9 +9,9 @@
     <Import_RootNamespace>Domore</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\AppConfigContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\AppSettingsContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\AppSettingsFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\App.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\IAppConfigContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\AssemblyCompany.cs">
       <Link>Properties\AssemblyCompany.cs</Link>
     </Compile>

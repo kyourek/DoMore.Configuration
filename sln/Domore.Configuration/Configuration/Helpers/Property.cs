@@ -3,8 +3,8 @@ using System.Linq;
 using System.Reflection;
 
 namespace Domore.Configuration.Helpers {
-    internal class Property {
-        private static void SetOne(object obj, IConfigurationBlock block, string key, int dotCount) {
+    class Property {
+        static void SetOne(object obj, IConfigurationBlock block, string key, int dotCount) {
             var parts = key.Split('.');
             for (var i = dotCount + 1; i < parts.Length; i++) {
                 var propertyKey = parts[i];
@@ -56,16 +56,17 @@ namespace Domore.Configuration.Helpers {
             return obj;
         }
 
-        private class ObjectProperty {
+        class ObjectProperty {
             public object Object { get; }
             public string Key { get; }
 
+            Converter _Converter;
             public Converter Converter {
-                get { return _Converter ?? (_Converter = new Converter()); }
-                set { _Converter = value; }
+                get => _Converter ?? (_Converter = new Converter());
+                set => _Converter = value;
             }
-            private Converter _Converter;
 
+            private string _PropertyName;
             public string PropertyName { 
                 get {
                     if (_PropertyName == null) {
@@ -76,8 +77,8 @@ namespace Domore.Configuration.Helpers {
                     return _PropertyName;
                 } 
             }
-            private string _PropertyName;
 
+            string _IndexString;
             public string IndexString {
                 get {
                     if (_IndexString == null) {
@@ -88,8 +89,8 @@ namespace Domore.Configuration.Helpers {
                     return _IndexString;
                 }
             }
-            private string _IndexString;
 
+            object[] _Index;
             public object[] Index {
                 get {
                     if (_Index == null) {
@@ -107,13 +108,13 @@ namespace Domore.Configuration.Helpers {
                     return _Index;
                 }
             }
-            private object[] _Index;
 
+            Type _ObjectType;
             public Type ObjectType {
-                get { return _ObjectType ?? (_ObjectType = Object.GetType()); }
+                get => _ObjectType ?? (_ObjectType = Object.GetType());
             }
-            private Type _ObjectType;
 
+            PropertyInfo _PropertyInfo;
             public PropertyInfo PropertyInfo {
                 get {
                     if (_PropertyInfo == null) {
@@ -124,7 +125,6 @@ namespace Domore.Configuration.Helpers {
                     return _PropertyInfo;
                 }
             }
-            private PropertyInfo _PropertyInfo;
 
             public Type PropertyType {
                 get {
@@ -135,9 +135,10 @@ namespace Domore.Configuration.Helpers {
             }
 
             public bool Exists {
-                get { return PropertyInfo != null; }
+                get => PropertyInfo != null;
             }
 
+            ItemProperty _Item;
             public ItemProperty Item {
                 get {
                     if (_Item == null) {
@@ -148,7 +149,6 @@ namespace Domore.Configuration.Helpers {
                     return _Item;
                 }
             }
-            private ItemProperty _Item;
 
             public virtual object PropertyValue {
                 get { return PropertyInfo.GetValue(Object, null); }
@@ -166,13 +166,13 @@ namespace Domore.Configuration.Helpers {
             }
         }
 
-        private class ItemProperty : ObjectProperty {
+        class ItemProperty : ObjectProperty {
             public ItemProperty(object @object, string key) : base(@object, key) {
             }
 
             public override object PropertyValue {
-                get { return PropertyInfo.GetValue(Object, Index); }
-                set { PropertyInfo.SetValue(Object, value, Index);; }
+                get => PropertyInfo.GetValue(Object, Index);
+                set => PropertyInfo.SetValue(Object, value, Index);
             }
 
             public bool IndexExists {

@@ -11,7 +11,7 @@ namespace Domore.Configuration {
 #endif
     public interface IConfigurationContainer {
         [DispId(1)]
-        string Content { get; set; }
+        object Content { get; set; }
 
         [DispId(2)]
         IConfigurationBlockFactory BlockFactory { get; set; }
@@ -20,7 +20,7 @@ namespace Domore.Configuration {
         IConfigurationBlock Block { get; }
 
         [DispId(4)]
-        event EventHandler Changed;
+        event EventHandler ContentsChanged;
 
         [DispId(5)]
         string Value(object key);

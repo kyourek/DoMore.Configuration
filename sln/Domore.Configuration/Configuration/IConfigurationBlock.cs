@@ -10,10 +10,10 @@ namespace Domore.Configuration {
 #endif
     public interface IConfigurationBlock {
         [DispId(1)]
-        string Configuration { get; }
+        object Content { get; }
 
         [DispId(2)]
-        string ConfigurationContent { get; }
+        IConfigurationContentsFactory ContentsFactory { get; }
 
         [DispId(3)]
         int ItemCount { get; }

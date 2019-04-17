@@ -23,9 +23,9 @@ namespace Domore.Configuration {
         }
 
         [Test]
-        public void Changed_RaisedWhenContentChanges() {
+        public void Changed_RaisedWhenContentsChanges() {
             var changed = 0;
-            Subject.Changed += (s, e) => changed++;
+            Subject.ContentsChanged += (s, e) => changed++;
             Subject.Content = "some\r\nconfig=1";
             Assert.AreEqual(1, changed);
             TempFileName = Path.GetTempFileName();
@@ -82,7 +82,7 @@ namespace Domore.Configuration {
             Assert.AreEqual(expected, d);
         }
 
-        private class Configure_SetsObjectProperties_Class {
+        class Configure_SetsObjectProperties_Class {
             public bool YesNo { get; set; }
             public int HowMany { get; set; }
             public double HowMuch { get; set; }
@@ -104,7 +104,7 @@ namespace Domore.Configuration {
             Assert.AreEqual("because", obj.Why);
         }
 
-        private class Configure_DoesNotSetFields_Class {
+        class Configure_DoesNotSetFields_Class {
             public string ShouldNotBeSet;
             public string ShouldBeSet { get; set; }
         }
@@ -124,7 +124,7 @@ namespace Domore.Configuration {
             Assert.AreEqual("blank2", obj.ShouldNotBeSet);
         }
 
-        private class Configure_SetsObjectPropertyProperties_Class {
+        class Configure_SetsObjectPropertyProperties_Class {
             public double D { get; set; }
             public Inner Mine { get; } = new Inner();
 
@@ -145,7 +145,7 @@ namespace Domore.Configuration {
             Assert.AreEqual("inner-value", obj.Mine.S);
         }
 
-        private class Configure_SetsPropertyValueOfTypeType_Class {
+        class Configure_SetsPropertyValueOfTypeType_Class {
             public Type TypeProperty { get; set; }
             public class TheType {
             }
@@ -158,7 +158,7 @@ namespace Domore.Configuration {
             Assert.AreEqual(typeof(Configure_SetsPropertyValueOfTypeType_Class.TheType), obj.TypeProperty);
         }
 
-        private class Configure_CreatesNewInstanceOfPropertyFromType_Class {
+        class Configure_CreatesNewInstanceOfPropertyFromType_Class {
             public Collection Coll { get; } = new Collection();
             public class Collection {
                 public readonly Dictionary<int, TheParentType> Dict = new Dictionary<int, TheParentType>();

@@ -9,7 +9,13 @@ namespace Domore {
     abstract class ReleaseAction {
         protected void Process(string fileName, params string[] arguments) {
             var args = string.Join(" ", arguments);
-            Log(fileName + " " + args);
+            Log($"{fileName} {args}");
+
+            if (ProcessPath.TryGetValue(fileName, out string processPath)) {
+                fileName = processPath;
+                Log($"Using {fileName}");
+            }
+
             using (var process = new Process()) {
                 process.StartInfo.FileName = fileName;
                 process.StartInfo.Arguments = args;
@@ -38,9 +44,7 @@ namespace Domore {
                 }
                 return _SolutionDirectory;
             }
-            set {
-                _SolutionDirectory = value;
-            }
+            set => _SolutionDirectory = value;
         }
         string _SolutionDirectory;
 
@@ -55,10 +59,10 @@ namespace Domore {
             set => _Context = value;
         }
 
-        IDictionary<string, string> _Paths;
-        public IDictionary<string, string> Paths {
-            get => _Paths ?? (_Paths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
-            set => _Paths = value;
+        IDictionary<string, string> _ProcessPath;
+        public IDictionary<string, string> ProcessPath {
+            get => _ProcessPath ?? (_ProcessPath = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+            set => _ProcessPath = value;
         }
 
         public abstract void Work();

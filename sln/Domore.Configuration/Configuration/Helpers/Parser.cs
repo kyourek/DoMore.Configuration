@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Domore.Configuration.Helpers {
-    public class Parser {
+    class Parser {
         public IEnumerable<int> ParseIntegerCollection(string input) {
             if (null == input) throw new ArgumentNullException(nameof(input));
 
@@ -13,8 +13,7 @@ namespace Domore.Configuration.Helpers {
                     continue;
                 }
 
-                var val = default(int);
-                if (int.TryParse(str, out val)) {
+                if (int.TryParse(str, out var val)) {
                     yield return val;
                     continue;
                 }
