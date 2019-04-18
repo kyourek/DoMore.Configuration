@@ -110,9 +110,7 @@ namespace Domore.Configuration.Helpers {
             }
 
             Type _ObjectType;
-            public Type ObjectType {
-                get => _ObjectType ?? (_ObjectType = Object.GetType());
-            }
+            public Type ObjectType => _ObjectType ?? (_ObjectType = Object.GetType());
 
             PropertyInfo _PropertyInfo;
             public PropertyInfo PropertyInfo {
@@ -134,9 +132,7 @@ namespace Domore.Configuration.Helpers {
                 }
             }
 
-            public bool Exists {
-                get => PropertyInfo != null;
-            }
+            public bool Exists => PropertyInfo != null;
 
             ItemProperty _Item;
             public ItemProperty Item {
@@ -151,8 +147,8 @@ namespace Domore.Configuration.Helpers {
             }
 
             public virtual object PropertyValue {
-                get { return PropertyInfo.GetValue(Object, null); }
-                set { PropertyInfo.SetValue(Object, value, null); }
+                get => PropertyInfo.GetValue(Object, null);
+                set => PropertyInfo.SetValue(Object, value, null);
             }
 
             public ObjectProperty(object @object, string key) {

@@ -81,11 +81,11 @@ namespace Domore.Configuration {
             return value = Value<T>(key, def);
         }
 
-        public object Configure(object obj, string key) {
+        public object Configure(object obj, string key = null) {
             return Block.Configure(obj, key);
         }
 
-        public T Configure<T>(T obj, string key) {
+        public T Configure<T>(T obj, string key = null) {
             return Block.Configure(obj, key);
         }
 

@@ -5,14 +5,15 @@ namespace Domore.Configuration {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class ConfigurationDefault : IConfigurationDefault {
-        static readonly IConfigurationContainer _Container = new ConfigurationContainer();
-        public IConfigurationContainer Container { get => _Container; }
+        public static IConfigurationContainer Container { get; } = new ConfigurationContainer();
 
         public static IConfigurationContentsFactory ContentsFactory {
-            get => _Container.ContentsFactory;
-            set => _Container.ContentsFactory = value;
+            get => Container.ContentsFactory;
+            set => Container.ContentsFactory = value;
         }
 
-        public static T Configure<T>(T obj, string key = null) => _Container.Configure(obj, key);
+        public static T Configure<T>(T obj, string key = null) => Container.Configure(obj, key);
+
+        IConfigurationContainer IConfigurationDefault.Container => Container;
     }
 }

@@ -13,7 +13,7 @@ namespace Domore.Configuration.Helpers {
 
             var conv = TypeDescriptor.GetConverter(type);
             if (conv is ConfigurationTypeConverter conf) {
-                conf.ConfigurationBlock = block;
+                conf.Configuration = block;
             }
 
             if (block.ItemExists(key)) {

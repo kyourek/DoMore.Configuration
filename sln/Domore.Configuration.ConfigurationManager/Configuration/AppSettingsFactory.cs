@@ -23,7 +23,7 @@ namespace Domore.Configuration {
         static IEnumerable<KeyValuePair<string, string>> GetSettings(AppSettingsSection section) {
             if (section == null) return EmptySettings;
             return GetSettings(section.Settings);
-        }
+        } 
 
         static IEnumerable<KeyValuePair<string, string>> GetSettings(string exePath) {
             return string.IsNullOrWhiteSpace(exePath)

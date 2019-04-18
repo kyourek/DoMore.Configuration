@@ -17,16 +17,13 @@ namespace Domore.Configuration {
 
         class ConfigurationBlock : IConfigurationBlock {
             ConfigurationBlockItem.Collection _Items;
-            ConfigurationBlockItem.Collection Items {
-                get => _Items ?? (_Items = ConfigurationBlockItem.Collection.Create(ContentsFactory.CreateConfigurationContents(Content)));
-            }
+            ConfigurationBlockItem.Collection Items => _Items ?? (_Items = 
+                ConfigurationBlockItem.Collection.Create(ContentsFactory.CreateConfigurationContents(Content)));
 
             public object Content { get; }
             public IConfigurationContentsFactory ContentsFactory { get; }
 
-            public int ItemCount {
-                get => Items.Count;
-            }
+            public int ItemCount => Items.Count;
 
             public ConfigurationBlock(object content, IConfigurationContentsFactory contentsFactory) {
                 Content = content;
