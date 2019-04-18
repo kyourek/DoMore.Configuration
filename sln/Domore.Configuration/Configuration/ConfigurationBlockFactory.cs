@@ -5,14 +5,15 @@ using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Domore.Configuration {
+    using Contents;
     using Helpers;
 
     [Guid("7506691D-E25D-4D44-BBEF-5CDE862E9148")]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class ConfigurationBlockFactory : IConfigurationBlockFactory {
-        public IConfigurationBlock CreateConfigurationBlock(object content, IConfigurationContentsFactory contentsFactory) {
-            return new ConfigurationBlock(content, contentsFactory);
+        public IConfigurationBlock CreateConfigurationBlock(object content, IConfigurationContentsFactory contentsFactory = null) {
+            return new ConfigurationBlock(content, contentsFactory ?? new ConfContentsFactory());
         }
 
         class ConfigurationBlock : IConfigurationBlock {

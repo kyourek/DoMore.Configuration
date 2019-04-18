@@ -2,8 +2,6 @@
 using System.Runtime.InteropServices;
 
 namespace Domore.Configuration {
-    using Contents;
-
     [Guid("D695CFB3-BA77-4F4D-A7E8-290CBC279B77")]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
@@ -28,7 +26,7 @@ namespace Domore.Configuration {
 
         IConfigurationContentsFactory _ContentsFactory;
         public IConfigurationContentsFactory ContentsFactory {
-            get => _ContentsFactory ?? (_ContentsFactory = new ConfContentsFactory());
+            get => _ContentsFactory;
             set {
                 if (_ContentsFactory != value) {
                     _ContentsFactory = value;

@@ -8,6 +8,12 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/kyourek/Domore.Configuration</projectUrl>
     <dependencies>
+      <group targetFramework="net40">
+        <dependency id="Domore.Configuration" version="2.0.0-beta.17" />
+      </group>
+      <group targetFramework="net45">
+        <dependency id="Domore.Configuration" version="2.0.0-beta.17" />
+      </group>
       <group targetFramework="netcoreapp2.0">
         <dependency id="Domore.Configuration" version="2.0.0-beta.17" />
         <dependency id="System.Configuration.ConfigurationManager" version="4.5.0" />
