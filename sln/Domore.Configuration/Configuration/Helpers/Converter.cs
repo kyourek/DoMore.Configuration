@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace Domore.Configuration.Helpers {
     class Converter {
         public object Convert(Type type, string value) {
-            return TypeDescriptor.GetConverter(type).ConvertFrom(value);
+            return TypeDescriptor.GetConverter(type).ConvertFromString(value);
         }
 
         public object Convert(Type type, IConfigurationBlock block, string key) {
