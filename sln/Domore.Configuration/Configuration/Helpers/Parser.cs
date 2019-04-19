@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domore.Configuration.Helpers {
     class Parser {
-        public IEnumerable<int> ParseIntegerCollection(string input) {
+        public static IEnumerable<int> ParseIntegerCollection(string input) {
             if (null == input) throw new ArgumentNullException(nameof(input));
 
             var csv = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);

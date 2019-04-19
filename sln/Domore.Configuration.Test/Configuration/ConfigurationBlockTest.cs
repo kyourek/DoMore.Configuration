@@ -150,5 +150,16 @@ namespace Domore.Configuration {
             var man = Subject.Configure(new Man());
             Assert.AreEqual("red", man.BestFriend.Color);
         }
+
+        class Kid { public Pet Pet { get; set; } }
+        class Pet { }
+        class Cat : Pet { }
+
+        [Test]
+        public void Configure_CreatesInstanceOfType() {
+            Content = @"Kid.Pet = Domore.Configuration.ConfigurationBlockTest+Cat, Domore.Configuration.Test";
+            var kid = Subject.Configure(new Kid());
+            Assert.That(kid.Pet, Is.InstanceOf(typeof(Cat)));
+        }
     }
 }

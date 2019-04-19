@@ -18,7 +18,7 @@ namespace Domore.Configuration {
 
         class ConfigurationBlock : IConfigurationBlock {
             ConfigurationBlockItem.Collection _Items;
-            ConfigurationBlockItem.Collection Items => _Items ?? (_Items = 
+            ConfigurationBlockItem.Collection Items => _Items ?? (_Items =
                 ConfigurationBlockItem.Collection.Create(ContentsFactory.CreateConfigurationContents(Content)));
 
             public object Content { get; }
@@ -81,6 +81,14 @@ namespace Domore.Configuration {
                 OriginalKey = originalKey;
                 NormalizedKey = normalizedKey;
                 OriginalValue = originalValue;
+            }
+
+            public object ConvertValue(Type type) {
+                return Converter.Convert(type, OriginalValue);
+            }
+
+            public T ConvertValue<T>() {
+                return (T)ConvertValue(typeof(T));
             }
 
             public override string ToString() {

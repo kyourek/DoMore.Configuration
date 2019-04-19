@@ -3,11 +3,24 @@ using System.ComponentModel;
 
 namespace Domore.Configuration.Helpers {
     class Converter {
-        public object Convert(Type type, string value) {
-            return TypeDescriptor.GetConverter(type).ConvertFromString(value);
+        public static object Convert(Type type, string value, TypeConverter typeConverter = null) {
+            typeConverter = typeConverter ?? TypeDescriptor.GetConverter(type);
+            try {
+                return typeConverter.ConvertFrom(value);
+            }
+            catch {
+                if (type == typeof(Type)) {
+                    return Type.GetType(value, throwOnError: true, ignoreCase: true);
+                }
+                var valueType = Type.GetType(value, throwOnError: false, ignoreCase: true);
+                if (valueType != null) {
+                    return Activator.CreateInstance(valueType);
+                }
+                throw;
+            }
         }
 
-        public object Convert(Type type, IConfigurationBlock block, string key) {
+        public static object Convert(Type type, IConfigurationBlock block, string key) {
             if (null == type) throw new ArgumentNullException(nameof(type));
             if (null == block) throw new ArgumentNullException(nameof(block));
 
@@ -17,20 +30,7 @@ namespace Domore.Configuration.Helpers {
             }
 
             if (block.ItemExists(key)) {
-                var value = block.Item(key).OriginalValue;
-                try {
-                    return conv.ConvertFrom(value);
-                }
-                catch {
-                    if (type == typeof(Type)) {
-                        return Type.GetType(value, throwOnError: true, ignoreCase: true);
-                    }
-                    var valueType = Type.GetType(value, throwOnError: false, ignoreCase: true);
-                    if (valueType != null) {
-                        return Activator.CreateInstance(valueType);
-                    }
-                    throw;
-                }
+                return Convert(type, block.Item(key).OriginalValue, conv);
             }
 
             try {

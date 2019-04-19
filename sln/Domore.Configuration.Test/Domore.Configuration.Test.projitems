@@ -27,5 +27,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\ComVisible.cs">
       <Link>Properties\ComVisible.cs</Link>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationBlockItemTest.cs" />
   </ItemGroup>
 </Project>

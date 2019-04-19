@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Domore.Configuration {
     [Guid("F5BE22A8-89C0-4FD6-924D-156DE83B54BE")]
@@ -17,5 +18,11 @@ namespace Domore.Configuration {
 
         [DispId(3)]
         string OriginalValue { get; }
+
+        [DispId(4)]
+        object ConvertValue(Type type);
+
+        [ComVisible(false)]
+        T ConvertValue<T>();
     }
 }

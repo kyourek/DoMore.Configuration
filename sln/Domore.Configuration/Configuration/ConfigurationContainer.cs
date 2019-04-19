@@ -62,7 +62,7 @@ namespace Domore.Configuration {
         }
 
         public T Value<T>(object key) {
-            return (T)Convert.ChangeType(Value(key), typeof(T));
+            return Block.Item(key).ConvertValue<T>();
         }
 
         public T Value<T>(object key, T def) {

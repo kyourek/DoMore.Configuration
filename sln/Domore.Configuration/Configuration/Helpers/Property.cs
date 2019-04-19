@@ -60,14 +60,8 @@ namespace Domore.Configuration.Helpers {
             public object Object { get; }
             public string Key { get; }
 
-            Converter _Converter;
-            public Converter Converter {
-                get => _Converter ?? (_Converter = new Converter());
-                set => _Converter = value;
-            }
-
             private string _PropertyName;
-            public string PropertyName { 
+            public string PropertyName {
                 get {
                     if (_PropertyName == null) {
                         _PropertyName = Key.Contains("[")
@@ -75,7 +69,7 @@ namespace Domore.Configuration.Helpers {
                             : Key;
                     }
                     return _PropertyName;
-                } 
+                }
             }
 
             string _IndexString;
