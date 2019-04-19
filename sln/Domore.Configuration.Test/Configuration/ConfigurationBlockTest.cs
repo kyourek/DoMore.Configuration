@@ -5,7 +5,7 @@ using System.Globalization;
 using NUnit.Framework;
 
 namespace Domore.Configuration {
-    using Contents;
+    using Providers;
 
     [TestFixture]
     public class ConfigurationBlockTest {

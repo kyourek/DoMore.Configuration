@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Domore.Configuration.Contents {
+namespace Domore.Configuration.Providers {
     class TextContentsProvider : IConfigurationContentsProvider {
         public virtual IEnumerable<KeyValuePair<string, string>> GetConfigurationContents(object content) {
             var contents = content?.ToString()?.Trim() ?? "";

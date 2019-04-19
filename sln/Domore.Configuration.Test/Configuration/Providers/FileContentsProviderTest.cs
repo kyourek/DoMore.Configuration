@@ -3,7 +3,7 @@ using System.Linq;
 
 using NUnit.Framework;
 
-namespace Domore.Configuration.Contents {
+namespace Domore.Configuration.Providers {
     [TestFixture]
     public class FileContentsProviderTest {
         string TempFileName;

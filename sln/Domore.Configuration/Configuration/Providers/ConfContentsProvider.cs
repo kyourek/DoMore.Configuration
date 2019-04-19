@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Domore.Configuration.Contents {
+namespace Domore.Configuration.Providers {
     class ConfContentsProvider : FileContentsProvider {
         string _ConfFile;
         string ConfFile {

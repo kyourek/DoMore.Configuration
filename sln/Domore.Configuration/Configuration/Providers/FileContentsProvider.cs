@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Domore.Configuration.Contents {
+namespace Domore.Configuration.Providers {
     class FileContentsProvider : TextContentsProvider {
         public override IEnumerable<KeyValuePair<string, string>> GetConfigurationContents(object content) {
             var file = content?.ToString();
