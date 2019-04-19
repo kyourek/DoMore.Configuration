@@ -13,8 +13,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationDefault.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationTypeConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\FileContentsFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\TextContentsFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\FileContentsProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\TextContentsProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Converter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Key.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Parser.cs" />
@@ -39,7 +39,7 @@
       <Link>Properties\InternalsVisibleTo.cs</Link>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationContentsProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\ConfContentsFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\ConfContentsProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationDefault.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
   </ItemGroup>

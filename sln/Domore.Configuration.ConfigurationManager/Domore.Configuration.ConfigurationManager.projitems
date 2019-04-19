@@ -9,7 +9,7 @@
     <Import_RootNamespace>Domore</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\AppSettingsFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\AppSettingsProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\AssemblyCompany.cs">
       <Link>Properties\AssemblyCompany.cs</Link>
     </Compile>
