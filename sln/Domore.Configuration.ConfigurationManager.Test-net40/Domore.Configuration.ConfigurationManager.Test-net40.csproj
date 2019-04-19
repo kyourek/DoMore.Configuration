@@ -40,9 +40,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Domore.Configuration-net40\Domore.Configuration-net40.csproj">
       <Project>{e5717466-9682-4408-a3cb-9e90353607a5}</Project>
       <Name>Domore.Configuration-net40</Name>
@@ -51,6 +48,9 @@
       <Project>{bc4dc1ea-b4fa-48d9-ad4c-c6432e1600f8}</Project>
       <Name>Domore.Configuration.ConfigurationManager-net40</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\Domore.Configuration.ConfigurationManager.Test\Domore.Configuration.ConfigurationManager.Test.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

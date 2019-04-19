@@ -1,2 +1,2 @@
-cd %~dp0\Domore.Release\bin
+cd %~dp0\Domore.Release
 dotnet Domore.Release.dll %*
