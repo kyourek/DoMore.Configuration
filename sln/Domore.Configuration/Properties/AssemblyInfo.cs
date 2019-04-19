@@ -1,4 +1,2 @@
-﻿using System.Reflection;
-[assembly: AssemblyTitle("Domore.Configuration")]
-[assembly: AssemblyDescription("Domore Configuration")]
-[assembly: AssemblyProduct("Domore.Configuration")]
+﻿using System.Runtime.CompilerServices;
+[assembly: InternalsVisibleTo("Domore.Configuration.Test")]

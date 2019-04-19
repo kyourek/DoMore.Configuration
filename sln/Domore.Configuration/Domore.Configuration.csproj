@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+  <PropertyGroup>
+    <TargetFrameworks>net40;net45;netcoreapp2.0;netstandard2.0</TargetFrameworks>
+    <RootNamespace>Domore</RootNamespace>
+    <Version>2.0.0</Version>
+    <Authors>Ken Yourek</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kyourek/Domore.Configuration</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kyourek/Domore.Configuration</RepositoryUrl>
+  </PropertyGroup>
+</Project>
