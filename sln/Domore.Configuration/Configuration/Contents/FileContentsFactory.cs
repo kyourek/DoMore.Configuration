@@ -2,11 +2,11 @@
 using System.IO;
 
 namespace Domore.Configuration.Contents {
-    class FileContentsFactory : TextContentsFactory {
-        public override IEnumerable<KeyValuePair<string, string>> CreateConfigurationContents(object content) {
+    class FileContentsProvider : TextContentsProvider {
+        public override IEnumerable<KeyValuePair<string, string>> GetConfigurationContents(object content) {
             var file = content?.ToString();
             if (File.Exists(file)) content = File.ReadAllText(file);
-            return base.CreateConfigurationContents(content);
+            return base.GetConfigurationContents(content);
         }
     }
 }

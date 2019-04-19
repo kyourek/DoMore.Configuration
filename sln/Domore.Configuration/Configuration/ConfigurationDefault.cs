@@ -7,9 +7,9 @@ namespace Domore.Configuration {
     public class ConfigurationDefault : IConfigurationDefault {
         public static IConfigurationContainer Container { get; } = new ConfigurationContainer();
 
-        public static IConfigurationContentsFactory ContentsFactory {
-            get => Container.ContentsFactory;
-            set => Container.ContentsFactory = value;
+        public static IConfigurationContentsProvider ContentsProvider {
+            get => Container.ContentsProvider;
+            set => Container.ContentsProvider = value;
         }
 
         public static T Configure<T>(T obj, string key = null) => Container.Configure(obj, key);

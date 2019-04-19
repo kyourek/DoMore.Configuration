@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 
 namespace Domore.Configuration.Contents {
-    class ConfContentsFactory : FileContentsFactory {
+    class ConfContentsProvider : FileContentsProvider {
         string _ConfFile;
         string ConfFile {
             get => _ConfFile ?? (_ConfFile = GetConfFile());
@@ -27,10 +27,10 @@ namespace Domore.Configuration.Contents {
             return "";
         }
 
-        public override IEnumerable<KeyValuePair<string, string>> CreateConfigurationContents(object content) {
+        public override IEnumerable<KeyValuePair<string, string>> GetConfigurationContents(object content) {
             content = content?.ToString()?.Trim() ?? "";
             content = content.Equals("") ? ConfFile : content;
-            return base.CreateConfigurationContents(content);
+            return base.GetConfigurationContents(content);
         }
     }
 }

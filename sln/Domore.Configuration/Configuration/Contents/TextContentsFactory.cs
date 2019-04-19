@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Configuration.Contents {
-    class TextContentsFactory : IConfigurationContentsFactory {
-        public virtual IEnumerable<KeyValuePair<string, string>> CreateConfigurationContents(object content) {
+    class TextContentsProvider : IConfigurationContentsProvider {
+        public virtual IEnumerable<KeyValuePair<string, string>> GetConfigurationContents(object content) {
             var contents = content?.ToString()?.Trim() ?? "";
             var separator = contents.Contains("\n") ? "\n" : ";";
 

@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Linq;
 
 namespace Domore.Configuration {
-    public class AppSettingsFactory : IConfigurationContentsFactory {
+    public class AppSettingsProvider : IConfigurationContentsProvider {
         static IEnumerable<KeyValuePair<string, string>> EmptySettings {
             get { yield break; }
         }
@@ -31,7 +31,7 @@ namespace Domore.Configuration {
                 : GetSettings(ConfigurationManager.OpenExeConfiguration(exePath)?.AppSettings);
         }
 
-        public IEnumerable<KeyValuePair<string, string>> CreateConfigurationContents(object content) {
+        public IEnumerable<KeyValuePair<string, string>> GetConfigurationContents(object content) {
             return GetSettings(content?.ToString());
         }
     }

@@ -14,7 +14,7 @@ namespace Domore.Configuration {
         object Content { get; set; }
 
         [DispId(2)]
-        IConfigurationContentsFactory ContentsFactory { get; set; }
+        IConfigurationContentsProvider ContentsProvider { get; set; }
 
         [DispId(3)]
         IConfigurationBlockFactory BlockFactory { get; set; }

@@ -3,7 +3,7 @@
 
     class Program {
         static void Main() {
-            ConfigurationDefault.ContentsFactory = new AppSettingsFactory();
+            ConfigurationDefault.ContentsProvider = new AppSettingsProvider();
             new Sample().Run();
         }
     }

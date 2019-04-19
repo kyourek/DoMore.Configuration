@@ -12,7 +12,7 @@ namespace Domore.Configuration {
         object Content;
         IConfigurationBlock _Subject;
         IConfigurationBlock Subject {
-            get => _Subject ?? (_Subject = new ConfigurationBlockFactory().CreateConfigurationBlock(Content, new TextContentsFactory()));
+            get => _Subject ?? (_Subject = new ConfigurationBlockFactory().CreateConfigurationBlock(Content, new TextContentsProvider()));
             set => _Subject = value;
         }
 

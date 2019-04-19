@@ -38,7 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\InternalsVisibleTo.cs">
       <Link>Properties\InternalsVisibleTo.cs</Link>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationContentsFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationContentsProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Contents\ConfContentsFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationDefault.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />

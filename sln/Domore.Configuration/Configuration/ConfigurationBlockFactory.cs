@@ -12,23 +12,23 @@ namespace Domore.Configuration {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class ConfigurationBlockFactory : IConfigurationBlockFactory {
-        public IConfigurationBlock CreateConfigurationBlock(object content, IConfigurationContentsFactory contentsFactory = null) {
-            return new ConfigurationBlock(content, contentsFactory ?? new ConfContentsFactory());
+        public IConfigurationBlock CreateConfigurationBlock(object content, IConfigurationContentsProvider contentsProvider = null) {
+            return new ConfigurationBlock(content, contentsProvider ?? new ConfContentsProvider());
         }
 
         class ConfigurationBlock : IConfigurationBlock {
             ConfigurationBlockItem.Collection _Items;
             ConfigurationBlockItem.Collection Items => _Items ?? (_Items =
-                ConfigurationBlockItem.Collection.Create(ContentsFactory.CreateConfigurationContents(Content)));
+                ConfigurationBlockItem.Collection.Create(ContentsProvider.GetConfigurationContents(Content)));
 
             public object Content { get; }
-            public IConfigurationContentsFactory ContentsFactory { get; }
+            public IConfigurationContentsProvider ContentsProvider { get; }
 
             public int ItemCount => Items.Count;
 
-            public ConfigurationBlock(object content, IConfigurationContentsFactory contentsFactory) {
+            public ConfigurationBlock(object content, IConfigurationContentsProvider contentsProvider) {
                 Content = content;
-                ContentsFactory = contentsFactory;
+                ContentsProvider = contentsProvider;
             }
 
             public bool ItemExists(object key) {

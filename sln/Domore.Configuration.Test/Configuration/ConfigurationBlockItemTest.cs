@@ -78,14 +78,14 @@ namespace Domore.Configuration {
         class Cat : Pet { }
 
         [Test]
-        public void Configure_CreatesInstanceOfType() {
-            Content = @"value = Domore.Configuration.ConfigurationBlockItemTest+Cat, Domore.Configuration.Test";
+        public void ConvertValue_CreatesInstanceOfType() {
+            Content = @"value = domore.Configuration.ConfigurationBlockItemTest+Cat, Domore.Configuration.Test";
             var pet = Subject.ConvertValue<Pet>();
             Assert.That(pet, Is.InstanceOf(typeof(Cat)));
         }
 
         [Test]
-        public void Configure_CreatesTypeInstance() {
+        public void ConvertValue_CreatesTypeInstance() {
             Content = @"value = Domore.Configuration.ConfigurationBlockItemTest+Cat, Domore.Configuration.Test";
             var type = Subject.ConvertValue<Type>();
             Assert.That(type, Is.EqualTo(typeof(Cat)));

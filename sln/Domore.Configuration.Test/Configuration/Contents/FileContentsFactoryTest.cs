@@ -5,13 +5,13 @@ using NUnit.Framework;
 
 namespace Domore.Configuration.Contents {
     [TestFixture]
-    public class FileContentsFactoryTest {
+    public class FileContentsProviderTest {
         string TempFileName;
-        FileContentsFactory Subject;
+        FileContentsProvider Subject;
 
         [SetUp]
         public void SetUp() {
-            Subject = new FileContentsFactory();
+            Subject = new FileContentsProvider();
         }
 
         [TearDown]
@@ -22,10 +22,10 @@ namespace Domore.Configuration.Contents {
         }
 
         [Test]
-        public void CreateConfigurationContents_ReadsFromFile() {
+        public void GetConfigurationContents_ReadsFromFile() {
             TempFileName = Path.GetTempFileName();
             File.WriteAllText(TempFileName, "prop1 = val2");
-            var contents = Subject.CreateConfigurationContents(TempFileName);
+            var contents = Subject.GetConfigurationContents(TempFileName);
             Assert.AreEqual("val2", contents.First().Value);
         }
     }

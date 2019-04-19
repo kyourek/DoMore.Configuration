@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Domore.Configuration {
     [Guid("884A0522-59A1-4305-92A5-3F53FCFE4E52")]
@@ -13,7 +14,7 @@ namespace Domore.Configuration {
         object Content { get; }
 
         [DispId(2)]
-        IConfigurationContentsFactory ContentsFactory { get; }
+        IConfigurationContentsProvider ContentsProvider { get; }
 
         [DispId(3)]
         int ItemCount { get; }

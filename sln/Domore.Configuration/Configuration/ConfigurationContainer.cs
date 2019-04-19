@@ -24,12 +24,12 @@ namespace Domore.Configuration {
             }
         }
 
-        IConfigurationContentsFactory _ContentsFactory;
-        public IConfigurationContentsFactory ContentsFactory {
-            get => _ContentsFactory;
+        IConfigurationContentsProvider _ContentsProvider;
+        public IConfigurationContentsProvider ContentsProvider {
+            get => _ContentsProvider;
             set {
-                if (_ContentsFactory != value) {
-                    _ContentsFactory = value;
+                if (_ContentsProvider != value) {
+                    _ContentsProvider = value;
                     Reset();
                 }
             }
@@ -48,7 +48,7 @@ namespace Domore.Configuration {
 
         IConfigurationBlock _Block;
         public IConfigurationBlock Block {
-            get => _Block ?? (_Block = BlockFactory.CreateConfigurationBlock(Content, ContentsFactory));
+            get => _Block ?? (_Block = BlockFactory.CreateConfigurationBlock(Content, ContentsProvider));
             private set => _Block = value;
         }
 

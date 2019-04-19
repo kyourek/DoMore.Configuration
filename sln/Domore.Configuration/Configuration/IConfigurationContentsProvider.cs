@@ -10,8 +10,8 @@ namespace Domore.Configuration {
 #else
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
 #endif
-    public interface IConfigurationContentsFactory {
+    public interface IConfigurationContentsProvider {
         [DispId(1)]
-        IEnumerable<KeyValuePair<string, string>> CreateConfigurationContents(object content);
+        IEnumerable<KeyValuePair<string, string>> GetConfigurationContents(object content);
     }
 }
