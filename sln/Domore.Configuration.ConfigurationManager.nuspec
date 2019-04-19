@@ -2,24 +2,24 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Domore.Configuration.ConfigurationManager</id>
-    <version>2.0.0-beta.21</version>
+    <version>2.0.0-beta.22</version>
     <authors>Ken Yourek</authors>
     <description>Do more configuration with App.config</description>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/kyourek/Domore.Configuration</projectUrl>
     <dependencies>
       <group targetFramework="net40">
-        <dependency id="Domore.Configuration" version="2.0.0-beta.21" />
+        <dependency id="Domore.Configuration" version="2.0.0-beta.22" />
       </group>
       <group targetFramework="net45">
-        <dependency id="Domore.Configuration" version="2.0.0-beta.21" />
+        <dependency id="Domore.Configuration" version="2.0.0-beta.22" />
       </group>
       <group targetFramework="netcoreapp2.0">
-        <dependency id="Domore.Configuration" version="2.0.0-beta.21" />
+        <dependency id="Domore.Configuration" version="2.0.0-beta.22" />
         <dependency id="System.Configuration.ConfigurationManager" version="4.5.0" />
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="Domore.Configuration" version="2.0.0-beta.21" />
+        <dependency id="Domore.Configuration" version="2.0.0-beta.22" />
         <dependency id="System.Configuration.ConfigurationManager" version="4.5.0" />
       </group>
     </dependencies>
