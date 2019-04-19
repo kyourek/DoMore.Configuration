@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationBlockTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationContainerTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationTypeConverterTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\KeyTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Providers\FileContentsProviderTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\ParserTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />

@@ -29,8 +29,8 @@ namespace Domore.Configuration.Helpers {
                 conf.Configuration = block;
             }
 
-            if (block.ItemExists(key)) {
-                return Convert(type, block.Item(key).OriginalValue, conv);
+            if (block.ItemExists(key, out var item)) {
+                return Convert(type, item.OriginalValue, conv);
             }
 
             try {
