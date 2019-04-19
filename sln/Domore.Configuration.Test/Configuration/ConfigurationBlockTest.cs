@@ -60,6 +60,58 @@ namespace Domore.Configuration {
             Assert.IsFalse(Subject.ItemExists("val 3"));
         }
 
+        [Test]
+        public void ItemExists_TrueIfIndexExistsWithOutParam() {
+            Content = "val1 = hello, world!\r\nval2 = goodbye, earth..?\nval3 = 3.14";
+            Assert.IsTrue(Subject.ItemExists(2, out _));
+        }
+
+        [Test]
+        public void ItemExists_FalseIfIndexDoesNotExistWithOutParam() {
+            Content = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n";
+            Assert.IsFalse(Subject.ItemExists(2, out _));
+        }
+
+        [Test]
+        public void ItemExists_TrueIfKeyExistsWithOutParam() {
+            Content = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n VAL3 = 3.14";
+            Assert.IsTrue(Subject.ItemExists("val 3", out _));
+        }
+
+        [Test]
+        public void ItemExists_FalseIfKeyDoesNotExistWithOutParam() {
+            Content = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n ";
+            Assert.IsFalse(Subject.ItemExists("val 3", out _));
+        }
+
+        [Test]
+        public void ItemExists_SetsOutParamIfIndexExists() {
+            Content = "val1 = hello, world!\r\nval2 = goodbye, earth..?\nval3 = 3.14";
+            Subject.ItemExists(2, out var item);
+            Assert.That(item.OriginalValue, Is.EqualTo("3.14"));
+        }
+
+        [Test]
+        public void ItemExists_SetsOutParamIfIndexDoesNotExist() {
+            Content = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n";
+            Subject.ItemExists(2, out var item);
+            Assert.That(item, Is.Null);
+        }
+
+        [Test]
+        public void ItemExists_SetsOutParamIfKeyExists() {
+            Content = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n VAL3 = 3.14";
+            Subject.ItemExists("val 2", out var item);
+            Assert.That(item.OriginalValue, Is.EqualTo("goodbye, earth..?"));
+        }
+
+        [Test]
+        public void ItemExists_SetsOutParamIfKeyDoesNotExist() {
+            Content = "val1 = hello, world!\r\nval2 = goodbye, earth..?\n ";
+            Subject.ItemExists("val 3", out var item);
+            Assert.That(item, Is.Null);
+        }
+
         [TestCase(0, "val1")]
         [TestCase(1, "val2")]
         [TestCase(2, "Val 3")]

@@ -23,5 +23,8 @@ namespace Domore.Configuration {
 
         [ComVisible(false)]
         T Configure<T>(T obj, string key = null);
+
+        [ComVisible(false)]
+        bool ItemExists(object key, out IConfigurationBlockItem item);
     }
 }

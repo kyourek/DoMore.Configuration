@@ -27,17 +27,6 @@ namespace Domore.Configuration {
                 ContentsProvider = contentsProvider;
             }
 
-            public bool ItemExists(object key) {
-                var error = default(Exception);
-                try {
-                    Item(key);
-                }
-                catch (Exception ex) {
-                    error = ex;
-                }
-                return error == null;
-            }
-
             public IConfigurationBlockItem Item(object key) {
                 if (null == key) throw new ArgumentNullException(nameof(key));
 
@@ -48,6 +37,21 @@ namespace Domore.Configuration {
                 var stringKey = key.ToString();
                 var normalizedKey = Key.Normalize(stringKey);
                 return Items[normalizedKey];
+            }
+
+            public bool ItemExists(object key, out IConfigurationBlockItem item) {
+                try {
+                    item = Item(key);
+                    return true;
+                }
+                catch {
+                    item = null;
+                    return false;
+                }
+            }
+
+            public bool ItemExists(object key) {
+                return ItemExists(key, out _);
             }
 
             public object Configure(object obj, string key) {
