@@ -6,6 +6,17 @@ namespace Domore.Configuration {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     public class ConfigurationContainer : IConfigurationContainer {
+        ConfigurationBlockFactory _BlockFactory;
+        ConfigurationBlockFactory BlockFactory {
+            get => _BlockFactory ?? (_BlockFactory = new ConfigurationBlockFactory());
+            set {
+                if (_BlockFactory != value) {
+                    _BlockFactory = value;
+                    Reset();
+                }
+            }
+        }
+
         protected virtual void OnContentsChanged(EventArgs e) {
             var handler = ContentsChanged;
             if (handler != null) handler.Invoke(this, e);
@@ -35,17 +46,6 @@ namespace Domore.Configuration {
             }
         }
 
-        IConfigurationBlockFactory _BlockFactory;
-        public IConfigurationBlockFactory BlockFactory {
-            get => _BlockFactory ?? (_BlockFactory = new ConfigurationBlockFactory());
-            set {
-                if (_BlockFactory != value) {
-                    _BlockFactory = value;
-                    Reset();
-                }
-            }
-        }
-
         IConfigurationBlock _Block;
         public IConfigurationBlock Block {
             get => _Block ?? (_Block = BlockFactory.CreateConfigurationBlock(Content, ContentsProvider));
@@ -55,36 +55,6 @@ namespace Domore.Configuration {
         public void Reset() {
             Block = null;
             OnContentsChanged(EventArgs.Empty);
-        }
-
-        public string Value(object key) {
-            return Block.Item(key).OriginalValue;
-        }
-
-        public T Value<T>(object key) {
-            return Block.Item(key).ConvertValue<T>();
-        }
-
-        public T Value<T>(object key, T def) {
-            return Block.ItemExists(key)
-                ? Value<T>(key)
-                : def;
-        }
-
-        public T Value<T>(object key, out T value) {
-            return value = Value<T>(key);
-        }
-
-        public T Value<T>(object key, out T value, T def) {
-            return value = Value<T>(key, def);
-        }
-
-        public object Configure(object obj, string key = null) {
-            return Block.Configure(obj, key);
-        }
-
-        public T Configure<T>(T obj, string key = null) {
-            return Block.Configure(obj, key);
         }
 
         public override string ToString() {

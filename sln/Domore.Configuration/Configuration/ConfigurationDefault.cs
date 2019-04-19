@@ -12,7 +12,7 @@ namespace Domore.Configuration {
             set => Container.ContentsProvider = value;
         }
 
-        public static T Configure<T>(T obj, string key = null) => Container.Configure(obj, key);
+        public static T Configure<T>(T obj, string key = null) => Container.Block.Configure(obj, key);
 
         IConfigurationContainer IConfigurationDefault.Container => Container;
     }

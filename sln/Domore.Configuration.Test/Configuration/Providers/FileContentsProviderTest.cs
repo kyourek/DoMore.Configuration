@@ -1,7 +1,6 @@
-﻿using System.IO;
+﻿using NUnit.Framework;
+using System.IO;
 using System.Linq;
-
-using NUnit.Framework;
 
 namespace Domore.Configuration.Providers {
     [TestFixture]

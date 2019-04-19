@@ -45,7 +45,7 @@ namespace Domore.Configuration.Helpers {
             var normalizedKey = Key.Normalize(key);
 
             var dotCount = key.Count(c => c == '.');
-            var itemCount = block.ItemCount;
+            var itemCount = block.ItemCount();
             for (var i = 0; i < itemCount; i++) {
                 var item = block.Item(i);
                 if (item.NormalizedKey.StartsWith(normalizedKey + ".")) {

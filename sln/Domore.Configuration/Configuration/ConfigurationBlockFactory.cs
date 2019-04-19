@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace Domore.Configuration {
     using Helpers;
     using Providers;
 
-    [Guid("7506691D-E25D-4D44-BBEF-5CDE862E9148")]
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.None)]
-    public class ConfigurationBlockFactory : IConfigurationBlockFactory {
+    class ConfigurationBlockFactory {
         public IConfigurationBlock CreateConfigurationBlock(object content, IConfigurationContentsProvider contentsProvider = null) {
             return new ConfigurationBlock(content, contentsProvider ?? new ConfContentsProvider());
         }
@@ -24,7 +20,7 @@ namespace Domore.Configuration {
             public object Content { get; }
             public IConfigurationContentsProvider ContentsProvider { get; }
 
-            public int ItemCount => Items.Count;
+            public int ItemCount() => Items.Count;
 
             public ConfigurationBlock(object content, IConfigurationContentsProvider contentsProvider) {
                 Content = content;

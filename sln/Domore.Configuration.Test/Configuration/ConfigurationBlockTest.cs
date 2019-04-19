@@ -1,8 +1,7 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.ComponentModel;
 using System.Globalization;
-
-using NUnit.Framework;
 
 namespace Domore.Configuration {
     using Providers;
@@ -22,12 +21,6 @@ namespace Domore.Configuration {
         }
 
         [Test]
-        public void Content_EqualsConfiguration() {
-            Content = "here=the config\r\nand new line";
-            Assert.AreEqual(Content, Subject.Content);
-        }
-
-        [Test]
         public void ToString_IsContent() {
             Content = string.Join(Environment.NewLine, new[] { "this is some = good config", "Configuration = good" });
             Assert.AreEqual(Content, Subject.ToString());
@@ -40,7 +33,7 @@ namespace Domore.Configuration {
                 val2 = goodbye, earth..?
                 val3 = 3.14
             ";
-            Assert.AreEqual(3, Subject.ItemCount);
+            Assert.AreEqual(3, Subject.ItemCount());
         }
 
         [Test]
@@ -106,7 +99,7 @@ namespace Domore.Configuration {
         [Test]
         public void ItemCount_GetsCountWhenSeparatedBySemicolon() {
             Content = "val1 = hello, world!;val2 = goodbye, earth..?; Val 3 = 3.14  ";
-            Assert.AreEqual(3, Subject.ItemCount);
+            Assert.AreEqual(3, Subject.ItemCount());
         }
 
         [Test]
@@ -118,7 +111,7 @@ namespace Domore.Configuration {
         [Test]
         public void ItemCount_NewLinePrecedesSemicolonSeparation() {
             Content = "val1 = hello, world!\n val2 = goodbye, earth..?; Val 3 = 3.14  ";
-            Assert.AreEqual(2, Subject.ItemCount);
+            Assert.AreEqual(2, Subject.ItemCount());
         }
 
         [Test]

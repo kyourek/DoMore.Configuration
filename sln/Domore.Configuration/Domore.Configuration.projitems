@@ -20,7 +20,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Parser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Helpers\Property.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationBlock.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationBlockFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationBlockItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IConfigurationContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\AssemblyCompany.cs">

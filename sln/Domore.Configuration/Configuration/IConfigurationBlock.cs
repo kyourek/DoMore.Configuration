@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace Domore.Configuration {
     [Guid("884A0522-59A1-4305-92A5-3F53FCFE4E52")]
@@ -11,21 +10,15 @@ namespace Domore.Configuration {
 #endif
     public interface IConfigurationBlock {
         [DispId(1)]
-        object Content { get; }
+        int ItemCount();
 
         [DispId(2)]
-        IConfigurationContentsProvider ContentsProvider { get; }
-
-        [DispId(3)]
-        int ItemCount { get; }
-
-        [DispId(4)]
         bool ItemExists(object key);
 
-        [DispId(5)]
+        [DispId(3)]
         IConfigurationBlockItem Item(object key);
 
-        [DispId(6)]
+        [DispId(4)]
         object Configure(object obj, string key = null);
 
         [ComVisible(false)]
