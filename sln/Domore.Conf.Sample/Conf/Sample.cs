@@ -2,7 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Domore.Conf {
+namespace Domore.Conf.Sample {
+    class Program {
+        static void Main() {
+            new Sample().Run();
+        }
+    }
+
     class Sample {
         public void Run() {
             var alien = Conf.Configure(new Alien());

@@ -7,4 +7,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Domore.Conf\Domore.Conf.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Domore.Conf.Sample.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
