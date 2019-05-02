@@ -9,9 +9,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Configuration.Config
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Configuration.Test", "Domore.Configuration.Test\Domore.Configuration.Test.csproj", "{1D2FACED-35E0-450F-96D3-B3271F30A7A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.ConfigurationManager.Test", "Domore.Configuration.ConfigurationManager.Test\Domore.Configuration.ConfigurationManager.Test.csproj", "{0F691E33-258F-4902-8DF0-19FB19AF76B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Configuration.ConfigurationManager.Test", "Domore.Configuration.ConfigurationManager.Test\Domore.Configuration.ConfigurationManager.Test.csproj", "{0F691E33-258F-4902-8DF0-19FB19AF76B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Configuration.Sample", "Domore.Configuration.Sample\Domore.Configuration.Sample.csproj", "{6930A094-5660-4F43-B953-FE2D91DCDD89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Configuration.Sample", "Domore.Configuration.Sample\Domore.Configuration.Sample.csproj", "{6930A094-5660-4F43-B953-FE2D91DCDD89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "properties", "properties", "{247F830B-1C66-40CF-93A4-C28547F0F898}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3CBA17DE-C21F-49E9-B3DF-BA8D9FE18619}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{86FD2F1F-060C-4A94-ABD6-CD8DCC10A364}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "release", "release", "{26ED64FD-A7E4-4852-AD8E-5CA32365E18F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Release", "Domore.Release\Domore.Release.csproj", "{D606E5D5-309E-4F8B-BC1D-FB0A4A0B7479}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +52,19 @@ Global
 		{6930A094-5660-4F43-B953-FE2D91DCDD89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6930A094-5660-4F43-B953-FE2D91DCDD89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6930A094-5660-4F43-B953-FE2D91DCDD89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D606E5D5-309E-4F8B-BC1D-FB0A4A0B7479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D606E5D5-309E-4F8B-BC1D-FB0A4A0B7479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D606E5D5-309E-4F8B-BC1D-FB0A4A0B7479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D606E5D5-309E-4F8B-BC1D-FB0A4A0B7479}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1D2FACED-35E0-450F-96D3-B3271F30A7A5} = {3CBA17DE-C21F-49E9-B3DF-BA8D9FE18619}
+		{0F691E33-258F-4902-8DF0-19FB19AF76B8} = {3CBA17DE-C21F-49E9-B3DF-BA8D9FE18619}
+		{6930A094-5660-4F43-B953-FE2D91DCDD89} = {86FD2F1F-060C-4A94-ABD6-CD8DCC10A364}
+		{D606E5D5-309E-4F8B-BC1D-FB0A4A0B7479} = {26ED64FD-A7E4-4852-AD8E-5CA32365E18F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0CCF879-418A-463A-BCD6-96DEFBD56F6F}

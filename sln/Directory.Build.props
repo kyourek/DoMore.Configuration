@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <Authors>Ken Yourek</Authors>
+    <Copyright>Copyright © Ken Yourek 2019</Copyright>
+    <VersionPrefix>2.0.1</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <AssemblyVersion>2.0.1</AssemblyVersion>
+    <InformationalVersion>2.0.1</InformationalVersion>
+    <FileVersion>2.0.1.0</FileVersion>
+    <PackageVersion>2.0.1</PackageVersion>
+    <PackageProjectUrl>https://github.com/kyourek/Domore.Configuration</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/kyourek/Domore.Configuration.git</RepositoryUrl>
+    <RepositoryBranch></RepositoryBranch>
+    <RepositoryCommit></RepositoryCommit>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>conf;config;configuration</PackageTags>
+  </PropertyGroup>
+</Project>
