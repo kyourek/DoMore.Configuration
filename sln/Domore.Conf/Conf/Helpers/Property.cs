@@ -3,12 +3,12 @@ using System.Linq;
 using System.Reflection;
 
 namespace Domore.Conf.Helpers {
-    class Property {
-        static void SetOne(object obj, IConfBlock block, string key, int dotCount) {
+    static class Property {
+        static void SetOne(object obj, IConfBlock block, string key, int dotCount, ConfConverter converter) {
             var parts = key.Split('.');
             for (var i = dotCount + 1; i < parts.Length; i++) {
                 var propertyKey = parts[i];
-                var objectProperty = new ObjectProperty(obj, propertyKey);
+                var objectProperty = new ObjectProperty(obj, propertyKey, converter);
                 if (objectProperty.Exists) {
                     if (i == parts.Length - 1) {
                         var item = objectProperty.Item;
@@ -41,7 +41,7 @@ namespace Domore.Conf.Helpers {
             }
         }
 
-        public static object SetAll(object obj, IConfBlock block, string key) {
+        public static object SetAll(object obj, IConfBlock block, string key, ConfConverter converter) {
             var normalizedKey = Key.Normalize(key);
 
             var dotCount = key.Count(c => c == '.');
@@ -49,7 +49,7 @@ namespace Domore.Conf.Helpers {
             for (var i = 0; i < itemCount; i++) {
                 var item = block.Item(i);
                 if (item.NormalizedKey.StartsWith(normalizedKey + ".")) {
-                    SetOne(obj, block, item.NormalizedKey, dotCount);
+                    SetOne(obj, block, item.NormalizedKey, dotCount, converter);
                 }
             }
 
@@ -59,8 +59,9 @@ namespace Domore.Conf.Helpers {
         class ObjectProperty {
             public object Object { get; }
             public string Key { get; }
+            public ConfConverter Converter { get; }
 
-            private string _PropertyName;
+            string _PropertyName;
             public string PropertyName {
                 get {
                     if (_PropertyName == null) {
@@ -134,7 +135,7 @@ namespace Domore.Conf.Helpers {
                     if (_Item == null) {
                         _Item = IndexString == ""
                             ? null
-                            : new ItemProperty(PropertyValue, "Item" + IndexString);
+                            : new ItemProperty(PropertyValue, "Item" + IndexString, Converter);
                     }
                     return _Item;
                 }
@@ -145,10 +146,10 @@ namespace Domore.Conf.Helpers {
                 set => PropertyInfo.SetValue(Object, value, null);
             }
 
-            public ObjectProperty(object @object, string key) {
-                if (null == @object) throw new ArgumentNullException(nameof(@object));
+            public ObjectProperty(object @object, string key, ConfConverter converter) {
                 Key = key;
-                Object = @object;
+                Object = @object ?? throw new ArgumentNullException(nameof(@object));
+                Converter = converter ?? throw new ArgumentNullException(nameof(converter));
             }
 
             public void SetValue(IConfBlock block, string key) {
@@ -157,7 +158,7 @@ namespace Domore.Conf.Helpers {
         }
 
         class ItemProperty : ObjectProperty {
-            public ItemProperty(object @object, string key) : base(@object, key) {
+            public ItemProperty(object @object, string key, ConfConverter converter) : base(@object, key, converter) {
             }
 
             public override object PropertyValue {

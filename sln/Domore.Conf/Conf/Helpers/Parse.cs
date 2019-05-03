@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 
 namespace Domore.Conf.Helpers {
-    class Parser {
-        public static IEnumerable<int> ParseIntegerCollection(string input) {
+    static class Parse {
+        public static IEnumerable<int> IntegerCollection(string input) {
             if (null == input) throw new ArgumentNullException(nameof(input));
 
             var csv = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);

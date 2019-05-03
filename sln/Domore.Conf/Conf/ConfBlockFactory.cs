@@ -8,23 +8,25 @@ namespace Domore.Conf {
     using Providers;
 
     class ConfBlockFactory {
-        public IConfBlock CreateConfBlock(object content, IConfContentsProvider contentsProvider = null) {
-            return new ConfBlock(content, contentsProvider ?? new ConfContentsProvider());
+        public IConfBlock CreateConfBlock(object content, IConfContentsProvider contentsProvider = null, ConfConverter converter = null) {
+            return new ConfBlock(content, contentsProvider ?? new ConfContentsProvider(), converter ?? new ConfConverter());
         }
 
         class ConfBlock : IConfBlock {
             ConfBlockItem.Collection _Items;
             ConfBlockItem.Collection Items => _Items ?? (_Items =
-                ConfBlockItem.Collection.Create(ContentsProvider.GetConfContents(Content)));
+                ConfBlockItem.Collection.Create(ContentsProvider.GetConfContents(Content), Converter));
 
             public object Content { get; }
             public IConfContentsProvider ContentsProvider { get; }
+            public ConfConverter Converter { get; }
 
             public int ItemCount() => Items.Count;
 
-            public ConfBlock(object content, IConfContentsProvider contentsProvider) {
+            public ConfBlock(object content, IConfContentsProvider contentsProvider, ConfConverter converter) {
+                Converter = converter;
                 Content = content;
-                ContentsProvider = contentsProvider;
+                ContentsProvider = contentsProvider ?? throw new ArgumentNullException(nameof(contentsProvider));
             }
 
             public IConfBlockItem Item(object key) {
@@ -60,7 +62,7 @@ namespace Domore.Conf {
                 key = (key ?? "").Trim();
                 key = key == "" ? obj.GetType().Name : key;
 
-                return Property.SetAll(obj, this, key);
+                return Property.SetAll(obj, this, key, Converter);
             }
 
             public T Configure<T>(T obj, string key) {
@@ -76,8 +78,10 @@ namespace Domore.Conf {
             public string OriginalKey { get; }
             public string NormalizedKey { get; }
             public string OriginalValue { get; }
+            public ConfConverter Converter { get; }
 
-            public ConfBlockItem(string originalKey, string normalizedKey, string originalValue) {
+            public ConfBlockItem(string originalKey, string normalizedKey, string originalValue, ConfConverter converter) {
+                Converter = converter ?? throw new ArgumentNullException(nameof(converter));
                 OriginalKey = originalKey;
                 NormalizedKey = normalizedKey;
                 OriginalValue = originalValue;
@@ -120,9 +124,9 @@ namespace Domore.Conf {
                     Add(items);
                 }
 
-                public static Collection Create(IEnumerable<KeyValuePair<string, string>> items) {
+                public static Collection Create(IEnumerable<KeyValuePair<string, string>> items, ConfConverter converter) {
                     if (null == items) throw new ArgumentNullException(nameof(items));
-                    return new Collection(items.Select(item => new ConfBlockItem(item.Key, Key.Normalize(item.Key), item.Value)));
+                    return new Collection(items.Select(item => new ConfBlockItem(item.Key, Key.Normalize(item.Key), item.Value, converter)));
                 }
             }
         }

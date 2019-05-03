@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace Domore.Conf {
@@ -16,6 +17,9 @@ namespace Domore.Conf {
                 }
             }
         }
+
+        ConfConverter _Converter;
+        ConfConverter Converter => _Converter ?? (_Converter = new ConfConverter());
 
         protected virtual void OnContentsChanged(EventArgs e) {
             var handler = ContentsChanged;
@@ -48,7 +52,7 @@ namespace Domore.Conf {
 
         IConfBlock _Block;
         public IConfBlock Block {
-            get => _Block ?? (_Block = BlockFactory.CreateConfBlock(Content, ContentsProvider));
+            get => _Block ?? (_Block = BlockFactory.CreateConfBlock(Content, ContentsProvider, Converter));
             private set => _Block = value;
         }
 
