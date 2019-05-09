@@ -20,6 +20,9 @@ namespace Domore.Conf {
         IConfBlock Block { get; }
 
         [DispId(4)]
+        IConfConverterTable TypeConverter { get; }
+
+        [DispId(5)]
         event EventHandler ContentsChanged;
     }
 }

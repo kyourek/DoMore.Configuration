@@ -28,6 +28,8 @@ namespace Domore.Conf {
 
         public event EventHandler ContentsChanged;
 
+        public IConfConverterTable TypeConverter => Converter;
+
         object _Content;
         public object Content {
             get => _Content;

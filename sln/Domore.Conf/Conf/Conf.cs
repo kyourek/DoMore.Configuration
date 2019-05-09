@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Domore.Conf {
     [Guid("DB5DC8B5-6ED2-4A75-A88E-F9F9A84CF3F6")]

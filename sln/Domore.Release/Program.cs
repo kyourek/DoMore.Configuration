@@ -1,9 +1,9 @@
 ﻿namespace Domore {
-    using Configuration;
+    using Conf;
 
     class Program {
         static void Main(string[] args) {
-            ConfigurationDefault.ContentsProvider = new AppSettingsProvider();
+            Conf.Conf.ContentsProvider = new AppSettingsProvider();
             new Release(args);
         }
     }

@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Domore.Conf {
-    class ConfConverter {
+    class ConfConverter : IConfConverterTable {
         readonly TypeConverterTable TypeConverters = new TypeConverterTable();
+
+        public TypeConverter this[Type type] {
+            set { TypeConverters[type] = value; }
+        }
 
         public object Convert(Type type, string value, TypeConverter typeConverter = null) {
             typeConverter = typeConverter ?? TypeConverters.GetTypeConverter(type);
