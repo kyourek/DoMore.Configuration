@@ -49,11 +49,11 @@ namespace Domore.Conf {
                 }
             }
             public class MyConfTypeConverter : ConfTypeConverter {
-                public IConfBlock Conf { get; set; }
+                public IConfBlock Param { get; set; }
                 public object Value { get; set; }
                 public object Conversion { get; set; }
                 public override object ConvertFrom(IConfBlock conf, ITypeDescriptorContext context, CultureInfo culture, object value) {
-                    Conf = conf;
+                    Param = conf;
                     Value = value;
                     return Conversion;
                 }
@@ -89,7 +89,18 @@ namespace Domore.Conf {
             Subject.TypeConverter[typeof(TypeConverterHelper.ConvertedType)] = converter;
             Subject.Content = "helper.property = _";
             Subject.Configure(new TypeConverterHelper.ConfiguredType(), "helper");
-            Assert.AreSame(Subject.Block, converter.Conf);
+            Assert.AreSame(Subject.Block, converter.Param);
+        }
+
+        [Test]
+        public void Log_SetsLogAction() {
+            var converter = new TypeConverterHelper.MyConfTypeConverter();
+            var log = "";
+            Subject.Log = s => log += s;
+            Subject.TypeConverter[typeof(TypeConverterHelper.ConvertedType)] = converter;
+            Subject.Content = "helper.property = _";
+            Subject.Configure(new TypeConverterHelper.ConfiguredType(), "helper");
+            Assert.That(log, Is.Not.Empty);
         }
     }
 }

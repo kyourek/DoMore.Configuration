@@ -23,6 +23,9 @@ namespace Domore.Conf {
         IConfConverterTable TypeConverter { get; }
 
         [DispId(5)]
+        ConfLog Log { get; set; }
+
+        [DispId(6)]
         event EventHandler ContentsChanged;
     }
 }

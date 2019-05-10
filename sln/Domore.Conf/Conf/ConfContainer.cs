@@ -30,6 +30,11 @@ namespace Domore.Conf {
 
         public IConfConverterTable TypeConverter => Converter;
 
+        public ConfLog Log {
+            get => Converter.Log.Action;
+            set => Converter.Log.Action = value;
+        }
+
         object _Content;
         public object Content {
             get => _Content;

@@ -13,6 +13,11 @@ namespace Domore.Conf {
             set => Container.ContentsProvider = value;
         }
 
+        public static ConfLog Log {
+            get => Container.Log;
+            set => Container.Log = value;
+        }
+
         public static T Configure<T>(T obj, string key = null) => Container.Configure(obj, key);
 
         IConfContainer IConf.Container => Container;

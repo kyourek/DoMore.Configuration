@@ -23,6 +23,11 @@ namespace Domore.Conf {
 
             public int ItemCount() => Items.Count;
 
+            public Log Log {
+                get => Converter.Log;
+                set => Converter.Log = value;
+            }
+
             public ConfBlock(object content, IConfContentsProvider contentsProvider, ConfConverter converter) {
                 Converter = converter;
                 Content = content;
@@ -59,8 +64,12 @@ namespace Domore.Conf {
             public object Configure(object obj, string key) {
                 if (null == obj) throw new ArgumentNullException(nameof(obj));
 
+                Log.Lines("Configuring", obj.GetType());
+
                 key = (key ?? "").Trim();
                 key = key == "" ? obj.GetType().Name : key;
+
+                Log.Lines("with key", key);
 
                 return Property.SetAll(obj, this, key, Converter);
             }
