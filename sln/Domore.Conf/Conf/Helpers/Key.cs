@@ -30,6 +30,7 @@ namespace Domore.Conf.Helpers {
                     key = $"{key}{NormalizeName(nam)}[{NormalizeIndex(idx)}]";
                     cpy = cpy.Substring(cpy.IndexOf(']') + 1);
                 } while (ContainsIndex(cpy));
+                key = $"{key}{NormalizeName(cpy)}";
             }
             else {
                 key = NormalizeName(key);
