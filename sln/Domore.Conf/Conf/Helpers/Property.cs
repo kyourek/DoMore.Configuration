@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Reflection;
 
@@ -135,7 +136,7 @@ namespace Domore.Conf.Helpers {
                     if (_Item == null) {
                         _Item = IndexString == ""
                             ? null
-                            : new ItemProperty(PropertyValue, "Item" + IndexString, Converter);
+                            : ItemProperty.Create(PropertyValue, $"Item{IndexString}", Converter);
                     }
                     return _Item;
                 }
@@ -158,9 +159,6 @@ namespace Domore.Conf.Helpers {
         }
 
         class ItemProperty : ObjectProperty {
-            public ItemProperty(object @object, string key, ConfConverter converter) : base(@object, key, converter) {
-            }
-
             public override object PropertyValue {
                 get => PropertyInfo.GetValue(Object, Index);
                 set => PropertyInfo.SetValue(Object, value, Index);
@@ -175,6 +173,64 @@ namespace Domore.Conf.Helpers {
                         return false;
                     }
                     return true;
+                }
+            }
+
+            public ItemProperty(object @object, string key, ConfConverter converter) : base(@object, key, converter) {
+            }
+
+            public static ItemProperty Create(object @object, string key, ConfConverter converter) {
+                if (@object is IList list) {
+                    return new ListProperty(list, key, converter);
+                }
+                if (@object is IDictionary dictionary) {
+                    return new DictionaryProperty(dictionary, key, converter);
+                }
+                return new ItemProperty(@object, key, converter);
+            }
+
+            class ListProperty : ItemProperty {
+                public IList List { get; }
+                public new int Index => (int)base.Index[0];
+
+                public override object PropertyValue {
+                    get => List[Index];
+                    set {
+                        var type = PropertyType;
+                        var list = List;
+                        var index = Index;
+                        var @default = type.IsValueType
+                            ? Activator.CreateInstance(type)
+                            : null;
+
+                        while (list.Count < index) {
+                            list.Add(@default);
+                        }
+                        if (list.Count > index) {
+                            list[index] = value;
+                        }
+                        else {
+                            list.Add(value);
+                        }
+                    }
+                }
+
+                public ListProperty(IList list, string key, ConfConverter converter) : base(list, key, converter) {
+                    List = list ?? throw new ArgumentNullException(nameof(list));
+                }
+            }
+
+            class DictionaryProperty : ItemProperty {
+                public IDictionary Dictionary { get; }
+                public new object Index => base.Index[0];
+
+                public override object PropertyValue {
+                    get => Dictionary[Index];
+                    set => Dictionary[Index] = value;
+                }
+
+                public DictionaryProperty(IDictionary dictionary, string key, ConfConverter converter) : base(dictionary, key, converter) {
+                    Dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
                 }
             }
         }

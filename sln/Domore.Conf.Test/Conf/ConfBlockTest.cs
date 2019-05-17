@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 
@@ -205,6 +207,73 @@ namespace Domore.Conf {
             Content = @"Kid.Pet = Domore.Conf.ConfBlockTest+Cat, Domore.Conf.Test";
             var kid = Subject.Configure(new Kid());
             Assert.That(kid.Pet, Is.InstanceOf(typeof(Cat)));
+        }
+
+        class Mom { public IList<string> Jobs { get; } = new Collection<string>(); }
+
+        [Test]
+        public void Configure_AddsToList() {
+            Content = @"
+                Mom.Jobs[0] = chef
+                Mom.jobs[1] = Nurse
+                mom.jobs[2] = accountant";
+            var mom = Subject.Configure(new Mom());
+            Assert.That(mom.Jobs, Is.EqualTo(new[] { "chef", "Nurse", "accountant" }));
+        }
+
+        class NumContainer { public ICollection<double> Nums { get; } = new List<double>(); }
+
+        [Test]
+        public void Configure_AddsConvertedValuesToList() {
+            Content = @"
+                Cont.Nums[0] = 1.23
+                Cont.nums[1] = 2.34
+                Cont.nums[2] = 3.45";
+            var cont = Subject.Configure(new NumContainer(), "cont");
+            Assert.That(cont.Nums, Is.EqualTo(new[] { 1.23, 2.34, 3.45 }));
+        }
+
+        [Test]
+        public void Configure_RespectsLastListedIndexOfList() {
+            Content = @"
+                Cont.Nums[0] = 1.23
+                Cont.nums[1] = 2.34
+                Cont.nums[1] = 2.00
+                Cont.nums[2] = 3.45";
+            var cont = Subject.Configure(new NumContainer(), "cont");
+            Assert.That(cont.Nums, Is.EqualTo(new[] { 1.23, 2.00, 3.45 }));
+        }
+
+        [Test]
+        public void Configure_SetsListItemsToDefault() {
+            Content = @"
+                Cont.Nums[0] = 1.23
+                Cont.nums[1] = 2.34
+                Cont.nums[2] = 3.45
+                Cont.nums[5] = 5.67";
+            var cont = Subject.Configure(new NumContainer(), "cont");
+            Assert.That(cont.Nums, Is.EqualTo(new[] { 1.23, 2.34, 3.45, 0.0, 0.0, 5.67 }));
+        }
+
+        [Test]
+        public void Configure_SetsListItemsToNull() {
+            Content = @"
+                Mom.Jobs[1] = chef
+                Mom.jobs[3] = Nurse
+                mom.jobs[7] = accountant";
+            var mom = Subject.Configure(new Mom());
+            Assert.That(mom.Jobs, Is.EqualTo(new[] { null, "chef", null, "Nurse", null, null, null, "accountant" }));
+        }
+
+        class IntContainer { public IDictionary<string, int> Dict { get; } = new Dictionary<string, int>(); }
+
+        [Test]
+        public void Configure_SetsDictionaryValues() {
+            Content = @"
+                cont.Dict[first] = 1
+                cont.dict[Third] = 3";
+            var cont = Subject.Configure(new IntContainer(), "cont");
+            Assert.That(cont.Dict, Is.EqualTo(new Dictionary<string, int> { { "first", 1 }, { "Third", 3 } }));
         }
     }
 }
