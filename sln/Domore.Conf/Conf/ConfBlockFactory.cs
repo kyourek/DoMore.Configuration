@@ -66,8 +66,8 @@ namespace Domore.Conf {
 
                 Log.Lines("Configuring", obj.GetType());
 
-                key = (key ?? "").Trim();
-                key = key == "" ? obj.GetType().Name : key;
+                key = key ?? obj.GetType().Name;
+                key = key.Trim();
 
                 Log.Lines("with key", key);
 

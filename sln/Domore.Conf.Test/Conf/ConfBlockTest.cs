@@ -275,5 +275,62 @@ namespace Domore.Conf {
             var cont = Subject.Configure(new IntContainer(), "cont");
             Assert.That(cont.Dict, Is.EqualTo(new Dictionary<string, int> { { "first", 1 }, { "Third", 3 } }));
         }
+
+        class Infant {
+            public string Weight { get; set; }
+            public int DiaperSize { get; set; }
+            public Mom Mom { get; } = new Mom();
+        }
+
+        [Test]
+        public void Configure_CanSetValuesWithoutKey() {
+            Content = @"
+                Weight = 12.3 lb
+                Diaper size = 1
+                Mom.Jobs[0] = chef
+                Mom.jobs[1] = Nurse
+                mom.jobs[2] = accountant            ";
+            var infant = Subject.Configure(new Infant(), "");
+            Assert.That(infant.Weight, Is.EqualTo("12.3 lb"));
+        }
+
+        [Test]
+        public void Configure_SetsSecondValueWithoutKey() {
+            Content = @"
+                Weight = 12.3 lb
+                Diaper size = 1
+                Mom.Jobs[0] = chef
+                Mom.jobs[1] = Nurse
+                mom.jobs[2] = accountant
+            ";
+            var infant = Subject.Configure(new Infant(), "");
+            Assert.That(infant.DiaperSize, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Configure_SetsComplexTypeValuesWithoutKey() {
+            Content = @"
+                Weight = 12.3 lb
+                Diaper size = 1
+                Mom.Jobs[0] = chef
+                Mom.jobs[1] = Nurse
+                mom.jobs[2] = accountant
+            ";
+            var infant = Subject.Configure(new Infant(), "");
+            Assert.That(infant.Mom.Jobs[1], Is.EqualTo("Nurse"));
+        }
+
+        [Test]
+        public void Configure_SetsDeepValues() {
+            Content = @"
+                kid.Weight = 12.3 lb
+                kid.Diaper size = 1
+                kid.Mom.Jobs[0] = chef
+                kid.Mom.jobs[1] = Nurse
+                kid.mom.jobs[2] = accountant
+            ";
+            var infant = Subject.Configure(new Infant(), "Kid");
+            Assert.That(infant.Mom.Jobs[2], Is.EqualTo("accountant"));
+        }
     }
 }

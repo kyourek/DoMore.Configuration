@@ -5,9 +5,10 @@ using System.Reflection;
 
 namespace Domore.Conf.Helpers {
     static class Property {
-        static void SetOne(object obj, IConfBlock block, string key, int dotCount, ConfConverter converter) {
+        static void SetOne(object obj, bool keyed, IConfBlock block, string key, int dotCount, ConfConverter converter) {
             var parts = key.Split('.');
-            for (var i = dotCount + 1; i < parts.Length; i++) {
+            var start = keyed ? dotCount + 1 : dotCount;
+            for (var i = start; i < parts.Length; i++) {
                 var propertyKey = parts[i];
                 var objectProperty = new ObjectProperty(obj, propertyKey, converter);
                 if (objectProperty.Exists) {
@@ -43,14 +44,15 @@ namespace Domore.Conf.Helpers {
         }
 
         public static object SetAll(object obj, IConfBlock block, string key, ConfConverter converter) {
-            var normalizedKey = Key.Normalize(key);
+            var normKey = Key.Normalize(key);
+            var noKey = normKey == "";
 
             var dotCount = key.Count(c => c == '.');
             var itemCount = block.ItemCount();
             for (var i = 0; i < itemCount; i++) {
                 var item = block.Item(i);
-                if (item.NormalizedKey.StartsWith(normalizedKey + ".")) {
-                    SetOne(obj, block, item.NormalizedKey, dotCount, converter);
+                if (item.NormalizedKey.StartsWith(normKey + ".") || noKey) {
+                    SetOne(obj, !noKey, block, item.NormalizedKey, dotCount, converter);
                 }
             }
 
