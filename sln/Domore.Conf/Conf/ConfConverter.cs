@@ -5,23 +5,23 @@ using System.ComponentModel;
 namespace Domore.Conf {
     using Helpers;
 
-    class ConfConverter : IConfConverterTable {
-        readonly TypeConverterTable TypeConverters = new TypeConverterTable();
+    internal class ConfConverter : IConfConverterTable {
+        private readonly TypeConverterTable TypeConverters = new TypeConverterTable();
 
         public TypeConverter this[Type type] {
-            set { TypeConverters[type] = value; }
+            set => TypeConverters[type] = value;
         }
 
-        Log _Log;
         public Log Log {
             get => _Log ?? (_Log = new Log());
             set => _Log = value;
         }
+        private Log _Log;
 
         public object Convert(Type type, string value, TypeConverter typeConverter = null) {
-            Log.Lines("Converting value", value, "to type", type);
+            Log.These("Converting value", $"`{value}`", "to type", $"`{type}`");
             typeConverter = typeConverter ?? TypeConverters.GetTypeConverter(type);
-            Log.Lines("using converter", typeConverter);
+            Log.These("using converter", $"`{typeConverter}`");
             try {
                 return typeConverter.ConvertFrom(value);
             }
@@ -41,14 +41,14 @@ namespace Domore.Conf {
             if (null == type) throw new ArgumentNullException(nameof(type));
             if (null == block) throw new ArgumentNullException(nameof(block));
 
-            Log.Lines("Converting key", key, "to type", type);
+            Log.These("Converting key", $"`{key}`", "to type", $"`{type}`");
 
             var conv = TypeConverters.GetTypeConverter(type);
             if (conv is ConfTypeConverter conf) {
                 conf.Conf = block;
             }
 
-            Log.Lines("using converter", conv);
+            Log.These("using converter", $"`{conv}`");
 
             if (block.ItemExists(key, out var item)) {
                 return Convert(type, item.OriginalValue, conv);
@@ -66,10 +66,10 @@ namespace Domore.Conf {
             }
         }
 
-        class TypeConverterTable {
-            readonly IDictionary<Type, TypeConverter> TypeConverters = new Dictionary<Type, TypeConverter>();
+        private class TypeConverterTable {
+            private readonly IDictionary<Type, TypeConverter> TypeConverters = new Dictionary<Type, TypeConverter>();
 
-            void SetTypeConverter(Type type, TypeConverter converter) {
+            private void SetTypeConverter(Type type, TypeConverter converter) {
                 lock (TypeConverters) {
                     TypeConverters[type] = converter;
                 }

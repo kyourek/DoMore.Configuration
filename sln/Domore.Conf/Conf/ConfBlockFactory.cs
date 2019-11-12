@@ -7,15 +7,16 @@ namespace Domore.Conf {
     using Helpers;
     using Providers;
 
-    class ConfBlockFactory {
+    internal class ConfBlockFactory {
         public IConfBlock CreateConfBlock(object content, IConfContentsProvider contentsProvider = null, ConfConverter converter = null) {
             return new ConfBlock(content, contentsProvider ?? new ConfContentsProvider(), converter ?? new ConfConverter());
         }
 
-        class ConfBlock : IConfBlock {
-            ConfBlockItem.Collection _Items;
-            ConfBlockItem.Collection Items => _Items ?? (_Items =
-                ConfBlockItem.Collection.Create(ContentsProvider.GetConfContents(Content), Converter));
+        private class ConfBlock : IConfBlock {
+            private ConfBlockItem.Collection Items => 
+                _Items ?? (
+                _Items = ConfBlockItem.Collection.Create(ContentsProvider.GetConfContents(Content), Converter));
+            private ConfBlockItem.Collection _Items;
 
             public object Content { get; }
             public IConfContentsProvider ContentsProvider { get; }
@@ -57,33 +58,30 @@ namespace Domore.Conf {
                 }
             }
 
-            public bool ItemExists(object key) {
-                return ItemExists(key, out _);
-            }
+            public bool ItemExists(object key) =>
+                ItemExists(key, out _);
 
             public object Configure(object obj, string key) {
                 if (null == obj) throw new ArgumentNullException(nameof(obj));
 
-                Log.Lines("Configuring", obj.GetType());
+                Log.These("Configuring", $"`{obj.GetType()}`");
 
                 key = key ?? obj.GetType().Name;
                 key = key.Trim();
 
-                Log.Lines("with key", key);
+                Log.These("with key", $"`{key}`");
 
                 return Property.SetAll(obj, this, key, Converter);
             }
 
-            public T Configure<T>(T obj, string key) {
-                return (T)Configure((object)obj, key);
-            }
+            public T Configure<T>(T obj, string key) =>
+                (T)Configure((object)obj, key);
 
-            public override string ToString() {
-                return string.Join(Environment.NewLine, Items);
-            }
+            public override string ToString() =>
+                string.Join(Environment.NewLine, Items);
         }
 
-        class ConfBlockItem : IConfBlockItem {
+        private class ConfBlockItem : IConfBlockItem {
             public string OriginalKey { get; }
             public string NormalizedKey { get; }
             public string OriginalValue { get; }
@@ -96,20 +94,17 @@ namespace Domore.Conf {
                 OriginalValue = originalValue;
             }
 
-            public object ConvertValue(Type type) {
-                return Converter.Convert(type, OriginalValue);
-            }
+            public object ConvertValue(Type type) =>
+                Converter.Convert(type, OriginalValue);
 
-            public T ConvertValue<T>() {
-                return (T)ConvertValue(typeof(T));
-            }
+            public T ConvertValue<T>() =>
+                (T)ConvertValue(typeof(T));
 
-            public override string ToString() {
-                return $"{OriginalKey} = {OriginalValue}";
-            }
+            public override string ToString() =>
+                $"{OriginalKey} = {OriginalValue}";
 
             public class Collection : KeyedCollection<string, IConfBlockItem> {
-                void Add(IEnumerable<IConfBlockItem> items) {
+                private void Add(IEnumerable<IConfBlockItem> items) {
                     if (null == items) throw new ArgumentNullException(nameof(items));
                     foreach (var item in items) {
                         var key = GetKeyForItem(item);
