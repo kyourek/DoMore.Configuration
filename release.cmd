@@ -1,1 +1,1 @@
-dotnet .\sln\Domore.Release\bin\Debug\netcoreapp3.1\Domore.Release.dll -Package[0]=Domore.Conf -Package[1]=Domore.Conf.ConfigurationManager %*
+dotnet .\sln\Domore.Release\bin\Debug\netcoreapp3.1\Domore.Release.dll -Repository=https://github.com/kyourek/domore-conf.git -Package[0]=Domore.Conf -Package[1]=Domore.Conf.ConfigurationManager %*
