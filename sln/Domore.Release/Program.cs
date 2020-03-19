@@ -4,8 +4,8 @@ namespace Domore {
     using Conf;
     using CONF = Conf.Conf;
 
-    class Program {
-        static void Main(string[] args) {
+    internal class Program {
+        private static void Main(string[] args) {
             try {
                 CONF.Container.ContentsProvider = new AppSettingsProvider();
                 CONF.Container.ConfigureLogging();
