@@ -3,17 +3,17 @@
   <PropertyGroup>
     <Authors>Ken Yourek</Authors>
     <Copyright>Copyright © Ken Yourek 2019-2020</Copyright>
-    <VersionPrefix>3.8.0.31</VersionPrefix>
+    <VersionPrefix>3.9.0.32</VersionPrefix>
     <VersionSuffix></VersionSuffix>
-    <AssemblyVersion>3.8.0.31</AssemblyVersion>
-    <InformationalVersion>3.8.0.31</InformationalVersion>
-    <FileVersion>3.9.0.31</FileVersion>
-    <PackageVersion>3.8.0.31</PackageVersion>
+    <AssemblyVersion>3.9.0.32</AssemblyVersion>
+    <InformationalVersion>3.9.0.32</InformationalVersion>
+    <FileVersion>3.9.0.32</FileVersion>
+    <PackageVersion>3.9.0.32</PackageVersion>
     <PackageProjectUrl>https://github.com/kyourek/Domore.Conf</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/kyourek/domore-conf.git</RepositoryUrl>
     <RepositoryBranch>master</RepositoryBranch>
-    <RepositoryCommit>3219e25d1cf5bbdfe881d08a305cf9b7a6ae325d</RepositoryCommit>
+    <RepositoryCommit>9ff513dd9efb3a69103bb67ae13aaaec7274ac30</RepositoryCommit>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>conf;config;configuration</PackageTags>
