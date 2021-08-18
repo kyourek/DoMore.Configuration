@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Domore.Conf {
     [Guid("884A0522-59A1-4305-92A5-3F53FCFE4E52")]
@@ -23,6 +25,9 @@ namespace Domore.Conf {
 
         [ComVisible(false)]
         T Configure<T>(T obj, string key = null);
+
+        [ComVisible(false)]
+        IEnumerable<T> Configure<T>(Func<T> factory, string key = null);
 
         [ComVisible(false)]
         bool ItemExists(object key, out IConfBlockItem item);

@@ -13,7 +13,7 @@ namespace Domore.Conf {
         }
 
         private class ConfBlock : IConfBlock {
-            private ConfBlockItem.Collection Items => 
+            private ConfBlockItem.Collection Items =>
                 _Items ?? (
                 _Items = ConfBlockItem.Collection.Create(ContentsProvider.GetConfContents(Content), Converter));
             private ConfBlockItem.Collection _Items;
@@ -76,6 +76,9 @@ namespace Domore.Conf {
 
             public T Configure<T>(T obj, string key) =>
                 (T)Configure((object)obj, key);
+
+            public IEnumerable<T> Configure<T>(Func<T> factory, string key) =>
+                Collect.All(factory, key, this);
 
             public override string ToString() =>
                 string.Join(Environment.NewLine, Items);

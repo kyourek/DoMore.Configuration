@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 
 namespace Domore.Conf {
     using Providers;
@@ -331,6 +332,57 @@ namespace Domore.Conf {
             ";
             var infant = Subject.Configure(new Infant(), "Kid");
             Assert.That(infant.Mom.Jobs[2], Is.EqualTo("accountant"));
+        }
+
+        [Test]
+        public void Configure_ReturnsCollection() {
+            Content = @"
+                kid[0].weight = 3
+                kid[0].diapersize = 1
+                kid[1].weight = 15
+                kid[1].diapersize = 2
+                kid[2].weight = 26
+                kid[2].diapersize = 4
+            ";
+            var kids = Subject.Configure(() => new Infant(), "Kid").ToList();
+            Assert.That(kids.Count, Is.EqualTo(3));
+        }
+
+        [TestCase(0, "Weight", "3")]
+        [TestCase(0, "DiaperSize", 1)]
+        [TestCase(1, "Weight", "15")]
+        [TestCase(1, "DiaperSize", 2)]
+        [TestCase(2, "Weight", "26")]
+        [TestCase(2, "DiaperSize", 4)]
+        public void Configure_ConfiguresCollection(int index, string propertyName, object expected) {
+            Content = @"
+                kid[0].weight = 3
+                kid[0].diapersize = 1
+                kid[1].weight = 15
+                kid[1].diapersize = 2
+                kid[2].weight = 26
+                kid[2].diapersize = 4
+            ";
+            var kids = Subject.Configure(() => new Infant(), "Kid").ToList();
+            Assert.That(typeof(Infant).GetProperty(propertyName).GetValue(kids[index], null), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Configure_ConfiguresCollectionDeeply() {
+            Content = @"
+                kid[0].weight = 3
+                kid[0].diapersize = 1
+                kid[1].weight = 15
+                kid[1].diapersize = 2
+                kid[1].Mom.JOBS[0] = nurse0
+                kid[1].Mom.JOBS[1] = Nurse1
+                kid[1].Mom.JOBS[2] = nurse2
+                kid[2].weight = 26
+                kid[2].diapersize = 4
+            ";
+            var kids = Subject.Configure(() => new Infant(), "Kid").ToList();
+            var kid = kids.Single(k => k.DiaperSize == 2);
+            Assert.That(kid.Mom.Jobs[1], Is.EqualTo("Nurse1"));
         }
     }
 }
