@@ -384,5 +384,19 @@ namespace Domore.Conf {
             var kid = kids.Single(k => k.DiaperSize == 2);
             Assert.That(kid.Mom.Jobs[1], Is.EqualTo("Nurse1"));
         }
+
+        [Test]
+        public void Configure_ConfiguresSingleItem() {
+            Content = @"
+                kid.weight = 3
+                kid.diapersize = 1
+                kid.Mom.JOBS[0] = nurse0
+                kid.Mom.JOBS[1] = Nurse1
+                kid.Mom.JOBS[2] = nurse2
+            ";
+            var kids = Subject.Configure(() => new Infant(), "KID").ToList();
+            var kid = kids.Single();
+            Assert.That(kid.Mom.Jobs[2], Is.EqualTo("nurse2"));
+        }
     }
 }
