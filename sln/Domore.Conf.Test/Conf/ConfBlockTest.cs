@@ -398,5 +398,28 @@ namespace Domore.Conf {
             var kid = kids.Single();
             Assert.That(kid.Mom.Jobs[2], Is.EqualTo("nurse2"));
         }
+
+        private class ClassWithListExposedAsICollection {
+            public ICollection<Inner> Inners {
+                get => _Inners ?? (_Inners = new List<Inner>());
+                set => _Inners = value;
+            }
+            private ICollection<Inner> _Inners;
+
+            public class Inner {
+                public double Value { get; set; }
+            }
+        }
+
+        [Test]
+        public void Configure_AddsItemsToListExposedAsICollection() {
+            Content = @"
+                item.inners[0].value = 1.1
+                item.inners[1].value = 1.2
+                item.inners[2].value = 1.3
+            ";
+            var obj = Subject.Configure(new ClassWithListExposedAsICollection(), "item");
+            CollectionAssert.AreEqual(new[] { 1.1, 1.2, 1.3 }, obj.Inners.Select(i => i.Value));
+        }
     }
 }
