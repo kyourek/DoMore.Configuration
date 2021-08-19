@@ -217,5 +217,31 @@ namespace Domore.Conf.Extensions {
             Assert.That(copy.List[1].DoubleProp, Is.EqualTo(subject.List[1].DoubleProp));
             Assert.That(copy.List[1].StringProp, Is.EqualTo(subject.List[1].StringProp));
         }
+
+        private class ClassWithListExposedAsICollection {
+            public ICollection<Inner> Inners {
+                get => _Inners ?? (_Inners = new List<Inner>());
+                set => _Inners = value;
+            }
+            private ICollection<Inner> _Inners;
+
+            public class Inner {
+                public double Value { get; set; }
+            }
+        }
+
+        [Test]
+        public void GetConfText_GetsConfFromListExposedAsICollection() {
+            var obj = new ClassWithListExposedAsICollection();
+            obj.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.1 });
+            obj.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.2 });
+            obj.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.3 });
+            var actual = obj.GetConfText("item");
+            var expected = string.Join(Environment.NewLine,
+                "item.Inners[0].Value = 1.1",
+                "item.Inners[1].Value = 1.2",
+                "item.Inners[2].Value = 1.3");
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }
