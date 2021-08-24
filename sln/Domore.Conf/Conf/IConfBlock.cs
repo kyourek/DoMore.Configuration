@@ -12,15 +12,18 @@ namespace Domore.Conf {
 #endif
     public interface IConfBlock {
         [DispId(1)]
-        int ItemCount();
+        string Content { get; }
 
         [DispId(2)]
-        bool ItemExists(object key);
+        int ItemCount();
 
         [DispId(3)]
-        IConfBlockItem Item(object key);
+        bool ItemExists(object key);
 
         [DispId(4)]
+        IConfBlockItem Item(object key);
+
+        [DispId(5)]
         object Configure(object obj, string key = null);
 
         [ComVisible(false)]

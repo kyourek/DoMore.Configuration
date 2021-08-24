@@ -15,7 +15,7 @@ namespace Domore.Conf {
         private class ConfBlock : IConfBlock {
             private ConfBlockItem.Collection Items =>
                 _Items ?? (
-                _Items = new ConfBlockItem.Collection(ContentsProvider.GetConfContents(Content), Converter));
+                _Items = new ConfBlockItem.Collection(Contents, Converter));
             private ConfBlockItem.Collection _Items;
 
             public object Content { get; }
@@ -23,7 +23,11 @@ namespace Domore.Conf {
             public ConfConverter Converter { get; }
 
             public int ItemCount() => Items.Count;
-            public IEnumerable<KeyValuePair<string, string>> Contents => Items.Contents;
+
+            public IEnumerable<KeyValuePair<string, string>> Contents =>
+                _Contents ?? (
+                _Contents = ContentsProvider.GetConfContents(Content));
+            private IEnumerable<KeyValuePair<string, string>> _Contents;
 
             public Log Log {
                 get => Converter.Log;
@@ -83,6 +87,11 @@ namespace Domore.Conf {
 
             public override string ToString() =>
                 string.Join(Environment.NewLine, Items);
+
+            string IConfBlock.Content =>
+                _Content ?? (
+                _Content = ContentsProvider.GetConfContent(Contents));
+            private string _Content;
         }
 
         private class ConfBlockItem : IConfBlockItem {

@@ -38,7 +38,6 @@ namespace Domore.Conf {
             set => Converter.Log.Action = value;
         }
 
-        object _Content;
         public object Content {
             get => _Content;
             set {
@@ -48,6 +47,7 @@ namespace Domore.Conf {
                 }
             }
         }
+        private object _Content;
 
         public IConfContentsProvider ContentsProvider {
             get => _ContentsProvider ?? (_ContentsProvider = new ConfContentsProvider());

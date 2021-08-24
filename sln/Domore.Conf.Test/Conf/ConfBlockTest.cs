@@ -421,5 +421,20 @@ namespace Domore.Conf {
             var obj = Subject.Configure(new ClassWithListExposedAsICollection(), "item");
             CollectionAssert.AreEqual(new[] { 1.1, 1.2, 1.3 }, obj.Inners.Select(i => i.Value));
         }
+
+        [Test]
+        public void Content_ReturnsStringContents() {
+            Content = @"
+                item.inners[0].value = 1.1
+                item.inners[1].value = 1.2
+                item.inners[2].value = 1.3
+            ";
+            var actual = Subject.Content;
+            var expected = string.Join(Environment.NewLine,
+                "item.inners[0].value = 1.1",
+                "item.inners[1].value = 1.2",
+                "item.inners[2].value = 1.3");
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }
