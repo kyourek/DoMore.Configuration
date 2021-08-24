@@ -243,5 +243,27 @@ namespace Domore.Conf.Extensions {
                 "item.Inners[2].Value = 1.3");
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        [Test]
+        public void GetConfText_GetsConfOfList() {
+            var list = new List<string> { "hello", "world", "hey", "earth" };
+            var actual = list.GetConfText();
+            var expected = string.Join(Environment.NewLine,
+                "String[0] = hello",
+                "String[1] = world",
+                "String[2] = hey",
+                "String[3] = earth");
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void GetConfText_GetsConfOfDictionary() {
+            var dict = new Dictionary<string, double> { { "hello", 1.23 }, { "World", 4.56 } };
+            var actual = dict.GetConfText();
+            var expected = string.Join(Environment.NewLine,
+                "Double[hello] = 1.23",
+                "Double[World] = 4.56");
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }

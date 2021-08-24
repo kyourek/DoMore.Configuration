@@ -8,6 +8,14 @@ namespace Domore.Conf {
     internal class ConfObjectProvider {
         private IEnumerable<KeyValuePair<string, string>> ListConfContents(IList list, string key) {
             if (null == list) throw new ArgumentNullException(nameof(list));
+            if (key == null) {
+                var listType = list.GetType();
+                var listArgs = listType.GetGenericArguments();
+                if (listArgs.Length == 1) {
+                    key = listArgs[0].Name;
+                }
+            }
+
             for (var i = 0; i < list.Count; i++) {
                 var k = $"{key}[{i}]";
                 var v = list[i];
@@ -29,6 +37,14 @@ namespace Domore.Conf {
 
         private IEnumerable<KeyValuePair<string, string>> DictionaryConfContents(IDictionary dictionary, string key) {
             if (null == dictionary) throw new ArgumentNullException(nameof(dictionary));
+            if (key == null) {
+                var dictType = dictionary.GetType();
+                var dictArgs = dictType.GetGenericArguments();
+                if (dictArgs.Length == 2) {
+                    key = dictArgs[1].Name;
+                }
+            }
+
             var dKeys = dictionary.Keys;
             if (dKeys != null) {
                 foreach (var dKey in dKeys) {
