@@ -31,8 +31,8 @@ namespace Domore.Conf {
             }
 
             public ConfBlock(object content, IConfContentsProvider contentsProvider, ConfConverter converter) {
-                Converter = converter;
                 Content = content;
+                Converter = converter ?? throw new ArgumentNullException(nameof(converter));
                 ContentsProvider = contentsProvider ?? throw new ArgumentNullException(nameof(contentsProvider));
             }
 
