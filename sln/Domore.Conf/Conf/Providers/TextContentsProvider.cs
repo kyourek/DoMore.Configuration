@@ -15,5 +15,10 @@ namespace Domore.Conf.Providers {
                 .Where(array => array.Length == 2)
                 .Select(array => new KeyValuePair<string, string>(array[0].Trim(), array[1].Trim()));
         }
+
+        public virtual string GetConfContent(IEnumerable<KeyValuePair<string, string>> contents) {
+            contents = contents ?? new KeyValuePair<string, string>[] { };
+            return string.Join(Environment.NewLine, contents.Select(item => $"{item.Key} = {item.Value}"));
+        }
     }
 }

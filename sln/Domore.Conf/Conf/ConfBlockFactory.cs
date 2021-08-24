@@ -15,7 +15,7 @@ namespace Domore.Conf {
         private class ConfBlock : IConfBlock {
             private ConfBlockItem.Collection Items =>
                 _Items ?? (
-                _Items = ConfBlockItem.Collection.Create(ContentsProvider.GetConfContents(Content), Converter));
+                _Items = new ConfBlockItem.Collection(ContentsProvider.GetConfContents(Content), Converter));
             private ConfBlockItem.Collection _Items;
 
             public object Content { get; }
@@ -23,6 +23,7 @@ namespace Domore.Conf {
             public ConfConverter Converter { get; }
 
             public int ItemCount() => Items.Count;
+            public IEnumerable<KeyValuePair<string, string>> Contents => Items.Contents;
 
             public Log Log {
                 get => Converter.Log;
@@ -127,13 +128,13 @@ namespace Domore.Conf {
                     return item.NormalizedKey;
                 }
 
-                public Collection(IEnumerable<IConfBlockItem> items) {
-                    Add(items);
-                }
+                public ConfConverter Converter { get; }
+                public IEnumerable<KeyValuePair<string, string>> Contents { get; }
 
-                public static Collection Create(IEnumerable<KeyValuePair<string, string>> items, ConfConverter converter) {
-                    if (null == items) throw new ArgumentNullException(nameof(items));
-                    return new Collection(items.Select(item => new ConfBlockItem(item.Key, Key.Normalize(item.Key), item.Value, converter)));
+                public Collection(IEnumerable<KeyValuePair<string, string>> contents, ConfConverter converter) {
+                    Contents = contents ?? throw new ArgumentNullException(nameof(contents));
+                    Converter = converter;
+                    Add(Contents.Select(item => new ConfBlockItem(item.Key, Key.Normalize(item.Key), item.Value, Converter)));
                 }
             }
         }

@@ -31,5 +31,8 @@ namespace Domore.Conf {
 
         [ComVisible(false)]
         bool ItemExists(object key, out IConfBlockItem item);
+
+        [ComVisible(false)]
+        IEnumerable<KeyValuePair<string, string>> Contents { get; }
     }
 }

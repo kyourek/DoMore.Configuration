@@ -13,5 +13,8 @@ namespace Domore.Conf {
     public interface IConfContentsProvider {
         [DispId(1)]
         IEnumerable<KeyValuePair<string, string>> GetConfContents(object content);
+
+        [DispId(2)]
+        string GetConfContent(IEnumerable<KeyValuePair<string, string>> contents);
     }
 }
