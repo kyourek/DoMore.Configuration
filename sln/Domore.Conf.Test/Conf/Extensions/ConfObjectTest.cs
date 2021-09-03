@@ -265,5 +265,36 @@ namespace Domore.Conf.Extensions {
                 "Double[World] = 4.56");
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        private class GetConfText_CanBePassedEmptyStringForKey_Helper : ComplexListedClass {
+            public string MyName { get; set; }
+            public float MyValue { get; set; }
+        }
+
+        [Test]
+        public void GetConfText_CanBePassedEmptyStringForKey() {
+            var subject = new GetConfText_CanBePassedEmptyStringForKey_Helper();
+            subject.MyName = "thename";
+            subject.MyValue = 3.21F;
+            subject.List.Add(new ComplexClass());
+            subject.List[0].Child.StringProp = "hello";
+            subject.List[0].DoubleProp = 1.23;
+            subject.List[0].StringProp = "world";
+            subject.List.Add(new ComplexClass());
+            subject.List[1].Child.StringProp = "HELLO";
+            subject.List[1].DoubleProp = 2.34;
+            subject.List[1].StringProp = "WORLD";
+            var actual = subject.GetConfText(key: "");
+            var expected = string.Join(Environment.NewLine,
+                "List[0].Child.StringProp = hello",
+                "List[0].DoubleProp = 1.23",
+                "List[0].StringProp = world",
+                "List[1].Child.StringProp = HELLO",
+                "List[1].DoubleProp = 2.34",
+                "List[1].StringProp = WORLD",
+                "MyName = thename",
+                "MyValue = 3.21");
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }

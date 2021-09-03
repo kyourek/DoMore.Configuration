@@ -74,6 +74,7 @@ namespace Domore.Conf {
                 .OrderBy(property => property.Name);
 
             key = key ?? type.Name;
+            string k(string s) => key == "" ? s : string.Join(".", key, s);
             foreach (var property in properties) {
                 if (property.CanRead) {
                     var parameters = property.GetIndexParameters();
@@ -83,14 +84,14 @@ namespace Domore.Conf {
                             var propertyValueType = propertyValue.GetType();
                             if (propertyValueType.IsValueType || propertyValueType == typeof(string)) {
                                 if (property.CanWrite) {
-                                    var pairKey = string.Join(".", key, property.Name);
+                                    var pairKey = k(property.Name);
                                     var pairValue = Convert.ToString(propertyValue);
                                     var pair = new KeyValuePair<string, string>(pairKey, pairValue);
                                     yield return pair;
                                 }
                             }
                             else {
-                                var cc = GetConfContents(propertyValue, string.Join(".", key, property.Name));
+                                var cc = GetConfContents(propertyValue, k(property.Name));
                                 foreach (var item in cc) {
                                     yield return item;
                                 }
