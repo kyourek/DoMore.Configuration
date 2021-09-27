@@ -266,6 +266,36 @@ namespace Domore.Conf.Extensions {
             Assert.That(actual, Is.EqualTo(expected));
         }
 
+        [Test]
+        public void GetConfText_CanRoundTripDictionary() {
+            var obj1 = new ClassWithListExposedAsICollection();
+            obj1.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.1 });
+            obj1.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.2 });
+            obj1.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.3 });
+
+            var obj2 = new ClassWithListExposedAsICollection();
+            obj2.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 2.1 });
+            obj2.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 2.2 });
+            obj2.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 2.3 });
+
+            var dict = new Dictionary<string, ClassWithListExposedAsICollection> {
+                { "obj1", obj1 },
+                { "obj2", obj2 }
+            };
+            var text = dict.GetConfText("item");
+            var conf = new ConfBlockFactory().CreateConfBlock(text, new TextContentsProvider());
+            var copy = conf.Configure(key => new ClassWithListExposedAsICollection(), "item")
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            Assert.That(copy["obj1"].Inners.ElementAt(0).Value, Is.EqualTo(1.1));
+            Assert.That(copy["obj1"].Inners.ElementAt(1).Value, Is.EqualTo(1.2));
+            Assert.That(copy["obj1"].Inners.ElementAt(2).Value, Is.EqualTo(1.3));
+
+            Assert.That(copy["obj2"].Inners.ElementAt(0).Value, Is.EqualTo(2.1));
+            Assert.That(copy["obj2"].Inners.ElementAt(1).Value, Is.EqualTo(2.2));
+            Assert.That(copy["obj2"].Inners.ElementAt(2).Value, Is.EqualTo(2.3));
+        }
+
         private class GetConfText_CanBePassedEmptyStringForKey_Helper : ComplexListedClass {
             public string MyName { get; set; }
             public float MyValue { get; set; }

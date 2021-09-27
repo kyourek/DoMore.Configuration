@@ -385,6 +385,59 @@ namespace Domore.Conf {
             Assert.That(kid.Mom.Jobs[1], Is.EqualTo("Nurse1"));
         }
 
+        private class KeyedInfant : Infant { public string Key { get; set; } }
+
+        [TestCase("Num 0", "Weight", "3")]
+        [TestCase("Num 0", "DiaperSize", 1)]
+        [TestCase("num1", "Weight", "15")]
+        [TestCase("num1", "DiaperSize", 2)]
+        [TestCase("num 2", "Weight", "26")]
+        [TestCase("num  2", "DiaperSize", 4)]
+        public void Configure_ConfiguresPairs(string index, string propertyName, object expected) {
+            Content = @"
+                kid[Num 0].weight = 3
+                kid[num 0].diapersize = 1
+                kid[num1].weight = 15
+                kid[NUM1].diapersize = 2
+                kid[num 2].weight = 26
+                kid[num  2].diapersize = 4
+            ";
+            var kids = Subject.Configure(k => new KeyedInfant { Key = k }, "Kid", StringComparer.OrdinalIgnoreCase).ToDictionary(pair => pair.Key, pair => pair.Value);
+            Assert.That(typeof(KeyedInfant).GetProperty(propertyName).GetValue(kids[index], null), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Configure_DoesNotNormalizeKeys() {
+            Content = @"
+                kid[Num 0].weight = 3
+                kid[num 0].diapersize = 1
+                kid[num1].weight = 15
+                kid[NUM1].diapersize = 2
+                kid[num 2].weight = 26
+                kid[num  2].diapersize = 4
+            ";
+            var kids = Subject.Configure(k => new KeyedInfant { Key = k }, "Kid").ToList();
+            var expected = new List<string> { "Num 0", "num 0", "num1", "NUM1", "num 2", "num  2" };
+            var actual = kids.Select(kid => kid.Key).ToList();
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void Configure_UsesSuppliedKeyComparer() {
+            Content = @"
+                kid[Num 0].weight = 3
+                kid[num 0].diapersize = 1
+                kid [num1].weight = 15
+                kid[NUM1].diapersize = 2
+                kid[num 2].weight = 26
+                kid[num  2].diapersize = 4
+            ";
+            var kids = Subject.Configure(k => new KeyedInfant { Key = k }, "Kid", StringComparer.OrdinalIgnoreCase).ToList();
+            var expected = new List<string> { "Num 0", "num1", "num 2", "num  2" };
+            var actual = kids.Select(kid => kid.Key).ToList();
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
         [Test]
         public void Configure_ConfiguresSingleItem() {
             Content = @"

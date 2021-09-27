@@ -30,7 +30,10 @@ namespace Domore.Conf {
         T Configure<T>(T obj, string key = null);
 
         [ComVisible(false)]
-        IEnumerable<T> Configure<T>(Func<T> factory, string key = null);
+        IEnumerable<T> Configure<T>(Func<T> factory, string key = null, IEqualityComparer<string> comparer = null);
+
+        [ComVisible(false)]
+        IEnumerable<KeyValuePair<string, T>> Configure<T>(Func<string, T> factory, string key = null, IEqualityComparer<string> comparer = null);
 
         [ComVisible(false)]
         bool ItemExists(object key, out IConfBlockItem item);

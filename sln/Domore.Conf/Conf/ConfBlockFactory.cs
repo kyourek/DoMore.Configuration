@@ -82,8 +82,11 @@ namespace Domore.Conf {
             public T Configure<T>(T obj, string key) =>
                 (T)Configure((object)obj, key);
 
-            public IEnumerable<T> Configure<T>(Func<T> factory, string key) =>
-                Collect.All(factory, key, this);
+            public IEnumerable<T> Configure<T>(Func<T> factory, string key, IEqualityComparer<string> comparer) =>
+                Collect.All(factory, key, comparer, this);
+
+            public IEnumerable<KeyValuePair<string, T>> Configure<T>(Func<string, T> factory, string key, IEqualityComparer<string> comparer) =>
+                Collect.Keyed(factory, key, comparer, this);
 
             public override string ToString() =>
                 string.Join(Environment.NewLine, Items);
