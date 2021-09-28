@@ -16,12 +16,12 @@ namespace Domore.Conf {
             return ValidateBlock(confContainer).Configure(obj, key);
         }
 
-        public static IEnumerable<T> Configure<T>(this IConfContainer confContainer, Func<T> factory, string key = null, IEqualityComparer<string> comparer = null) {
-            return ValidateBlock(confContainer).Configure(factory, key, comparer);
+        public static IEnumerable<T> Configure<T>(this IConfContainer confContainer, Func<T> factory, string collection = null, IEqualityComparer<string> comparer = null) {
+            return ValidateBlock(confContainer).Configure(factory, collection, comparer);
         }
 
-        public static IEnumerable<KeyValuePair<string, T>> Configure<T>(this IConfContainer confContainer, Func<string, T> factory, string key = null, IEqualityComparer<string> comparer = null) {
-            return ValidateBlock(confContainer).Configure(factory, key, comparer);
+        public static IEnumerable<KeyValuePair<string, T>> Configure<T>(this IConfContainer confContainer, Func<string, T> factory, string collection = null, IEqualityComparer<string> comparer = null) {
+            return ValidateBlock(confContainer).Configure(factory, collection, comparer);
         }
     }
 }

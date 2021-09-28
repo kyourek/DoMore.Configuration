@@ -367,6 +367,25 @@ namespace Domore.Conf {
             Assert.That(typeof(Infant).GetProperty(propertyName).GetValue(kids[index], null), Is.EqualTo(expected));
         }
 
+        [TestCase(0, "Weight", "3")]
+        [TestCase(0, "DiaperSize", 1)]
+        [TestCase(1, "Weight", "15")]
+        [TestCase(1, "DiaperSize", 0)]
+        [TestCase(2, "Weight", "26")]
+        [TestCase(2, "DiaperSize", 4)]
+        public void Configure_IgnoresConfigurationOfDifferentCollection(int index, string propertyName, object expected) {
+            Content = @"
+                kid[0].weight = 3
+                kid[0].diapersize = 1
+                kid[1].weight = 15
+                notakid[1].diapersize = 2
+                kid[2].weight = 26
+                kid[2].diapersize = 4
+            ";
+            var kids = Subject.Configure(() => new Infant(), "Kid").ToList();
+            Assert.That(typeof(Infant).GetProperty(propertyName).GetValue(kids[index], null), Is.EqualTo(expected));
+        }
+
         [Test]
         public void Configure_ConfiguresCollectionDeeply() {
             Content = @"
@@ -423,6 +442,22 @@ namespace Domore.Conf {
         }
 
         [Test]
+        public void Configure_PaysAttentionToCollection() {
+            Content = @"
+                kid  [Num 0].weight = 3
+                k id[num 0].diapersize = 1
+                wiz[num1].weight = 15
+                kid[NUM1].diapersize = 2
+                KID[num 2].weight = 26
+                Kid[num  2].diapersize = 4
+            ";
+            var kids = Subject.Configure(k => new KeyedInfant { Key = k }, "Kid").ToList();
+            var expected = new List<string> { "Num 0", "num 0", "NUM1", "num 2", "num  2" };
+            var actual = kids.Select(kid => kid.Key).ToList();
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [Test]
         public void Configure_UsesSuppliedKeyComparer() {
             Content = @"
                 kid[Num 0].weight = 3
@@ -450,6 +485,48 @@ namespace Domore.Conf {
             var kids = Subject.Configure(() => new Infant(), "KID").ToList();
             var kid = kids.Single();
             Assert.That(kid.Mom.Jobs[2], Is.EqualTo("nurse2"));
+        }
+
+        [Test]
+        public void Configure_UsesClassName() {
+            Content = @"
+                infant.weight = 3
+                infant.diapersize = 1
+                infant.Mom.JOBS[0] = nurse0
+                infant.Mom.JOBS[1] = Nurse1
+                infant.Mom.JOBS[2] = nurse2
+            ";
+            var kids = Subject.Configure(() => new Infant()).ToList();
+            var kid = kids.Single();
+            Assert.That(kid.Mom.Jobs[1], Is.EqualTo("Nurse1"));
+        }
+
+        [Test]
+        public void Configure_CallsBackWithNullKey() {
+            Content = @"
+                kid[].diapersize = 1
+                kid.weight = 15
+                kid[ " + "\t" + @" ].weight = 26
+                kid.diapersize = 4
+            ";
+            var kids = Subject.Configure(k => new KeyedInfant { Key = k }, "Kid").ToList();
+            var kid = kids.Single(k => k.Key == null);
+            Assert.That(kid.Value.Weight, Is.EqualTo("15"));
+            Assert.That(kid.Value.DiaperSize, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void Configure_CallsBackWithEmptyString() {
+            Content = @"
+                kid[].diapersize = 1
+                kid.weight = 15
+                kid[ " + "\t" + @" ].weight = 26
+                kid.diapersize = 4
+            ";
+            var kids = Subject.Configure(k => new KeyedInfant { Key = k }, "Kid").ToList();
+            var kid = kids.Single(k => k.Key == "");
+            Assert.That(kid.Value.Weight, Is.EqualTo("26"));
+            Assert.That(kid.Value.DiaperSize, Is.EqualTo(1));
         }
 
         private class ClassWithListExposedAsICollection {
