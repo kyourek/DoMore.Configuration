@@ -4,13 +4,15 @@ using System.Linq;
 using System.Reflection;
 
 namespace Domore.Conf.Helpers {
-    static class Property {
-        static void SetOne(object obj, bool keyed, IConfBlock block, string key, int dotCount, ConfConverter converter) {
+    internal static class Property {
+        private static readonly PropertyCache Cache = new PropertyCache();
+
+        private static void SetOne(object obj, bool keyed, IConfBlock block, string key, int dotCount, ConfConverter converter) {
             var parts = key.Split('.');
             var start = keyed ? dotCount + 1 : dotCount;
             for (var i = start; i < parts.Length; i++) {
                 var propertyKey = parts[i];
-                var objectProperty = new ObjectProperty(obj, propertyKey, converter);
+                var objectProperty = new ObjectProperty(obj, propertyKey, Cache, converter);
                 if (objectProperty.Exists) {
                     if (i == parts.Length - 1) {
                         var item = objectProperty.Item;
@@ -59,12 +61,12 @@ namespace Domore.Conf.Helpers {
             return obj;
         }
 
-        class ObjectProperty {
+        private class ObjectProperty {
             public object Object { get; }
             public string Key { get; }
+            public PropertyCache Cache { get; }
             public ConfConverter Converter { get; }
 
-            string _PropertyName;
             public string PropertyName {
                 get {
                     if (_PropertyName == null) {
@@ -75,8 +77,8 @@ namespace Domore.Conf.Helpers {
                     return _PropertyName;
                 }
             }
+            private string _PropertyName;
 
-            string _IndexString;
             public string IndexString {
                 get {
                     if (_IndexString == null) {
@@ -87,8 +89,8 @@ namespace Domore.Conf.Helpers {
                     return _IndexString;
                 }
             }
+            private string _IndexString;
 
-            object[] _Index;
             public object[] Index {
                 get {
                     if (_Index == null) {
@@ -106,21 +108,17 @@ namespace Domore.Conf.Helpers {
                     return _Index;
                 }
             }
+            private object[] _Index;
 
-            Type _ObjectType;
-            public Type ObjectType => _ObjectType ?? (_ObjectType = Object.GetType());
+            public Type ObjectType =>
+                _ObjectType ?? (
+                _ObjectType = Object.GetType());
+            private Type _ObjectType;
 
-            PropertyInfo _PropertyInfo;
-            public PropertyInfo PropertyInfo {
-                get {
-                    if (_PropertyInfo == null) {
-                        _PropertyInfo = ObjectType
-                            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                            .FirstOrDefault(property => string.Equals(property.Name, PropertyName, StringComparison.OrdinalIgnoreCase));
-                    }
-                    return _PropertyInfo;
-                }
-            }
+            public PropertyInfo PropertyInfo =>
+                _PropertyInfo ?? (
+                _PropertyInfo = Cache.Get(ObjectType, PropertyName));
+            private PropertyInfo _PropertyInfo;
 
             public Type PropertyType {
                 get {
@@ -132,25 +130,26 @@ namespace Domore.Conf.Helpers {
 
             public bool Exists => PropertyInfo != null;
 
-            ItemProperty _Item;
             public ItemProperty Item {
                 get {
                     if (_Item == null) {
                         _Item = IndexString == ""
                             ? null
-                            : ItemProperty.Create(PropertyValue, $"Item{IndexString}", Converter);
+                            : ItemProperty.Create(PropertyValue, $"Item{IndexString}", Cache, Converter);
                     }
                     return _Item;
                 }
             }
+            private ItemProperty _Item;
 
             public virtual object PropertyValue {
                 get => PropertyInfo.GetValue(Object, null);
                 set => PropertyInfo.SetValue(Object, value, null);
             }
 
-            public ObjectProperty(object @object, string key, ConfConverter converter) {
+            public ObjectProperty(object @object, string key, PropertyCache cache, ConfConverter converter) {
                 Key = key;
+                Cache = cache ?? throw new ArgumentNullException(nameof(cache));
                 Object = @object ?? throw new ArgumentNullException(nameof(@object));
                 Converter = converter ?? throw new ArgumentNullException(nameof(converter));
             }
@@ -160,7 +159,7 @@ namespace Domore.Conf.Helpers {
             }
         }
 
-        class ItemProperty : ObjectProperty {
+        private class ItemProperty : ObjectProperty {
             public override object PropertyValue {
                 get => PropertyInfo.GetValue(Object, Index);
                 set => PropertyInfo.SetValue(Object, value, Index);
@@ -178,20 +177,20 @@ namespace Domore.Conf.Helpers {
                 }
             }
 
-            public ItemProperty(object @object, string key, ConfConverter converter) : base(@object, key, converter) {
+            public ItemProperty(object @object, string key, PropertyCache cache, ConfConverter converter) : base(@object, key, cache, converter) {
             }
 
-            public static ItemProperty Create(object @object, string key, ConfConverter converter) {
+            public static ItemProperty Create(object @object, string key, PropertyCache cache, ConfConverter converter) {
                 if (@object is IList list) {
-                    return new ListProperty(list, key, converter);
+                    return new ListProperty(list, key, cache, converter);
                 }
                 if (@object is IDictionary dictionary) {
-                    return new DictionaryProperty(dictionary, key, converter);
+                    return new DictionaryProperty(dictionary, key, cache, converter);
                 }
-                return new ItemProperty(@object, key, converter);
+                return new ItemProperty(@object, key, cache, converter);
             }
 
-            class ListProperty : ItemProperty {
+            private class ListProperty : ItemProperty {
                 public IList List { get; }
                 public new int Index => (int)base.Index[0];
 
@@ -217,12 +216,12 @@ namespace Domore.Conf.Helpers {
                     }
                 }
 
-                public ListProperty(IList list, string key, ConfConverter converter) : base(list, key, converter) {
+                public ListProperty(IList list, string key, PropertyCache cache, ConfConverter converter) : base(list, key, cache, converter) {
                     List = list ?? throw new ArgumentNullException(nameof(list));
                 }
             }
 
-            class DictionaryProperty : ItemProperty {
+            private class DictionaryProperty : ItemProperty {
                 public IDictionary Dictionary { get; }
                 public new object Index => base.Index[0];
 
@@ -231,7 +230,7 @@ namespace Domore.Conf.Helpers {
                     set => Dictionary[Index] = value;
                 }
 
-                public DictionaryProperty(IDictionary dictionary, string key, ConfConverter converter) : base(dictionary, key, converter) {
+                public DictionaryProperty(IDictionary dictionary, string key, PropertyCache cache, ConfConverter converter) : base(dictionary, key, cache, converter) {
                     Dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
                 }
             }
