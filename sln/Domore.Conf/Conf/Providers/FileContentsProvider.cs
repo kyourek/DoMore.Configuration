@@ -2,7 +2,7 @@
 using System.IO;
 
 namespace Domore.Conf.Providers {
-    class FileContentsProvider : TextContentsProvider {
+    internal class FileContentsProvider : TextContentsProvider {
         public override IEnumerable<KeyValuePair<string, string>> GetConfContents(object content) {
             var file = content?.ToString();
             if (File.Exists(file)) content = File.ReadAllText(file);

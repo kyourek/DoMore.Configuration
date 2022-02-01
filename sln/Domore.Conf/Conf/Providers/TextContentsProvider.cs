@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf.Providers {
-    class TextContentsProvider : IConfContentsProvider {
+    internal class TextContentsProvider : IConfContentsProvider {
         public virtual IEnumerable<KeyValuePair<string, string>> GetConfContents(object content) {
             var contents = content?.ToString()?.Trim() ?? "";
             var separator = contents.Contains("\n") ? "\n" : ";";

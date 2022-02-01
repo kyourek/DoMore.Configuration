@@ -1,18 +1,18 @@
 ﻿using System;
 
 namespace Domore.Conf.Helpers {
-    static class Key {
-        static string NormalizeName(string s) {
+    internal static class Key {
+        private static string NormalizeName(string s) {
             if (null == s) throw new ArgumentNullException(nameof(s));
             return string.Join("", s.Split()).ToLowerInvariant().Trim();
         }
 
-        static string NormalizeIndex(string s) {
+        private static string NormalizeIndex(string s) {
             if (null == s) throw new ArgumentNullException(nameof(s));
             return s.Trim();
         }
 
-        static bool ContainsIndex(string s) {
+        private static bool ContainsIndex(string s) {
             if (null == s) throw new ArgumentNullException(nameof(s));
             var open = s.IndexOf('[');
             var close = s.IndexOf(']');

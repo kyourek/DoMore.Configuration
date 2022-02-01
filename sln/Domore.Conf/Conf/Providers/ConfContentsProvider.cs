@@ -3,13 +3,13 @@ using System.Diagnostics;
 using System.IO;
 
 namespace Domore.Conf.Providers {
-    class ConfContentsProvider : FileContentsProvider {
-        string _ConfFile;
+    internal class ConfContentsProvider : FileContentsProvider {
         string ConfFile {
             get => _ConfFile ?? (_ConfFile = GetConfFile());
         }
+        private string _ConfFile;
 
-        string GetConfFile() {
+        private string GetConfFile() {
             var proc = Process.GetCurrentProcess();
             var procFile = proc.MainModule.FileName;
             var confFile = Path.ChangeExtension(procFile, ".conf");

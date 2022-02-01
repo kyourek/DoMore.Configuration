@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Domore.Conf.Helpers {
-    static class Parse {
+    internal static class Parse {
         public static IEnumerable<int> IntegerCollection(string input) {
             if (null == input) throw new ArgumentNullException(nameof(input));
 
