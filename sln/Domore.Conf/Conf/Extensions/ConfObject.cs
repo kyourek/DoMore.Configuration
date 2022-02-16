@@ -8,8 +8,8 @@ namespace Domore.Conf.Extensions {
             return Provider.GetConfContents(@object, key);
         }
 
-        public static string GetConfText(this object @object, string key = null) {
-            return Provider.GetConfText(@object, key);
+        public static string GetConfText(this object @object, string key = null, bool? multiline = null) {
+            return Provider.GetConfText(@object, key, multiline);
         }
     }
 }

@@ -63,6 +63,31 @@ namespace Domore.Conf.Extensions {
             Assert.That(actual, Is.EqualTo(expected));
         }
 
+        [Test]
+        public void GetConfText_GetsComplexTextOnSingleLine() {
+            var subject = new ComplexClass();
+            subject.StringProp = "mystr";
+            subject.DoubleProp = 4.321;
+            subject.Child.StringProp = "My other str";
+            var actual = subject.GetConfText(multiline: false);
+            var expected = string.Join(";",
+                "ComplexClass.Child.StringProp=My other str",
+                "ComplexClass.DoubleProp=4.321",
+                "ComplexClass.StringProp=mystr");
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void GetConfText_GetsComplexTextOnSingleLineWithEmptyKey() {
+            var subject = new ComplexClass();
+            subject.StringProp = "mystr";
+            subject.DoubleProp = 4.321;
+            subject.Child.StringProp = "My other str";
+            var actual = subject.GetConfText(key: "", multiline: false);
+            var expected = "Child.StringProp=My other str;DoubleProp=4.321;StringProp=mystr";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
         private static void GetConfText_CanRoundTripComplexClass(Action<ComplexClass, ComplexClass> assert) {
             var expected = new ComplexClass();
             expected.StringProp = "mystr";
@@ -148,8 +173,7 @@ namespace Domore.Conf.Extensions {
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        [Test]
-        public void GetConfText_CanRoundTripComplexDictedClass() {
+        private void GetConfText_CanRoundTripComplexDictedClass(bool multiline) {
             var subject = new ComplexDictedClass();
             subject.Dict[0] = new ComplexClass();
             subject.Dict[0].Child.StringProp = "hello";
@@ -168,6 +192,16 @@ namespace Domore.Conf.Extensions {
             Assert.That(copy.Dict[1].Child.StringProp, Is.EqualTo(subject.Dict[1].Child.StringProp));
             Assert.That(copy.Dict[1].DoubleProp, Is.EqualTo(subject.Dict[1].DoubleProp));
             Assert.That(copy.Dict[1].StringProp, Is.EqualTo(subject.Dict[1].StringProp));
+        }
+
+        [Test]
+        public void GetConfText_CanRoundTripComplexDictedClass() {
+            GetConfText_CanRoundTripComplexDictedClass(true);
+        }
+
+        [Test]
+        public void GetConfText_CanRoundTripComplexDictedClassOnSingleLine() {
+            GetConfText_CanRoundTripComplexDictedClass(false);
         }
 
         private class ComplexListedClass {
@@ -196,8 +230,9 @@ namespace Domore.Conf.Extensions {
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        [Test]
-        public void GetConfText_CanRoundTripComplexListedClass() {
+        [TestCase(true)]
+        [TestCase(false)]
+        public void GetConfText_CanRoundTripComplexListedClass(bool multiline) {
             var subject = new ComplexListedClass();
             subject.List.Add(new ComplexClass());
             subject.List[0].Child.StringProp = "hello";
@@ -207,7 +242,7 @@ namespace Domore.Conf.Extensions {
             subject.List[1].Child.StringProp = "HELLO";
             subject.List[1].DoubleProp = 2.34;
             subject.List[1].StringProp = "WORLD";
-            var text = subject.GetConfText();
+            var text = subject.GetConfText(multiline: multiline);
             var conf = new ConfBlockFactory().CreateConfBlock(text, new TextContentsProvider());
             var copy = conf.Configure(new ComplexListedClass());
             Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));

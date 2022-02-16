@@ -119,11 +119,12 @@ namespace Domore.Conf {
             return DefaultConfContents(source, key);
         }
 
-        public string GetConfText(object source, string key = null) {
+        public string GetConfText(object source, string key = null, bool? multiline = null) {
+            var equals = multiline == false ? "=" : " = ";
+            var separator = multiline == false ? ";" : Environment.NewLine;
             var confContents = GetConfContents(source, key);
-            return string.Join(Environment.NewLine,
-                confContents.Select(pair => string.Join(" = ",
-                    pair.Key, pair.Value)));
+            return string.Join(separator, confContents
+                .Select(pair => string.Join(equals, pair.Key, pair.Value)));
         }
     }
 }
