@@ -488,6 +488,51 @@ namespace Domore.Conf {
         }
 
         [Test]
+        public void Configure_ConfiguresSingleItemWithMultilineValues() {
+            Content = @"
+                kid.weight = 3
+                kid.diapersize = 1
+                kid.Mom.JOBS[0] = nurse0
+                kid.Mom.JOBS[1] = @""
+                    Nurse and
+                    chauffeur and
+                    cook
+                ""
+                kid.Mom.JOBS[2] = nurse2
+            ";
+            var kids = Subject.Configure(() => new Infant(), "KID").ToList();
+            var kid = kids.Single();
+            var actual = kid.Mom.Jobs[1];
+            var expected = string.Join(Environment.NewLine, "Nurse and", "chauffeur and", "cook");
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Configure_TrimsMultilineValues() {
+            Content = @"
+                kid.weight = 3
+                kid.diapersize = 1
+                kid.Mom.JOBS[0] = nurse0
+                kid.Mom.JOBS[1] = @""
+
+                    Nurse and            
+                    chauffeur and    
+
+
+                    cook                             
+
+
+                ""
+                kid.Mom.JOBS[2] = nurse2
+            ";
+            var kids = Subject.Configure(() => new Infant(), "KID").ToList();
+            var kid = kids.Single();
+            var actual = kid.Mom.Jobs[1];
+            var expected = string.Join(Environment.NewLine, "Nurse and", "chauffeur and", "", "", "cook");
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
         public void Configure_UsesClassName() {
             Content = @"
                 infant.weight = 3

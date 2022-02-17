@@ -26,7 +26,7 @@ namespace Domore.Conf {
 
             public IEnumerable<KeyValuePair<string, string>> Contents =>
                 _Contents ?? (
-                _Contents = ContentsProvider.GetConfContents(Content));
+                _Contents = ContentsProvider.GetConfContents(Content).ToList());
             private IEnumerable<KeyValuePair<string, string>> _Contents;
 
             public Log Log {
