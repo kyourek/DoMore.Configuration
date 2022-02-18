@@ -86,6 +86,9 @@ namespace Domore.Conf {
                                 if (property.CanWrite) {
                                     var pairKey = k(property.Name);
                                     var pairValue = Convert.ToString(propertyValue);
+                                    if (pairValue.Contains("\n")) {
+                                        pairValue = string.Join(Environment.NewLine, "{", pairValue, "}");
+                                    }
                                     var pair = new KeyValuePair<string, string>(pairKey, pairValue);
                                     yield return pair;
                                 }

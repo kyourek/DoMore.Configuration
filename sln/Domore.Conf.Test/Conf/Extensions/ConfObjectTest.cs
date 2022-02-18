@@ -118,6 +118,19 @@ namespace Domore.Conf.Extensions {
                 Assert.That(actual.Child.StringProp, Is.EqualTo(expected.Child.StringProp)));
         }
 
+        [Test]
+        public void GetConfText_CanRoundTripComplexClassMultiline() {
+            var expected = new ComplexClass();
+            expected.StringProp = string.Join(Environment.NewLine, "mystr", "on", "", "multiple", "lines");
+            expected.DoubleProp = 4.321;
+            expected.Child.StringProp = "My other str";
+
+            var text = expected.GetConfText();
+            var conf = new ConfBlockFactory().CreateConfBlock(text, new TextContentsProvider());
+            var actual = conf.Configure(new ComplexClass());
+            Assert.That(actual.StringProp, Is.EqualTo(expected.StringProp));
+        }
+
         private class DictedClass {
             public Dictionary<int, string> DictOfStrings { get; } = new Dictionary<int, string>();
         }

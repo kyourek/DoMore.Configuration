@@ -36,5 +36,42 @@ namespace Domore.Conf.Providers {
             var actual = Subject.GetConfContent(contents);
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        [Test]
+        public void GetConfContent_ReturnsMultilineStringContents() {
+            var contents = new List<KeyValuePair<string, string>> {
+                new KeyValuePair<string, string>("key 1", "val1"),
+                new KeyValuePair<string, string>("key1", @"
+                val1
+                on
+
+                several
+
+
+                Lines
+
+
+                "),
+                new KeyValuePair<string, string>("Key  2", "another value")
+            };
+            var expected = string.Join(Environment.NewLine,
+                "key 1 = val1",
+                "key1 = {" + @"
+
+                val1
+                on
+
+                several
+
+
+                Lines
+
+
+                ",
+                "}",
+                "Key  2 = another value");
+            var actual = Subject.GetConfContent(contents);
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }

@@ -3,7 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf.Providers {
+    using TextContents;
+
     internal class TextContentsProvider : IConfContentsProvider {
+        public static string Multiline(string s) {
+            if (s != null) {
+                if (s.Contains('\n')) {
+                    s = string.Join(Environment.NewLine, "{", s, "}");
+                }
+            }
+            return s;
+        }
+
         public virtual IEnumerable<KeyValuePair<string, string>> GetConfContents(object content) {
             var contents = content?.ToString()?.Trim() ?? "";
             var separator = contents.Contains('\n') ? '\n' : ';';
@@ -17,20 +28,24 @@ namespace Domore.Conf.Providers {
                         var key = item.Substring(0, j).Trim();
                         var value = j == length - 1 ? "" : item.Substring(j + 1).Trim();
                         if (value == "") break;
-                        if (value == "@\"" && separator == '\n') {
+                        if (value == "{" && separator == '\n') {
                             value = "";
                             for (var k = i + 1; k < count; k++) {
-                                var next = items[k].Trim();
-                                if (next == "\"") {
-                                    var v = value.Trim();
-                                    if (v != "") {
-                                        yield return new KeyValuePair<string, string>(key, v);
+                                var next = items[k];
+                                if (next.IsCharAndWhiteSpace('}')) {
+                                    if (value.IsWhiteSpace() == false) {
+                                        value = value
+                                            .Replace("\r", "")
+                                            .Replace("\n", Environment.NewLine);
+                                        yield return new KeyValuePair<string, string>(key, value);
                                     }
                                     i = k + 1;
                                     break;
                                 }
                                 else {
-                                    value = value + Environment.NewLine + next;
+                                    value = value == ""
+                                        ? next
+                                        : (value + Environment.NewLine + next);
                                 }
                             }
                         }
@@ -44,8 +59,10 @@ namespace Domore.Conf.Providers {
         }
 
         public virtual string GetConfContent(IEnumerable<KeyValuePair<string, string>> contents) {
-            contents = contents ?? new KeyValuePair<string, string>[] { };
-            return string.Join(Environment.NewLine, contents.Select(item => $"{item.Key} = {item.Value}"));
+            return contents == null
+                ? string.Empty
+                : string.Join(Environment.NewLine, contents
+                    .Select(item => item.Key + " = " + Multiline(item.Value)));
         }
     }
 }
