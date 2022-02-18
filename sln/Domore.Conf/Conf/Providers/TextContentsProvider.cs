@@ -39,7 +39,7 @@ namespace Domore.Conf.Providers {
                                             .Replace("\n", Environment.NewLine);
                                         yield return new KeyValuePair<string, string>(key, value);
                                     }
-                                    i = k + 1;
+                                    i = k;
                                     break;
                                 }
                                 else {

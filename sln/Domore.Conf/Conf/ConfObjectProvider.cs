@@ -5,7 +5,13 @@ using System.Linq;
 using System.Reflection;
 
 namespace Domore.Conf {
+    using TextContentsProvider = Providers.TextContentsProvider;
+
     internal class ConfObjectProvider {
+        private static string Multiline(string s) {
+            return TextContentsProvider.Multiline(s);
+        }
+
         private IEnumerable<KeyValuePair<string, string>> ListConfContents(IList list, string key) {
             if (null == list) throw new ArgumentNullException(nameof(list));
             if (key == null) {
@@ -24,7 +30,7 @@ namespace Domore.Conf {
                     if (vType.IsValueType || vType == typeof(string)) {
                         yield return new KeyValuePair<string, string>(
                             key: k,
-                            value: $"{v}");
+                            value: Multiline($"{v}"));
                     }
                     else {
                         foreach (var kvp in GetConfContents(v, k)) {
@@ -55,7 +61,7 @@ namespace Domore.Conf {
                         if (vType.IsValueType || vType == typeof(string)) {
                             yield return new KeyValuePair<string, string>(
                                 key: k,
-                                value: $"{v}");
+                                value: Multiline($"{v}"));
                         }
                         else {
                             foreach (var kvp in GetConfContents(v, k)) {
@@ -87,7 +93,7 @@ namespace Domore.Conf {
                                     var pairKey = k(property.Name);
                                     var pairValue = Convert.ToString(propertyValue);
                                     if (pairValue.Contains("\n")) {
-                                        pairValue = string.Join(Environment.NewLine, "{", pairValue, "}");
+                                        pairValue = Multiline(pairValue);
                                     }
                                     var pair = new KeyValuePair<string, string>(pairKey, pairValue);
                                     yield return pair;

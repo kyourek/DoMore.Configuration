@@ -266,6 +266,79 @@ namespace Domore.Conf.Extensions {
             Assert.That(copy.List[1].StringProp, Is.EqualTo(subject.List[1].StringProp));
         }
 
+        [Test]
+        public void GetConfText_CanRoundTripComplexListedClassWithBracketedContent1() {
+            var subject = new ComplexListedClass();
+            subject.List.Add(new ComplexClass());
+            subject.List[0].Child.StringProp = "hello";
+            subject.List[0].DoubleProp = 1.23;
+            subject.List[0].StringProp = @"world
+on more than one
+
+line";
+            subject.List.Add(new ComplexClass());
+            subject.List[1].Child.StringProp = @"
+
+      
+HELLO there
+
+            how's it going?
+
+  
+ ";
+            subject.List[1].DoubleProp = 2.34;
+            subject.List[1].StringProp = "WORLD";
+            var text = subject.GetConfText();
+            var conf = new ConfBlockFactory().CreateConfBlock(text, new TextContentsProvider());
+            var copy = conf.Configure(new ComplexListedClass());
+            Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
+            Assert.That(copy.List[0].DoubleProp, Is.EqualTo(subject.List[0].DoubleProp));
+            Assert.That(copy.List[0].StringProp, Is.EqualTo(subject.List[0].StringProp));
+            Assert.That(copy.List[1].Child.StringProp, Is.EqualTo(subject.List[1].Child.StringProp));
+            Assert.That(copy.List[1].DoubleProp, Is.EqualTo(subject.List[1].DoubleProp));
+            Assert.That(copy.List[1].StringProp, Is.EqualTo(subject.List[1].StringProp));
+        }
+
+        [Test]
+        public void GetConfText_CanRoundTripComplexListedClassWithBracketedContent2() {
+            var subject = new ComplexListedClass();
+            subject.List.Add(new ComplexClass());
+            subject.List[0].Child.StringProp = @"hello
+            here's
+            some more }
+            {lines}";
+            subject.List[0].DoubleProp = 1.23;
+            subject.List[0].StringProp = @"world
+on more than one
+
+line";
+            subject.List.Add(new ComplexClass());
+            subject.List[1].Child.StringProp = @"
+
+      
+HELLO there
+
+            how's it going?
+
+  
+ ";
+            subject.List[1].DoubleProp = 2.34;
+            subject.List[1].StringProp = @"{
+WORLD   and    
+            some other
+            stuff}
+}...";
+            var text = subject.GetConfText();
+            var conf = new ConfBlockFactory().CreateConfBlock(text, new TextContentsProvider());
+            var copy = conf.Configure(new ComplexListedClass());
+            Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
+            Assert.That(copy.List[0].DoubleProp, Is.EqualTo(subject.List[0].DoubleProp));
+            Assert.That(copy.List[0].StringProp, Is.EqualTo(subject.List[0].StringProp));
+            Assert.That(copy.List[1].Child.StringProp, Is.EqualTo(subject.List[1].Child.StringProp));
+            Assert.That(copy.List[1].DoubleProp, Is.EqualTo(subject.List[1].DoubleProp));
+            Assert.That(copy.List[1].StringProp, Is.EqualTo(subject.List[1].StringProp));
+        }
+
         private class ClassWithListExposedAsICollection {
             public ICollection<Inner> Inners {
                 get => _Inners ?? (_Inners = new List<Inner>());
@@ -301,6 +374,34 @@ namespace Domore.Conf.Extensions {
                 "String[1] = world",
                 "String[2] = hey",
                 "String[3] = earth");
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void GetConfText_GetsConfOfListMultiline() {
+            var list = new List<string> { "hello", "world", "hey", @"
+earth
+            is on   
+MANY
+
+
+lines
+" };
+            var actual = list.GetConfText();
+            var expected = string.Join(Environment.NewLine,
+                "String[0] = hello",
+                "String[1] = world",
+                "String[2] = hey",
+                "String[3] = {" + @"
+
+earth
+            is on   
+MANY
+
+
+lines
+
+}");
             Assert.That(actual, Is.EqualTo(expected));
         }
 
