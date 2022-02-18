@@ -416,6 +416,36 @@ lines
         }
 
         [Test]
+        public void GetConfText_GetsConfOfDictionaryWithBracketedText() {
+            var dict = new Dictionary<string, string> { 
+                { "hello", @"here's{
+}some
+text...
+  
+  
+" }, 
+                { "World", @"
+}                      some
+more lines{" } };
+            var actual = dict.GetConfText();
+
+            var expected = @"String[hello] = {
+here's{
+}some
+text...
+  
+  
+
+}
+String[World] = {
+
+}                      some
+more lines{
+}";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
         public void GetConfText_CanRoundTripDictionary() {
             var obj1 = new ClassWithListExposedAsICollection();
             obj1.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.1 });
