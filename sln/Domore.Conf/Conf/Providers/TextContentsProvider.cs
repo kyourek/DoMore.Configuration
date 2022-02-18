@@ -68,10 +68,6 @@ namespace Domore.Conf.Providers {
         }
 
         public class Reverse {
-            private static string Multiline(string s) {
-                return TextContentsProvider.Multiline(s);
-            }
-
             private IEnumerable<KeyValuePair<string, string>> ListConfContents(IList list, string key) {
                 if (null == list) throw new ArgumentNullException(nameof(list));
                 if (key == null) {
