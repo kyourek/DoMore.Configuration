@@ -378,7 +378,7 @@ WORLD   and
         }
 
         [Test]
-        public void GetConfText_GetsConfOfListMultiline() {
+        public void GetConfText_GetsConfOfListWithBracketedText() {
             var list = new List<string> { "hello", "world", "hey", @"
 earth
             is on   
@@ -417,13 +417,13 @@ lines
 
         [Test]
         public void GetConfText_GetsConfOfDictionaryWithBracketedText() {
-            var dict = new Dictionary<string, string> { 
+            var dict = new Dictionary<string, string> {
                 { "hello", @"here's{
 }some
 text...
   
   
-" }, 
+" },
                 { "World", @"
 }                      some
 more lines{" } };

@@ -488,7 +488,7 @@ namespace Domore.Conf {
         }
 
         [Test]
-        public void Configure_ConfiguresSingleItemWithMultilineValues() {
+        public void Configure_ConfiguresSingleItemWithBracketedValues() {
             Content = @"
                 kid.weight = 3
                 kid.diapersize = 1
@@ -510,7 +510,7 @@ namespace Domore.Conf {
         }
 
         [Test]
-        public void Configure_TrimsMultilineValues() {
+        public void Configure_DoesNotTrimBracketedValues() {
             Content = @"
                 kid.weight = 3
                 kid.diapersize = 1
@@ -538,6 +538,25 @@ namespace Domore.Conf {
                     cook                             
 
         ";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Configure_DoesNotSetValueEithEmptyBracketedText() {
+            Content = @"
+                kid.weight = 3
+                kid.diapersize = 1
+                kid.Mom.JOBS[0] = nurse0
+                kid.Mom.JOBS[1] = {
+   
+        
+                }
+                kid.Mom.JOBS[2] = nurse2
+            ";
+            var kids = Subject.Configure(() => new Infant(), "KID").ToList();
+            var kid = kids.Single();
+            var actual = kid.Mom.Jobs[1];
+            var expected = default(string);
             Assert.That(actual, Is.EqualTo(expected));
         }
 
