@@ -2,7 +2,7 @@
 <Project>
   <PropertyGroup>
     <Authors>Ken Yourek</Authors>
-    <Copyright>Copyright © Ken Yourek 2019-2020</Copyright>
+    <Copyright>Copyright © Ken Yourek 2019-2022</Copyright>
     <VersionPrefix>4.7.0.42</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <AssemblyVersion>4.7.0.42</AssemblyVersion>
