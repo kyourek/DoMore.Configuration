@@ -542,7 +542,7 @@ namespace Domore.Conf {
         }
 
         [Test]
-        public void Configure_DoesNotSetValueEithEmptyBracketedText() {
+        public void Configure_DoesNotSetValueWithEmptyBracketedText() {
             Content = @"
                 kid.weight = 3
                 kid.diapersize = 1
