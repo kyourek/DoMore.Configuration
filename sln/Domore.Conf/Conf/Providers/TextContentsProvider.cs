@@ -8,7 +8,7 @@ namespace Domore.Conf.Providers {
     using TextContents;
 
     internal class TextContentsProvider : IConfContentsProvider {
-        public static string Multiline(string s) {
+        private static string Multiline(string s) {
             if (s != null) {
                 if (s.Contains('\n')) {
                     s = string.Join(Environment.NewLine, "{", s, "}");
