@@ -139,26 +139,29 @@ namespace Domore.Conf.Providers {
                 string k(string s) => key == "" ? s : string.Join(".", key, s);
                 foreach (var property in properties) {
                     if (property.CanRead) {
-                        var parameters = property.GetIndexParameters();
-                        if (parameters.Length == 0) {
-                            var propertyValue = property.GetValue(source, null);
-                            if (propertyValue != null) {
-                                var propertyValueType = propertyValue.GetType();
-                                if (propertyValueType.IsValueType || propertyValueType == typeof(string)) {
-                                    if (property.CanWrite) {
-                                        var pairKey = k(property.Name);
-                                        var pairValue = Convert.ToString(propertyValue);
-                                        if (pairValue.Contains("\n")) {
-                                            pairValue = Multiline(pairValue);
+                        var confAttr = property.GetCustomAttributes(typeof(ConfAttribute), inherit: true)?.FirstOrDefault() as ConfAttribute;
+                        if (confAttr == null || confAttr.Ignore == false) {
+                            var parameters = property.GetIndexParameters();
+                            if (parameters.Length == 0) {
+                                var propertyValue = property.GetValue(source, null);
+                                if (propertyValue != null) {
+                                    var propertyValueType = propertyValue.GetType();
+                                    if (propertyValueType.IsValueType || propertyValueType == typeof(string)) {
+                                        if (property.CanWrite) {
+                                            var pairKey = k(property.Name);
+                                            var pairValue = Convert.ToString(propertyValue);
+                                            if (pairValue.Contains("\n")) {
+                                                pairValue = Multiline(pairValue);
+                                            }
+                                            var pair = new KeyValuePair<string, string>(pairKey, pairValue);
+                                            yield return pair;
                                         }
-                                        var pair = new KeyValuePair<string, string>(pairKey, pairValue);
-                                        yield return pair;
                                     }
-                                }
-                                else {
-                                    var cc = ConfContents(propertyValue, k(property.Name));
-                                    foreach (var item in cc) {
-                                        yield return item;
+                                    else {
+                                        var cc = ConfContents(propertyValue, k(property.Name));
+                                        foreach (var item in cc) {
+                                            yield return item;
+                                        }
                                     }
                                 }
                             }
