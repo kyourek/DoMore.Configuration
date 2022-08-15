@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 
 namespace Domore.Conf.Providers {
+    using Extensions;
     using TextContents;
 
     internal class TextContentsProvider : IConfContentsProvider {
@@ -138,7 +139,7 @@ namespace Domore.Conf.Providers {
                 string k(string s) => key == "" ? s : string.Join(".", key, s);
                 foreach (var property in properties) {
                     if (property.CanRead) {
-                        var confAttr = property.GetCustomAttributes(typeof(ConfAttribute), inherit: true)?.FirstOrDefault() as ConfAttribute;
+                        var confAttr = property.GetConfAttribute();
                         if (confAttr == null || confAttr.Ignore == false) {
                             var parameters = property.GetIndexParameters();
                             if (parameters.Length == 0) {
