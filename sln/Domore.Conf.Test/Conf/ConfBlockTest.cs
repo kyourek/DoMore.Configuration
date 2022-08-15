@@ -199,9 +199,58 @@ namespace Domore.Conf {
             Assert.AreEqual("red", man.BestFriend.Color);
         }
 
+        private class ManWithCat : Man {
+            [Conf(ignore: false)]
+            public Cat Cat { get; set; }
+        }
+
+        [Test]
+        public void Configure_DoesNotIgnoreProperty() {
+            Content = @"
+                Penny.color = red
+                Man.Best friend = Penny
+                Man.Cat.Color = black
+            ";
+            var man = Subject.Configure(new ManWithCat(), "Man");
+            Assert.AreEqual("black", man.Cat.Color);
+        }
+
+        private class ManWithIgnoredCat : Man {
+            [Conf(ignore: true)]
+            public Cat Cat { get; set; }
+        }
+
+        [Test]
+        public void Configure_IgnoresIgnoredProperty() {
+            Content = @"
+                Penny.color = red
+                Man.Best friend = Penny
+                Man.Cat.Color = black
+            ";
+            var man = Subject.Configure(new ManWithIgnoredCat(), "Man");
+            Assert.IsNull(man.Cat);
+        }
+
+        private class ObjWithIgnoredProp {
+            public string NotIgnored { get; set; }
+
+            [Conf(ignore: true)]
+            public string YesIgnored { get; set; }
+        }
+
+        [Test]
+        public void Configure_IgnoresIgnoredProperty2() {
+            Content = @"
+                Obj.NotIgnored = 1
+                Obj.YesIgnored = 1
+            ";
+            var obj = Subject.Configure(new ObjWithIgnoredProp(), "Obj");
+            Assert.IsNull(obj.YesIgnored);
+        }
+
         class Kid { public Pet Pet { get; set; } }
         class Pet { }
-        class Cat : Pet { }
+        class Cat : Pet { public string Color { get; set; } }
 
         [Test]
         public void Configure_CreatesInstanceOfType() {

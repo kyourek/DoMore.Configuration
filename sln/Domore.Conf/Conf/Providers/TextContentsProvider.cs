@@ -134,7 +134,6 @@ namespace Domore.Conf.Providers {
                 var properties = type
                     .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                     .OrderBy(property => property.Name);
-
                 key = key ?? type.Name;
                 string k(string s) => key == "" ? s : string.Join(".", key, s);
                 foreach (var property in properties) {

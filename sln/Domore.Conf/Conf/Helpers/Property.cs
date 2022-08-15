@@ -13,10 +13,10 @@ namespace Domore.Conf.Helpers {
             for (var i = start; i < parts.Length; i++) {
                 var propertyKey = parts[i];
                 var objectProperty = new ObjectProperty(obj, propertyKey, Cache, converter);
-                if (objectProperty.Exists) {
+                if (objectProperty.Confable) {
                     if (i == parts.Length - 1) {
                         var item = objectProperty.Item;
-                        if (item != null && item.Exists) {
+                        if (item != null && item.Confable) {
                             item.SetValue(block, key);
                         }
                         else {
@@ -30,11 +30,11 @@ namespace Domore.Conf.Helpers {
                         }
 
                         var item = objectProperty.Item;
-                        if (item != null && item.Exists && (item.IndexExists == false || item.PropertyValue == null)) {
+                        if (item != null && item.Confable && (item.IndexExists == false || item.PropertyValue == null)) {
                             item.SetValue(block, string.Join(".", parts.Take(i + 1)));
                         }
 
-                        obj = item != null && item.Exists
+                        obj = item != null && item.Confable
                             ? item.PropertyValue
                             : objectProperty.PropertyValue;
                     }
@@ -128,7 +128,20 @@ namespace Domore.Conf.Helpers {
                 }
             }
 
-            public bool Exists => PropertyInfo != null;
+            public ConfAttribute Attribute =>
+                _Attribute ?? (
+                _Attribute = PropertyInfo.GetCustomAttributes(typeof(ConfAttribute), inherit: true)?.FirstOrDefault() as ConfAttribute);
+            private ConfAttribute _Attribute;
+
+            public bool Exists =>
+                _Exists ?? (
+                _Exists = PropertyInfo != null).Value;
+            private bool? _Exists;
+
+            public bool Confable =>
+                _Confable ?? (
+                _Confable = Exists && (Attribute?.Ignore != true)).Value;
+            private bool? _Confable;
 
             public ItemProperty Item {
                 get {
