@@ -57,6 +57,18 @@ namespace Domore.Conf.Extensions {
             CollectionAssert.AreEquivalent(expected, contents);
         }
 
+        private class TwoPropertyWithIgnoreClass2 : OnePropertyClass {
+            [Conf(ignoreGet: true, ignoreSet: false)]
+            public double DoubleProp { get; set; }
+        }
+
+        [Test]
+        public void GetConfContents_DoesNotGetIgnoredProperty2() {
+            var contents = new TwoPropertyWithIgnoreClass2 { StringProp = "Hello World", DoubleProp = 1.23 }.GetConfContents();
+            var expected = new Dictionary<string, string> { { "TwoPropertyWithIgnoreClass2.StringProp", "Hello World" } };
+            CollectionAssert.AreEquivalent(expected, contents);
+        }
+
         private class TwoPropertyWithoutIgnoreClass : OnePropertyClass {
             [Conf(ignore: false)]
             public double DoubleProp { get; set; }

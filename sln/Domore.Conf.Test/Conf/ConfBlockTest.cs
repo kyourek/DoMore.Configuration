@@ -221,13 +221,29 @@ namespace Domore.Conf {
         }
 
         [Test]
-        public void Configure_IgnoresIgnoredProperty() {
+        public void Configure_IgnoresMansCat() {
             Content = @"
                 Penny.color = red
                 Man.Best friend = Penny
                 Man.Cat.Color = black
             ";
             var man = Subject.Configure(new ManWithIgnoredCat(), "Man");
+            Assert.IsNull(man.Cat);
+        }
+
+        private class ManWithIgnoredCat2 : Man {
+            [Conf(ignoreSet: true, ignoreGet: false)]
+            public Cat Cat { get; set; }
+        }
+
+        [Test]
+        public void Configure_IgnoresMansCat2() {
+            Content = @"
+                Penny.color = red
+                Man.Best friend = Penny
+                Man.Cat.Color = black
+            ";
+            var man = Subject.Configure(new ManWithIgnoredCat2(), "Man");
             Assert.IsNull(man.Cat);
         }
 
@@ -239,7 +255,7 @@ namespace Domore.Conf {
         }
 
         [Test]
-        public void Configure_IgnoresIgnoredProperty2() {
+        public void Configure_IgnoresIgnoredProperty() {
             Content = @"
                 Obj.NotIgnored = 1
                 Obj.YesIgnored = 1

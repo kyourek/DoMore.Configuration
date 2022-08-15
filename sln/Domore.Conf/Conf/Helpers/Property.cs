@@ -140,7 +140,7 @@ namespace Domore.Conf.Helpers {
 
             public bool Confable =>
                 _Confable ?? (
-                _Confable = Exists && (Attribute?.Ignore != true)).Value;
+                _Confable = Exists && (Attribute?.IgnoreSet != true)).Value;
             private bool? _Confable;
 
             public ItemProperty Item {

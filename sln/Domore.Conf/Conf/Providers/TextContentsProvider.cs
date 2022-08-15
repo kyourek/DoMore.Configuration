@@ -140,7 +140,7 @@ namespace Domore.Conf.Providers {
                 foreach (var property in properties) {
                     if (property.CanRead) {
                         var confAttr = property.GetConfAttribute();
-                        if (confAttr == null || confAttr.Ignore == false) {
+                        if (confAttr == null || confAttr.IgnoreGet == false) {
                             var parameters = property.GetIndexParameters();
                             if (parameters.Length == 0) {
                                 var propertyValue = property.GetValue(source, null);
