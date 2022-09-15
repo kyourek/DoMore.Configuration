@@ -1,12 +1,23 @@
-﻿namespace Domore.Conf.Future.Text {
-    internal class TextContentProvider : ConfContentProvider {
-        private readonly TextContentParser Parser = new TextContentParser();
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 
-        public override ConfContent GetConfContent(object content) {
-            var s = $"{content}";
-            var p = Parser.Parse(s);
-            var c = ConfContent.From(p);
-            return c;
+namespace Domore.Conf.Future.Text {
+    using Parsing;
+
+    internal class TextContentProvider : ConfContentProvider {
+        private MultiLineParser MultiLineParser =>
+            _MultiLineParser ?? (
+            _MultiLineParser = new MultiLineParser());
+        private MultiLineParser _MultiLineParser;
+
+        public override ConfContent GetConfContent(object contents) {
+            var text = contents?.ToString() ?? "";
+            var parser = MultiLineParser;
+            var pairs = parser.Parse(text);
+            var list = pairs.ToList();
+            var conf = new ReadOnlyCollection<ConfPair>(list);
+            var content = new ConfContent(conf);
+            return content;
         }
     }
 }

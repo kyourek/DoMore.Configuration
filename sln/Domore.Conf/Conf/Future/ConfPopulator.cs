@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace Domore.Conf.Future {
     internal class ConfPopulator {
+        private readonly Dictionary<Type, Dictionary<string, ConfProperty>> ConfPropertyCache = new Dictionary<Type, Dictionary<string, ConfProperty>>();
+
         private readonly ConfPropertyCache PropertyCache = new ConfPropertyCache();
         private readonly ConfValueConverter ConverterDefault = new ConfValueConverter();
         private readonly ConfValueConverterCache ConverterCache = new ConfValueConverterCache();
@@ -52,6 +54,28 @@ namespace Domore.Conf.Future {
             if (null == pairs) throw new ArgumentNullException(nameof(pairs));
             foreach (var pair in pairs) {
                 Populate(pair.Key, pair.Value, target, conf);
+            }
+        }
+
+        public void Populate(object target, IConf conf, IEnumerable<ConfPair> content) {
+            if (null == target) throw new ArgumentNullException(nameof(target));
+            var targetType = target.GetType();
+            if (ConfPropertyCache.TryGetValue(targetType, out var targetPropCache) == false) {
+                ConfPropertyCache[targetType] = targetPropCache = new Dictionary<string, ConfProperty>(StringComparer.OrdinalIgnoreCase);
+            }
+            foreach (var pair in content) {
+                var key = pair.Key;
+                foreach (var part in key.Parts) {
+                    var targetPropName = part.Name;
+                    if (targetPropCache.TryGetValue(targetPropName, out var property) == false) {
+                        targetPropCache[targetPropName] = property = new ConfProperty(targetPropName, targetType);
+                    }
+                    if (property.Exists) {
+                        if (property.Populate) {
+
+                        }
+                    }
+                }
             }
         }
     }

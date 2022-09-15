@@ -40,6 +40,7 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
 
         public ConfKeyPart KeyPart() {
             return new ConfKeyPart(
+                name: String.ToString(),
                 indices: new ReadOnlyCollection<ConfKeyIndex>(
                     Indices
                         .Select(i => i.KeyIndex())

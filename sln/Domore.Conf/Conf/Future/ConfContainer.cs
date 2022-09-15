@@ -1,14 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Domore.Conf.Future {
     using Text;
 
-    public class ConfContainer {
+    internal class ConfContainer : IConf {
         private ConfContent Content =>
             _Content ?? (
             _Content = ContentProvider.GetConfContent(Contents));
         private ConfContent _Content;
+
+        private ConfPopulator Populator =>
+            _Populator ?? (
+            _Populator = new ConfPopulator());
+        private ConfPopulator _Populator;
 
         public object Contents {
             get => _Contents;
@@ -28,12 +32,13 @@ namespace Domore.Conf.Future {
         }
         private ConfContentProvider _ContentProvider;
 
-        public T Configure<T>(T obj, string key = null) {
-            return Content.Configure(obj, key);
+        public T Configure<T>(T target, string key = null) {
+            if (null == target) throw new ArgumentNullException(nameof(target));
+            var targetType = target.GetType();
+            var k = key == null ? targetType.Name : key;
+            var p = Content.ByKey(k);
+            return target;
         }
 
-        public IEnumerable<T> Configure<T>(Func<T> factory, string key = null) {
-            return Content.Configure(factory, key);
-        }
     }
 }

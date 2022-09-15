@@ -8,11 +8,11 @@ namespace Domore.Conf.Future {
     public class ConfContainerTest {
         private object Content;
 
-        private ConfContainer Subject {
-            get => _Subject ?? (_Subject = new ConfContainer { Contents = Content });
+        private ConfContainerOld Subject {
+            get => _Subject ?? (_Subject = new ConfContainerOld { Contents = Content });
             set => _Subject = value;
         }
-        private ConfContainer _Subject;
+        private ConfContainerOld _Subject;
 
         [SetUp]
         public void SetUp() {
