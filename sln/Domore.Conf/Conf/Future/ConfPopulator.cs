@@ -48,7 +48,7 @@ namespace Domore.Conf.Future {
             }
         }
 
-        public void Populate(object target, IConf conf, IEnumerable<ConfPair> pairs) {
+        public void Populate(object target, IConf conf, IEnumerable<ConfPairOld> pairs) {
             if (null == pairs) throw new ArgumentNullException(nameof(pairs));
             foreach (var pair in pairs) {
                 Populate(pair.Key, pair.Value, target, conf);

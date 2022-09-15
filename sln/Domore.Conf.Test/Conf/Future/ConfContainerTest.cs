@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Domore.Conf.Future {
     [TestFixture]
@@ -254,7 +255,7 @@ namespace Domore.Conf.Future {
                 kid[2].weight = 26
                 kid[2].diapersize = 4
             ";
-            var kids = default(IList<Infant>); // Subject.Configure(() => new Infant(), "Kid").ToList();
+            var kids = Subject.Configure(() => new Infant(), "Kid").ToList();
             Assert.That(kids.Count, Is.EqualTo(3));
         }
     }

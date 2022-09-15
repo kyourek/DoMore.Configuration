@@ -1,4 +1,7 @@
-﻿namespace Domore.Conf.Future {
+﻿using System;
+using System.Collections.Generic;
+
+namespace Domore.Conf.Future {
     using Text;
 
     public class ConfContainer {
@@ -27,6 +30,10 @@
 
         public T Configure<T>(T obj, string key = null) {
             return Content.Configure(obj, key);
+        }
+
+        public IEnumerable<T> Configure<T>(Func<T> factory, string key = null) {
+            return Content.Configure(factory, key);
         }
     }
 }

@@ -1,14 +1,14 @@
 ﻿namespace Domore.Conf.Future {
     internal class ConfItem {
-        public ConfPair Pair =>
+        public ConfPairOld Pair =>
             _Pair ?? (
-            _Pair = new ConfPair(Key.Parts, Value));
-        private ConfPair _Pair;
+            _Pair = new ConfPairOld(Key.Parts, Value));
+        private ConfPairOld _Pair;
 
-        public ConfKey Key { get; }
+        public ConfKeyOld Key { get; }
         public string Value { get; }
 
-        public ConfItem(ConfKey key, string value) {
+        public ConfItem(ConfKeyOld key, string value) {
             Key = key;
             Value = value;
         }
