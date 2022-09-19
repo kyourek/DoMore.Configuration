@@ -1,23 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <PropertyGroup>
-    <Authors>Ken Yourek</Authors>
-    <Copyright>Copyright © Ken Yourek 2019-2022</Copyright>
-    <VersionPrefix>5.1.0.44</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
-    <AssemblyVersion>5.1.0.44</AssemblyVersion>
-    <InformationalVersion>5.1.0.44</InformationalVersion>
-    <FileVersion>5.1.0.44</FileVersion>
-    <PackageVersion>5.1.0.44</PackageVersion>
-    <PackageProjectUrl>https://github.com/kyourek/Domore.Conf</PackageProjectUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/kyourek/domore-conf.git</RepositoryUrl>
-    <RepositoryBranch>master</RepositoryBranch>
-    <RepositoryCommit>7b74e972ffcca70657c9da3944148afe14f72210</RepositoryCommit>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>conf;config;configuration</PackageTags>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Authors>Ken Yourek</Authors>
+        <Copyright>Copyright © Ken Yourek 2019-2022</Copyright>
+        <VersionPrefix>5.1.0.44</VersionPrefix>
+        <VersionSuffix></VersionSuffix>
+        <AssemblyVersion>5.1.0.44</AssemblyVersion>
+        <InformationalVersion>5.1.0.44</InformationalVersion>
+        <FileVersion>5.1.0.44</FileVersion>
+        <PackageVersion>5.1.0.44</PackageVersion>
+        <PackageProjectUrl>https://github.com/kyourek/Domore.Conf</PackageProjectUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/kyourek/domore-conf.git</RepositoryUrl>
+        <RepositoryBranch>master</RepositoryBranch>
+        <RepositoryCommit>7b74e972ffcca70657c9da3944148afe14f72210</RepositoryCommit>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageTags>conf;config;configuration</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    </PropertyGroup>
 </Project>
