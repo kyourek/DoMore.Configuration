@@ -11,15 +11,5 @@ namespace Domore.Conf.Future {
         public override string ToString() {
             return Name;
         }
-
-        public override bool Equals(object obj) {
-            return
-                obj is ConfKeyIndexPart other &&
-                other.Name.Equals(Name);
-        }
-
-        public override int GetHashCode() {
-            return Name.GetHashCode();
-        }
     }
 }

@@ -21,26 +21,27 @@ namespace Domore.Conf.Future {
                 if (property.Exists) {
                     if (property.Populate) {
                         switch (key.Parts.Count) {
-                            case 1:
-                                var item = property.Item;
-                                if (item != null && item.Exists) {
-                                    if (item.Populate) {
-                                        item.PropertyValue = Convert(value, item, conf);
+                            case 1: {
+                                    var item = property.Item;
+                                    if (item != null && item.Exists) {
+                                        if (item.Populate) {
+                                            item.PropertyValue = Convert(value, item, conf);
+                                        }
                                     }
+                                    else {
+                                        property.PropertyValue = Convert(value, property, conf);
+                                    }
+                                    break;
                                 }
-                                else {
-                                    property.PropertyValue = Convert(value, property, conf);
+                            default: {
+                                    var keys = key.Skip(1);
+                                    var propertyValue = property.PropertyValue;
+                                    if (propertyValue is null) {
+                                        propertyValue = property.PropertyValue = Activator.CreateInstance(property.PropertyType);
+                                    }
+                                    Populate(keys, value, propertyValue, conf);
+                                    break;
                                 }
-                                break;
-                            default:
-                                var keys = key.Skip(1);
-                                var populator = new ConfPopulator();
-                                var propertyValue = property.PropertyValue;
-                                if (propertyValue is null) {
-                                    propertyValue = property.PropertyValue = Activator.CreateInstance(property.PropertyType);
-                                }
-                                populator.Populate(keys, value, propertyValue, conf);
-                                break;
                         }
                     }
                 }

@@ -3,6 +3,8 @@ using System.Text;
 
 namespace Domore.Conf.Future.Text.Parsing.Tokens {
     internal class KeyIndexPartBuilder : TokenBuilder {
+        private StringBuilder WhiteSpace { get; } = new StringBuilder();
+
         public StringBuilder String { get; } = new StringBuilder();
 
         public KeyIndexBuilder KeyIndex { get; }
@@ -13,8 +15,7 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
         }
 
         public override Token Add(string s, ref int i) {
-            var c = Next(s, ref i);
-            if (c == null) return null;
+            var c = s[i];
             if (c == Sep) return new KeyBuilder(Sep);
             switch (c) {
                 case ']':
@@ -22,7 +23,16 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
                 case ',':
                     return new KeyIndexPartBuilder(KeyIndex);
                 default:
-                    String.Append(c);
+                    if (char.IsWhiteSpace(c)) {
+                        if (String.Length > 0) {
+                            WhiteSpace.Append(c);
+                        }
+                    }
+                    else {
+                        String.Append(WhiteSpace);
+                        String.Append(c);
+                        WhiteSpace.Clear();
+                    }
                     return this;
             }
         }

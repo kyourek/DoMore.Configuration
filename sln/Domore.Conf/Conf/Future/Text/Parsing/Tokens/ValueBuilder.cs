@@ -15,15 +15,23 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
 
         public override Token Add(string s, ref int i) {
             var c = s[i];
-            if (c == Sep) return new Complete(Key, String);
+            if (c == Sep) {
+                if (String.Length > 0) {
+                    return new Complete(Key, String);
+                }
+                return new KeyBuilder(Sep);
+            }
             switch (c) {
                 case '{':
-                    for (var j = i + 1; j < s.Length; j++) {
-                        if (s[j] == Sep) {
-                            return new ValueContentBuilder(Key);
-                        }
-                        if (char.IsWhiteSpace(s[j]) == false) {
-                            break;
+                    if (String.Length == 0) {
+                        for (var j = i + 1; j < s.Length; j++) {
+                            if (s[j] == Sep) {
+                                i = j;
+                                return new ValueContentBuilder(Key);
+                            }
+                            if (char.IsWhiteSpace(s[j]) == false) {
+                                break;
+                            }
                         }
                     }
                     goto default;

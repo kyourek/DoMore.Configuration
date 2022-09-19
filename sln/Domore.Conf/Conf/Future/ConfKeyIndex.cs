@@ -15,5 +15,9 @@ namespace Domore.Conf.Future {
 
         public ConfKeyIndex(params string[] names) : this(names?.Select(name => new ConfKeyIndexPart(name)).ToArray()) {
         }
+
+        public override string ToString() {
+            return $"{string.Join(",", Parts)}";
+        }
     }
 }

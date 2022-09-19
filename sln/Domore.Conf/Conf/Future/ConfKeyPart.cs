@@ -10,7 +10,7 @@ namespace Domore.Conf.Future {
 
         public ConfKeyPart(string name, ReadOnlyCollection<ConfKeyIndex> indices) {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Indices = indices;
+            Indices = indices ?? throw new ArgumentNullException(nameof(indices));
         }
 
         public ConfKeyPart(string name, params ConfKeyIndex[] indices) : this(name, new ReadOnlyCollection<ConfKeyIndex>(new List<ConfKeyIndex>(indices))) {
@@ -18,6 +18,10 @@ namespace Domore.Conf.Future {
 
         public bool Is(string name) {
             return Name.Equals(name, NameComparison);
+        }
+
+        public override string ToString() {
+            return $"{Name}{(Indices.Count == 0 ? "" : $"[{string.Join("", Indices)}]")}";
         }
     }
 }

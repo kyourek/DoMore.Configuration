@@ -29,5 +29,9 @@ namespace Domore.Conf.Future {
             return new ConfKey(
                 parts: new ReadOnlyCollection<ConfKeyPart>(Parts.Skip(parts).ToList()));
         }
+
+        public override string ToString() {
+            return string.Join(".", Parts);
+        }
     }
 }

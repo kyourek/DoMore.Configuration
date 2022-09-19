@@ -14,5 +14,9 @@ namespace Domore.Conf.Future {
             if (null == target) throw new ArgumentNullException(nameof(target));
             var type = target.GetType();
         }
+
+        public override string ToString() {
+            return $"{Key}={Value}";
+        }
     }
 }
