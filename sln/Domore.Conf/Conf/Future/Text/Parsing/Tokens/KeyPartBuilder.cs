@@ -11,35 +11,31 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
 
         public KeyBuilder Key { get; }
 
-        public KeyPartBuilder(KeyBuilder key) {
+        public KeyPartBuilder(KeyBuilder key) : base((key ?? throw new ArgumentNullException(nameof(key))).Sep) {
             Key = key ?? throw new ArgumentNullException(nameof(key));
             Key.Parts.Add(this);
         }
 
         public override Token Add(string s, ref int i) {
-            var c = s[i];
+            var c = Next(s, ref i);
+            if (c == null) return null;
+            if (c == Sep) return new KeyBuilder(Sep);
             switch (c) {
-                case '\n':
-                    return new Invalid();
                 case '=':
                     return new ValueBuilder(Key);
                 case '[':
-                    i--;
                     return new KeyIndexBuilder(this);
                 case '.':
                     return new KeyPartBuilder(Key);
                 default:
-                    if (char.IsWhiteSpace(c)) {
-                    }
-                    else {
-                        String.Append(c);
-                    }
+                    String.Append(c);
                     return this;
             }
         }
 
         public ConfKeyPart KeyPart() {
             return new ConfKeyPart(
+                name: String.ToString(),
                 indices: new ReadOnlyCollection<ConfKeyIndex>(
                     Indices
                         .Select(i => i.KeyIndex())

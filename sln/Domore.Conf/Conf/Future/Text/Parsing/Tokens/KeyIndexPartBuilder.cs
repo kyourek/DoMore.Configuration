@@ -7,26 +7,22 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
 
         public KeyIndexBuilder KeyIndex { get; }
 
-        public KeyIndexPartBuilder(KeyIndexBuilder keyIndex) {
+        public KeyIndexPartBuilder(KeyIndexBuilder keyIndex) : base((keyIndex ?? throw new ArgumentNullException(nameof(keyIndex))).Sep) {
             KeyIndex = keyIndex ?? throw new ArgumentNullException(nameof(keyIndex));
             KeyIndex.Parts.Add(this);
         }
 
         public override Token Add(string s, ref int i) {
-            var c = s[i];
+            var c = Next(s, ref i);
+            if (c == null) return null;
+            if (c == Sep) return new KeyBuilder(Sep);
             switch (c) {
-                case '\n':
-                    return new Invalid();
                 case ']':
-                    return new KeyIndexBuilder(KeyIndex.KeyPart);
+                    return KeyIndex.KeyPart;
                 case ',':
                     return new KeyIndexPartBuilder(KeyIndex);
                 default:
-                    if (char.IsWhiteSpace(c)) {
-                    }
-                    else {
-                        String.Append(c);
-                    }
+                    String.Append(c);
                     return this;
             }
         }

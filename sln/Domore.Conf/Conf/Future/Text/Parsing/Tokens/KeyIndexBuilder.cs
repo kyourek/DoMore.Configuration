@@ -9,20 +9,19 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
 
         public KeyPartBuilder KeyPart { get; }
 
-        public KeyIndexBuilder(KeyPartBuilder keyPart) {
+        public KeyIndexBuilder(KeyPartBuilder keyPart) : base((keyPart ?? throw new ArgumentNullException(nameof(keyPart))).Sep) {
             KeyPart = keyPart ?? throw new ArgumentNullException(nameof(keyPart));
             KeyPart.Indices.Add(this);
         }
 
         public override Token Add(string s, ref int i) {
-            var c = s[i];
+            var c = Next(s, ref i);
+            if (c == null) return null;
+            if (c == Sep) return new KeyBuilder(Sep);
             switch (c) {
-                case '[':
-                    return new KeyIndexPartBuilder(this);
-                case '.':
-                    return new KeyPartBuilder(KeyPart.Key);
                 default:
-                    return new Invalid();
+                    i--;
+                    return new KeyIndexPartBuilder(this);
             }
         }
 

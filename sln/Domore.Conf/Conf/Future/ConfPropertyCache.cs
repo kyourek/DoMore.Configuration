@@ -1,43 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Domore.Conf.Future {
-    using Extensions;
-
     internal class ConfPropertyCache {
-        private readonly Dictionary<Type, Dictionary<string, PropertyInfo>> Cache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+        private readonly Dictionary<Type, Dictionary<string, ConfProperty>> Cache = new Dictionary<Type, Dictionary<string, ConfProperty>>();
 
-        private PropertyInfo Create(Type type, string name) {
-            if (null == type) throw new ArgumentNullException(nameof(type));
-            if (null == name) throw new ArgumentNullException(nameof(name));
+        public StringComparer StringComparer { get; } = StringComparer.OrdinalIgnoreCase;
 
-            var f = BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase;
-            var pi = type.GetProperty(name, f);
-            if (pi != null) return pi;
-
-            return type
-                .GetProperties(f)
-                .Select(p => new {
-                    PropertyInfo = p,
-                    ConfAttribute = p.GetConfAttribute()
-                })
-                .Where(i => i.ConfAttribute != null)
-                .Where(i => i.ConfAttribute.Names.Any(n => name.Equals(n, StringComparison.OrdinalIgnoreCase)))
-                .Select(i => i.PropertyInfo)
-                .FirstOrDefault();
-        }
-
-        public PropertyInfo Get(Type type, string name) {
-            if (null == type) throw new ArgumentNullException(nameof(type));
+        public ConfProperty Get(Type type, string name) {
             if (Cache.TryGetValue(type, out var cache) == false) {
-                Cache[type] = cache = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
+                Cache[type] = cache = new Dictionary<string, ConfProperty>(StringComparer);
             }
-            if (cache.TryGetValue(name, out var propertyInfo) == false) {
-                cache[name] = propertyInfo = Create(type, name);
+            if (cache.TryGetValue(name, out var property) == false) {
+                cache[name] = property = new ConfProperty(name, type);
             }
-            return propertyInfo;
+            return property;
         }
     }
 }

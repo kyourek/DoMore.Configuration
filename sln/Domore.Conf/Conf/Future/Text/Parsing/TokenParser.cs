@@ -4,18 +4,18 @@ using System.Collections.Generic;
 namespace Domore.Conf.Future.Text.Parsing {
     using Tokens;
 
-    internal class MultiLineParser {
-        public IEnumerable<ConfPair> Parse(string text) {
+    internal class TokenParser {
+        public IEnumerable<ConfPair> Parse(char sep, string text) {
             if (null == text) throw new ArgumentNullException(nameof(text));
-            var token = default(Token);
+            var token = new KeyBuilder(sep) as Token;
             for (var i = 0; i < text.Length; i++) {
                 if (token == null) {
-                    token = new KeyBuilder();
+                    break;
                 }
                 if (token is Invalid) {
                     for (; i < text.Length; i++) {
-                        if (text[i] == '\n') {
-                            token = null;
+                        if (text[i] == sep) {
+                            token = new KeyBuilder(sep);
                             break;
                         }
                     }
@@ -25,7 +25,11 @@ namespace Domore.Conf.Future.Text.Parsing {
                 }
                 if (token is Complete complete) {
                     yield return complete.Pair();
+                    token = new KeyBuilder(sep);
                 }
+            }
+            if (token is ValueBuilder value) {
+                yield return new Complete(value.Key, value.String).Pair();
             }
         }
     }

@@ -1,14 +1,6 @@
-﻿using System;
-using System.Text;
-
-namespace Domore.Conf.Future.Text.Parsing.Tokens {
-    internal class ValueContentBuilder : TokenBuilder {
-        public StringBuilder String { get; } = new StringBuilder();
-
-        public KeyBuilder Key { get; }
-
-        public ValueContentBuilder(KeyBuilder key) {
-            Key = key ?? throw new ArgumentNullException(nameof(key));
+﻿namespace Domore.Conf.Future.Text.Parsing.Tokens {
+    internal class ValueContentBuilder : ValueBuilder {
+        public ValueContentBuilder(KeyBuilder key) : base(key) {
         }
 
         public override Token Add(string s, ref int i) {
@@ -16,7 +8,7 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
             switch (c) {
                 case '}':
                     for (var j = i + 1; j < s.Length; j++) {
-                        if (s[j] == '\n') {
+                        if (s[j] == Sep) {
                             return new Complete(Key, String);
                         }
                         if (char.IsWhiteSpace(s[j]) == false) {

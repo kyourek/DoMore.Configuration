@@ -3,16 +3,16 @@ using System.Collections;
 using System.Reflection;
 
 namespace Domore.Conf.Future {
-    internal class ConfItemProperty : ConfObjectProperty {
+    internal class ConfItemProperty : ConfTargetProperty {
         public override object PropertyValue {
-            get => PropertyInfo.GetValue(Object, Index);
-            set => PropertyInfo.SetValue(Object, value, Index);
+            get => PropertyInfo.GetValue(Target, Index);
+            set => PropertyInfo.SetValue(Target, value, Index);
         }
 
         public bool IndexExists {
             get {
                 try {
-                    PropertyInfo.GetValue(Object, Index);
+                    PropertyInfo.GetValue(Target, Index);
                 }
                 catch {
                     return false;
@@ -21,17 +21,17 @@ namespace Domore.Conf.Future {
             }
         }
 
-        public ConfItemProperty(object @object, string key, ConfPropertyCache cache) : base(@object, key, cache) {
+        public ConfItemProperty(object target, ConfKeyPart key, ConfPropertyCache cache) : base(target, key, cache) {
         }
 
-        public static ConfItemProperty Create(object @object, string key, ConfPropertyCache cache) {
-            if (@object is IList list) {
+        public static ConfItemProperty Create(object target, ConfKeyPart key, ConfPropertyCache cache) {
+            if (target is IList list) {
                 return new ListProperty(list, key, cache);
             }
-            if (@object is IDictionary dictionary) {
+            if (target is IDictionary dictionary) {
                 return new DictionaryProperty(dictionary, key, cache);
             }
-            return new ConfItemProperty(@object, key, cache);
+            return new ConfItemProperty(target, key, cache);
         }
 
         private class ListProperty : ConfItemProperty {
@@ -60,7 +60,7 @@ namespace Domore.Conf.Future {
                 }
             }
 
-            public ListProperty(IList list, string key, ConfPropertyCache cache) : base(list, key, cache) {
+            public ListProperty(IList list, ConfKeyPart key, ConfPropertyCache cache) : base(list, key, cache) {
                 List = list ?? throw new ArgumentNullException(nameof(list));
             }
         }
@@ -74,7 +74,7 @@ namespace Domore.Conf.Future {
                 set => Dictionary[Index] = value;
             }
 
-            public DictionaryProperty(IDictionary dictionary, string key, ConfPropertyCache cache) : base(dictionary, key, cache) {
+            public DictionaryProperty(IDictionary dictionary, ConfKeyPart key, ConfPropertyCache cache) : base(dictionary, key, cache) {
                 Dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
             }
         }

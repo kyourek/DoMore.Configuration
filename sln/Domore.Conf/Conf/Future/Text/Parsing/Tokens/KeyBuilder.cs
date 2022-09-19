@@ -6,8 +6,13 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
     internal class KeyBuilder : TokenBuilder {
         public List<KeyPartBuilder> Parts { get; } = new List<KeyPartBuilder>();
 
+        public KeyBuilder(char sep) : base(sep) {
+        }
+
         public override Token Add(string s, ref int i) {
-            var c = s[i];
+            var c = Next(s, ref i);
+            if (c == null) return null;
+            if (c == Sep) return new KeyBuilder(Sep);
             switch (c) {
                 default:
                     i--;
