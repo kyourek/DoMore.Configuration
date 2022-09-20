@@ -2,15 +2,15 @@
 using System.Text;
 
 namespace Domore.Conf.Future.Text.Parsing.Tokens {
-    internal class ValueContentBuilder : ValueBuilder {
+    internal sealed class MultilineValueBuilder : ValueBuilder {
         private StringBuilder Line = new StringBuilder();
         private List<StringBuilder> Lines { get; } = new List<StringBuilder>();
         private StringBuilder WhiteSpace { get; } = new StringBuilder();
 
-        public ValueContentBuilder(KeyBuilder key) : base(key) {
+        public MultilineValueBuilder(KeyBuilder key) : base(key) {
         }
 
-        public override Token Add(string s, ref int i) {
+        public override Token Build(string s, ref int i) {
             var c = s[i];
             if (c == Sep) {
                 if (Line.Length > 0) {
@@ -27,7 +27,7 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
                             if (s[j] == Sep) {
                                 if (Lines.Count > 0) {
                                     String.Append(string.Join(Sep.ToString(), Lines));
-                                    return new Complete(Key, String);
+                                    return new Complete(Key, this);
                                 }
                                 return new KeyBuilder(Sep);
                             }

@@ -7,15 +7,15 @@ namespace Domore.Conf.Future {
         private readonly ConfValueConverter ConverterDefault = new ConfValueConverter();
         private readonly ConfValueConverterCache ConverterCache = new ConfValueConverterCache();
 
-        private object Convert(string value, ConfTargetProperty property, IConf conf) {
+        private object Convert(IConfValue value, ConfTargetProperty property, IConf conf) {
             if (null == property) throw new ArgumentNullException(nameof(property));
             var converterType = property.Attribute?.Converter;
             var converter = converterType == null ? ConverterDefault : ConverterCache.Get(converterType);
-            var converted = converter.Convert(value, new ConfValueConverterState(property.Target, property.PropertyInfo, conf));
+            var converted = converter.Convert(value?.Content, new ConfValueConverterState(property.Target, property.PropertyInfo, conf));
             return converted;
         }
 
-        private void Populate(ConfKey key, string value, object target, IConf conf) {
+        private void Populate(IConfKey key, IConfValue value, object target, IConf conf) {
             if (key != null && key.Parts.Count > 0) {
                 var property = new ConfTargetProperty(target, key.Parts[0], PropertyCache);
                 if (property.Exists) {
@@ -34,10 +34,18 @@ namespace Domore.Conf.Future {
                                     break;
                                 }
                             default: {
-                                    var keys = key.Skip(1);
+                                    var keys = key.Skip();
                                     var propertyValue = property.PropertyValue;
-                                    if (propertyValue is null) {
+                                    if (propertyValue == null) {
                                         propertyValue = property.PropertyValue = Activator.CreateInstance(property.PropertyType);
+                                    }
+                                    var propertyItem = property.Item;
+                                    if (propertyItem != null) {
+                                        var itemValue = propertyItem.PropertyValue;
+                                        if (itemValue == null) {
+                                            itemValue = propertyItem.PropertyValue = Activator.CreateInstance(propertyItem.PropertyType);
+                                        }
+                                        propertyValue = itemValue;
                                     }
                                     Populate(keys, value, propertyValue, conf);
                                     break;
@@ -48,7 +56,7 @@ namespace Domore.Conf.Future {
             }
         }
 
-        public void Populate(object target, IConf conf, IEnumerable<ConfPair> pairs) {
+        public void Populate(object target, IConf conf, IEnumerable<IConfPair> pairs) {
             if (null == pairs) throw new ArgumentNullException(nameof(pairs));
             foreach (var pair in pairs) {
                 Populate(pair.Key, pair.Value, target, conf);

@@ -1,4 +1,7 @@
 ﻿namespace Domore.Conf.Future.Text.Parsing.Tokens {
-    internal class Invalid : Token {
+    internal sealed class Invalid : Token {
+        protected override string Create() {
+            throw new System.NotImplementedException();
+        }
     }
 }

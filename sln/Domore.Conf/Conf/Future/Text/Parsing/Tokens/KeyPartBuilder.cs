@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text;
 
 namespace Domore.Conf.Future.Text.Parsing.Tokens {
-    internal class KeyPartBuilder : TokenBuilder {
+    internal sealed class KeyPartBuilder : TokenBuilder, IConfKeyPart {
+        protected override string Create() {
+            return String.ToString();
+        }
+
         public StringBuilder String { get; } = new StringBuilder();
-        public List<KeyIndexBuilder> Indices { get; } = new List<KeyIndexBuilder>();
+        public ConfCollection<KeyIndexBuilder> Indices { get; } = new ConfCollection<KeyIndexBuilder>();
 
         public KeyBuilder Key { get; }
 
@@ -16,13 +17,13 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
             Key.Parts.Add(this);
         }
 
-        public override Token Add(string s, ref int i) {
+        public override Token Build(string s, ref int i) {
             var c = Next(s, ref i);
             if (c == null) return null;
             if (c == Sep) return new KeyBuilder(Sep);
             switch (c) {
                 case '=':
-                    return new ValueBuilder(Key);
+                    return new SingleLineValueBuilder(Key);
                 case '[':
                     return new KeyIndexBuilder(this);
                 case '.':
@@ -33,13 +34,7 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
             }
         }
 
-        public ConfKeyPart KeyPart() {
-            return new ConfKeyPart(
-                name: String.ToString(),
-                indices: new ReadOnlyCollection<ConfKeyIndex>(
-                    Indices
-                        .Select(i => i.KeyIndex())
-                        .ToList()));
-        }
+        IConfCollection<IConfKeyIndex> IConfKeyPart.Indices =>
+            Indices;
     }
 }

@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 
 namespace Domore.Conf.Future {
     internal class ConfContent {
-        public ReadOnlyCollection<ConfPair> Pairs { get; }
+        public IEnumerable<IConfPair> Pairs { get; }
 
-        public ConfContent(ReadOnlyCollection<ConfPair> pairs) {
-            Pairs = pairs ?? throw new ArgumentNullException(nameof(pairs));
+        public ConfContent(params IConfPair[] pairs) {
+            Pairs = new List<IConfPair>(pairs);
         }
 
-        public IEnumerable<ConfPair> PairsOf(string key) {
+        public IEnumerable<IConfPair> PairsOf(string key) {
             foreach (var pair in Pairs) {
                 if (pair.Key.StartsWith(key)) {
-                    yield return new ConfPair(pair.Key.Skip(1), pair.Value);
+                    yield return new ConfPair(pair.Key.Skip(), pair.Value);
                 }
             }
         }

@@ -1,17 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Linq;
 
 namespace Domore.Conf.Future.Text {
     using Parsing;
 
-    internal class TextContentProvider : ConfContentProvider {
+    internal class TextContentProvider : IConfContentProvider {
         private readonly TokenParser Parser = new TokenParser();
 
-        public override ConfContent GetConfContent(object content) {
+        public ConfContent GetConfContent(object content) {
             var s = $"{content}";
             var d = s.Contains("\n") ? '\n' : ';';
             var p = Parser.Parse(d, s);
-            var c = new ConfContent(new ReadOnlyCollection<ConfPair>(new List<ConfPair>(p)));
+            var a = p.ToArray();
+            var c = new ConfContent(a);
             return c;
         }
     }

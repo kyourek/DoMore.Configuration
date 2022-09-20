@@ -21,10 +21,10 @@ namespace Domore.Conf.Future {
             }
         }
 
-        public ConfItemProperty(object target, ConfKeyPart key, ConfPropertyCache cache) : base(target, key, cache) {
+        public ConfItemProperty(object target, IConfKeyPart key, ConfPropertyCache cache) : base(target, key, cache) {
         }
 
-        public static ConfItemProperty Create(object target, ConfKeyPart key, ConfPropertyCache cache) {
+        public static ConfItemProperty Create(object target, IConfKeyPart key, ConfPropertyCache cache) {
             if (target is IList list) {
                 return new ListProperty(list, key, cache);
             }
@@ -39,7 +39,7 @@ namespace Domore.Conf.Future {
             public new int Index => (int)base.Index[0];
 
             public override object PropertyValue {
-                get => List[Index];
+                get => List.Count > Index ? List[Index] : null;
                 set {
                     var type = PropertyType;
                     var list = List;
@@ -60,7 +60,7 @@ namespace Domore.Conf.Future {
                 }
             }
 
-            public ListProperty(IList list, ConfKeyPart key, ConfPropertyCache cache) : base(list, key, cache) {
+            public ListProperty(IList list, IConfKeyPart key, ConfPropertyCache cache) : base(list, key, cache) {
                 List = list ?? throw new ArgumentNullException(nameof(list));
             }
         }
@@ -74,7 +74,7 @@ namespace Domore.Conf.Future {
                 set => Dictionary[Index] = value;
             }
 
-            public DictionaryProperty(IDictionary dictionary, ConfKeyPart key, ConfPropertyCache cache) : base(dictionary, key, cache) {
+            public DictionaryProperty(IDictionary dictionary, IConfKeyPart key, ConfPropertyCache cache) : base(dictionary, key, cache) {
                 Dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
             }
         }

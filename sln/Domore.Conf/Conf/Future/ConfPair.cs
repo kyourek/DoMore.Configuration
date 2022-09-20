@@ -1,22 +1,16 @@
-﻿using System;
+﻿namespace Domore.Conf.Future {
+    internal class ConfPair : IConfPair {
+        public string Content =>
+            _Content ?? (
+            _Content = $"{Key}={Value}");
+        private string _Content;
 
-namespace Domore.Conf.Future {
-    internal class ConfPair {
-        public ConfKey Key { get; }
-        public string Value { get; }
+        public IConfKey Key { get; }
+        public IConfValue Value { get; }
 
-        public ConfPair(ConfKey key, string value) {
+        public ConfPair(IConfKey key, IConfValue value) {
             Key = key;
             Value = value;
-        }
-
-        public void Populate(object target) {
-            if (null == target) throw new ArgumentNullException(nameof(target));
-            var type = target.GetType();
-        }
-
-        public override string ToString() {
-            return $"{Key}={Value}";
         }
     }
 }

@@ -1,11 +1,5 @@
 ﻿namespace Domore.Conf.Future.Text.Parsing {
     internal abstract class TokenBuilder : Token {
-        public char Sep { get; }
-
-        public TokenBuilder(char sep) {
-            Sep = sep;
-        }
-
         protected char? Next(string s, ref int i) {
             for (; i < s.Length; i++) {
                 var c = s[i];
@@ -19,6 +13,12 @@
             return null;
         }
 
-        public abstract Token Add(string s, ref int i);
+        public char Sep { get; }
+
+        public TokenBuilder(char sep) {
+            Sep = sep;
+        }
+
+        public abstract Token Build(string s, ref int i);
     }
 }

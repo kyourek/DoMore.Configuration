@@ -16,14 +16,14 @@ namespace Domore.Conf.Future {
             _Content = ContentProvider.GetConfContent(Contents));
         private ConfContent _Content;
 
-        private ConfContentProvider ContentProvider {
+        private IConfContentProvider ContentProvider {
             get => _ContentProvider ?? (_ContentProvider = new TextContentProvider());
             set {
                 _ContentProvider = value;
                 _Content = null;
             }
         }
-        private ConfContentProvider _ContentProvider;
+        private IConfContentProvider _ContentProvider;
 
         public object Contents {
             get => _Contents;
@@ -50,11 +50,11 @@ namespace Domore.Conf.Future {
                 .Where(pair => pair.Key.Parts.Count > 0)
                 .Where(pair => pair.Key.Parts[0].Indices.Count <= 1)
                 .GroupBy(pair => pair.Key.Parts[0].Indices.Count == 1
-                    ? pair.Key.Parts[0].Indices[0].ToString()
+                    ? pair.Key.Parts[0].Indices[0].Content
                     : null, comparer);
             foreach (var group in groups) {
                 var target = factory();
-                var pairs = group.Select(pair => new ConfPair(pair.Key.Skip(1), pair.Value));
+                var pairs = group.Select(pair => new ConfPair(pair.Key.Skip(), pair.Value));
                 Populator.Populate(target, this, pairs);
                 yield return target;
             }
@@ -68,11 +68,11 @@ namespace Domore.Conf.Future {
                 .Where(pair => pair.Key.Parts.Count > 0)
                 .Where(pair => pair.Key.Parts[0].Indices.Count <= 1)
                 .GroupBy(pair => pair.Key.Parts[0].Indices.Count == 1
-                    ? pair.Key.Parts[0].Indices[0].ToString()
+                    ? pair.Key.Parts[0].Indices[0].Content
                     : null, comparer);
             foreach (var group in groups) {
                 var target = factory(group.Key);
-                var pairs = group.Select(pair => new ConfPair(pair.Key.Skip(1), pair.Value));
+                var pairs = group.Select(pair => new ConfPair(pair.Key.Skip(), pair.Value));
                 Populator.Populate(target, this, pairs);
                 yield return new KeyValuePair<string, T>(group.Key, target);
             }

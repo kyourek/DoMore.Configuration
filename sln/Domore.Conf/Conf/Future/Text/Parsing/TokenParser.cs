@@ -5,7 +5,7 @@ namespace Domore.Conf.Future.Text.Parsing {
     using Tokens;
 
     internal class TokenParser {
-        public IEnumerable<ConfPair> Parse(char sep, string text) {
+        public IEnumerable<IConfPair> Parse(char sep, string text) {
             if (null == text) throw new ArgumentNullException(nameof(text));
             var token = new KeyBuilder(sep) as Token;
             for (var i = 0; i < text.Length; i++) {
@@ -21,15 +21,15 @@ namespace Domore.Conf.Future.Text.Parsing {
                     }
                 }
                 if (token is TokenBuilder builder) {
-                    token = builder.Add(text, ref i);
+                    token = builder.Build(text, ref i);
                 }
                 if (token is Complete complete) {
-                    yield return complete.Pair();
+                    yield return complete;
                     token = new KeyBuilder(sep);
                 }
             }
             if (token is ValueBuilder value) {
-                yield return new Complete(value.Key, value.String).Pair();
+                yield return new Complete(value.Key, value);
             }
         }
     }

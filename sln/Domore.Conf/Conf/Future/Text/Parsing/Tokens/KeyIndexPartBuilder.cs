@@ -2,8 +2,12 @@
 using System.Text;
 
 namespace Domore.Conf.Future.Text.Parsing.Tokens {
-    internal class KeyIndexPartBuilder : TokenBuilder {
+    internal sealed class KeyIndexPartBuilder : TokenBuilder, IConfKeyIndexPart {
         private StringBuilder WhiteSpace { get; } = new StringBuilder();
+
+        protected override string Create() {
+            return String.ToString();
+        }
 
         public StringBuilder String { get; } = new StringBuilder();
 
@@ -14,7 +18,7 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
             KeyIndex.Parts.Add(this);
         }
 
-        public override Token Add(string s, ref int i) {
+        public override Token Build(string s, ref int i) {
             var c = s[i];
             if (c == Sep) return new KeyBuilder(Sep);
             switch (c) {
@@ -35,10 +39,6 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
                     }
                     return this;
             }
-        }
-
-        public ConfKeyIndexPart KeyIndexPart() {
-            return new ConfKeyIndexPart(name: String.ToString());
         }
     }
 }

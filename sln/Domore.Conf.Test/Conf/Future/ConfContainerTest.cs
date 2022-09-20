@@ -527,5 +527,59 @@ namespace Domore.Conf.Future {
             var obj = Subject.Configure(new ClassWithListExposedAsICollection(), "item");
             CollectionAssert.AreEqual(new[] { 1.1, 1.2, 1.3 }, obj.Inners.Select(i => i.Value));
         }
+
+        //[Test]
+        //public void Content_ReturnsStringContents() {
+        //    Content = @"
+        //        item.inners[0].value = 1.1
+        //        item.inners[1].value = 1.2
+        //        item.inners[2].value = 1.3
+        //    ";
+        //    var actual = Subject.Content;
+        //    var expected = string.Join(Environment.NewLine,
+        //        "item.inners[0].value = 1.1",
+        //        "item.inners[1].value = 1.2",
+        //        "item.inners[2].value = 1.3");
+        //    Assert.That(actual, Is.EqualTo(expected));
+        //}
+
+        private class ObjWithOptionalNames {
+            [Conf("sp", "stringproperty")]
+            public string StrProp { get; set; }
+        }
+
+        [TestCase("sp")]
+        [TestCase("strprop")]
+        [TestCase("stringproperty")]
+        [TestCase("STRINGproperty")]
+        public void Configure_RespectsConfAttributeNames(string name) {
+            Content = $"obj.{name} = hello world";
+            var obj = Subject.Configure(new ObjWithOptionalNames(), "obj");
+            Assert.That(obj.StrProp, Is.EqualTo("hello world"));
+        }
+
+        private class ClassWithNamedListExposedAsICollection {
+            [Conf("Inner")]
+            public ICollection<Inner> Inners {
+                get => _Inners ?? (_Inners = new List<Inner>());
+                set => _Inners = value;
+            }
+            private ICollection<Inner> _Inners;
+
+            public class Inner {
+                public double Value { get; set; }
+            }
+        }
+
+        [Test]
+        public void Configure_AddsItemsToListExposedAsICollection2() {
+            Content = @"
+                item.inner[0].value = 1.1
+                item.inner[1].value = 1.2
+                item.inner[2].value = 1.3
+            ";
+            var obj = Subject.Configure(new ClassWithNamedListExposedAsICollection(), "item");
+            CollectionAssert.AreEqual(new[] { 1.1, 1.2, 1.3 }, obj.Inners.Select(i => i.Value));
+        }
     }
 }
