@@ -1,78 +1,81 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Domore.Conf {
-    using Providers;
+    using Text;
 
-    [Guid("D695CFB3-BA77-4F4D-A7E8-290CBC279B77")]
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.None)]
-    public class ConfContainer : IConfContainer {
-        private ConfBlockFactory BlockFactory {
-            get => _BlockFactory ?? (_BlockFactory = new ConfBlockFactory());
+    public class ConfContainer : IConf {
+        private ConfPopulator Populator =>
+            _Populator ?? (
+            _Populator = new ConfPopulator());
+        private ConfPopulator _Populator;
+
+        private ConfContent Content =>
+            _Content ?? (
+            _Content = ContentProvider.GetConfContent(Contents));
+        private ConfContent _Content;
+
+        public IConfContentProvider ContentProvider {
+            get => _ContentProvider ?? (_ContentProvider = new TextContentProvider());
             set {
-                if (_BlockFactory != value) {
-                    _BlockFactory = value;
-                    Reset();
-                }
+                _ContentProvider = value;
+                _Content = null;
             }
         }
-        private ConfBlockFactory _BlockFactory;
+        private IConfContentProvider _ContentProvider;
 
-        private ConfConverter Converter =>
-            _Converter ?? (
-            _Converter = new ConfConverter());
-        private ConfConverter _Converter;
-
-        protected virtual void OnContentsChanged(EventArgs e) {
-            var handler = ContentsChanged;
-            if (handler != null) handler.Invoke(this, e);
-        }
-
-        public event EventHandler ContentsChanged;
-
-        public IConfConverterTable TypeConverter => Converter;
-
-        public ConfLog Log {
-            get => Converter.Log.Action;
-            set => Converter.Log.Action = value;
-        }
-
-        public object Content {
-            get => _Content;
+        public object Contents {
+            get => _Contents;
             set {
-                if (_Content != value) {
-                    _Content = value;
-                    Reset();
-                }
+                _Contents = value;
+                _Content = null;
             }
         }
-        private object _Content;
+        private object _Contents;
 
-        public IConfContentsProvider ContentsProvider {
-            get => _ContentsProvider ?? (_ContentsProvider = new ConfContentsProvider());
-            set {
-                if (_ContentsProvider != value) {
-                    _ContentsProvider = value;
-                    Reset();
-                }
+        public T Configure<T>(T target, string key = null) {
+            if (null == target) throw new ArgumentNullException(nameof(target));
+            var k = key ?? typeof(T).Name;
+            var p = k == "" ? Content.Pairs : Content.PairsOf(k);
+            Populator.Populate(target, this, p);
+            return target;
+        }
+
+        public IEnumerable<T> Configure<T>(Func<T> factory, string key = null, IEqualityComparer<string> comparer = null) {
+            if (null == factory) throw new ArgumentNullException(nameof(factory));
+            var k = key ?? typeof(T).Name;
+            var groups = Content.Pairs
+                .Where(pair => pair.Key.StartsWith(k))
+                .Where(pair => pair.Key.Parts.Count > 0)
+                .Where(pair => pair.Key.Parts[0].Indices.Count <= 1)
+                .GroupBy(pair => pair.Key.Parts[0].Indices.Count == 1
+                    ? pair.Key.Parts[0].Indices[0].Content
+                    : null, comparer);
+            foreach (var group in groups) {
+                var target = factory();
+                var pairs = group.Select(pair => new ConfPair(pair.Key.Skip(), pair.Value));
+                Populator.Populate(target, this, pairs);
+                yield return target;
             }
         }
-        private IConfContentsProvider _ContentsProvider;
 
-        public IConfBlock Block {
-            get => _Block ?? (_Block = BlockFactory.CreateConfBlock(Content, ContentsProvider, Converter));
-            private set => _Block = value;
-        }
-        private IConfBlock _Block;
-
-        public void Reset() {
-            Block = null;
-            OnContentsChanged(EventArgs.Empty);
-        }
-
-        public override string ToString() {
-            return Content?.ToString() ?? base.ToString();
+        public IEnumerable<KeyValuePair<string, T>> Configure<T>(Func<string, T> factory, string key = null, IEqualityComparer<string> comparer = null) {
+            if (null == factory) throw new ArgumentNullException(nameof(factory));
+            var k = key ?? typeof(T).Name;
+            var groups = Content.Pairs
+                .Where(pair => pair.Key.StartsWith(k))
+                .Where(pair => pair.Key.Parts.Count > 0)
+                .Where(pair => pair.Key.Parts[0].Indices.Count <= 1)
+                .GroupBy(pair => pair.Key.Parts[0].Indices.Count == 1
+                    ? pair.Key.Parts[0].Indices[0].Content
+                    : null, comparer);
+            foreach (var group in groups) {
+                var target = factory(group.Key);
+                var pairs = group.Select(pair => new ConfPair(pair.Key.Skip(), pair.Value));
+                Populator.Populate(target, this, pairs);
+                yield return new KeyValuePair<string, T>(group.Key, target);
+            }
         }
     }
 }

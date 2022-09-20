@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf.Sample {
-    class Program {
-        static void Main() {
+    internal class Program {
+        private static void Main() {
             new Sample().Run();
         }
     }
 
-    class Sample {
+    internal class Sample {
         public void Run() {
-            Conf.ContentsProvider = new AppSettingsProvider();
+            Conf.ContentProvider = new AppSettingsProvider();
 
             var alien = Conf.Configure(new Alien());
             var visitor = Conf.Configure(new Visitor());
@@ -20,7 +20,7 @@ namespace Domore.Conf.Sample {
             Console.WriteLine($"V: Thanks! I also toured {string.Join(", ", visitor.TourDestinations.Values)}");
             Console.WriteLine($"V: on a {string.Join(", ", visitor.ShipModelsAndMakes.Select(pair => $"{pair.Value} {pair.Key}"))}");
             Console.WriteLine();
-            Conf.Container.Block.Content.Split('\n')
+            Conf.Container.Contents?.ToString().Split('\n')
                 .ToList()
                 .ForEach(item => Console.WriteLine(item.TrimEnd()));
             Console.WriteLine();
@@ -28,12 +28,12 @@ namespace Domore.Conf.Sample {
             Console.ReadLine();
         }
 
-        class Alien {
+        private class Alien {
             public string Greeting { get; set; }
             public string HomePlanet { get; set; }
         }
 
-        class Visitor {
+        private class Visitor {
             public string HomePlanet { get; set; }
             public IDictionary<int, string> TourDestinations { get; set; } = new Dictionary<int, string>();
             public IDictionary<string, string> ShipModelsAndMakes { get; set; } = new Dictionary<string, string>();

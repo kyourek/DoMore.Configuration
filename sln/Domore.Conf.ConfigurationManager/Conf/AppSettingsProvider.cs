@@ -5,7 +5,14 @@ using System.Configuration;
 using System.Linq;
 
 namespace Domore.Conf {
-    public class AppSettingsProvider : IConfContentsProvider {
+    using Text;
+
+    public class AppSettingsProvider : IConfContentProvider {
+        private static TextContentProvider TextParser =>
+            _TextParser ?? (
+            _TextParser = new TextContentProvider());
+        private static TextContentProvider _TextParser;
+
         private static IEnumerable<KeyValuePair<string, string>> EmptySettings {
             get { yield break; }
         }
@@ -36,15 +43,11 @@ namespace Domore.Conf {
             return GetSettings(content?.ToString());
         }
 
-        public string GetConfContent(IEnumerable<KeyValuePair<string, string>> contents) {
-            contents = contents ?? new KeyValuePair<string, string>[] { };
-            var appSettings = "<appSettings>" + Environment.NewLine;
-            foreach (var item in contents) {
-                appSettings += $"  <add key=\"{item.Key}\" value=\"{item.Value}\"/>";
-                appSettings += Environment.NewLine;
-            }
-            appSettings += "</appSettings>";
-            return appSettings;
+        public ConfContent GetConfContent(object content) {
+            var settings = GetSettings($"{content}");
+            var text = string.Join(Environment.NewLine, settings.Select(set => string.Join(" = ", set.Key, set.Value)));
+            var conf = TextParser.GetConfContent(text);
+            return conf;
         }
     }
 }

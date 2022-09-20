@@ -1,25 +1,16 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace Domore.Conf {
-    [Guid("DB5DC8B5-6ED2-4A75-A88E-F9F9A84CF3F6")]
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.None)]
+﻿namespace Domore.Conf {
     public class Conf : IConf {
-        public static IConfContainer Container { get; } = new ConfContainer();
+        public static ConfContainer Container { get; } = new ConfContainer();
 
-        public static IConfContentsProvider ContentsProvider {
-            get => Container.ContentsProvider;
-            set => Container.ContentsProvider = value;
-        }
-
-        public static ConfLog Log {
-            get => Container.Log;
-            set => Container.Log = value;
+        public static IConfContentProvider ContentProvider {
+            get => Container.ContentProvider;
+            set => Container.ContentProvider = value;
         }
 
         public static T Configure<T>(T obj, string key = null) => Container.Configure(obj, key);
 
-        IConfContainer IConf.Container => Container;
+        T IConf.Configure<T>(T target, string key) {
+            return Container.Configure(target, key);
+        }
     }
 }
