@@ -415,12 +415,16 @@ namespace Domore.Conf.Future {
             var kids = Subject.Configure(() => new Infant(), "KID").ToList();
             var kid = kids.Single();
             var actual = kid.Mom.Jobs[1];
-            var expected = "Nurse and\nchauffeur and\ncook";
+            var expected =
+@"                    Nurse and
+                    chauffeur and
+                    cook
+";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
         [Test]
-        public void Configure_TrimsBracketedValues() {
+        public void Configure_DoesNotTrimBracketedValues() {
             Content = @"
                 kid.weight = 3
                 kid.diapersize = 1
@@ -440,7 +444,15 @@ namespace Domore.Conf.Future {
             var kids = Subject.Configure(() => new Infant(), "KID").ToList();
             var kid = kids.Single();
             var actual = kid.Mom.Jobs[1];
-            var expected = "Nurse and\nchauffeur and\ncook";
+            var expected = @"   
+                    Nurse and            
+                    chauffeur and    
+
+
+                    cook                             
+
+        
+";
             Assert.That(actual, Is.EqualTo(expected));
         }
 

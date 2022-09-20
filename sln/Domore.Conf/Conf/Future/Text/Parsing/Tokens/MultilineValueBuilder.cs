@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
 namespace Domore.Conf.Future.Text.Parsing.Tokens {
     internal sealed class MultilineValueBuilder : ValueBuilder {
-        private StringBuilder Line = new StringBuilder();
-        private List<StringBuilder> Lines { get; } = new List<StringBuilder>();
-        private StringBuilder WhiteSpace { get; } = new StringBuilder();
+        private readonly StringBuilder Line = new StringBuilder();
 
         public MultilineValueBuilder(KeyBuilder key) : base(key) {
         }
@@ -14,42 +11,45 @@ namespace Domore.Conf.Future.Text.Parsing.Tokens {
             var c = s[i];
             if (c == Sep) {
                 if (Line.Length > 0) {
-                    Lines.Add(Line);
-                }
-                Line = new StringBuilder();
-                WhiteSpace.Clear();
-                return this;
-            }
-            switch (c) {
-                case '}':
-                    if (Line.Length == 0) {
-                        for (var j = i + 1; j < s.Length; j++) {
-                            if (s[j] == Sep) {
-                                if (Lines.Count > 0) {
-                                    String.Append(string.Join(Sep.ToString(), Lines));
-                                    return new Complete(Key, this);
-                                }
-                                return new KeyBuilder(Sep);
+                    var closing = false;
+                    for (var j = 0; j < Line.Length; j++) {
+                        var l = Line[j];
+                        if (l == '}') {
+                            if (closing) {
+                                closing = false;
+                                break;
                             }
-                            if (char.IsWhiteSpace(s[j]) == false) {
+                            closing = true;
+                        }
+                        else {
+                            if (char.IsWhiteSpace(l) == false) {
+                                closing = false;
                                 break;
                             }
                         }
                     }
-                    goto default;
-                default:
-                    if (char.IsWhiteSpace(c)) {
-                        if (Line.Length > 0) {
-                            WhiteSpace.Append(c);
+                    if (closing) {
+                        if (String.Length > 0) {
+                            String.Append(c);
+                            var whitespace = true;
+                            for (var k = 0; k < String.Length; k++) {
+                                if (char.IsWhiteSpace(String[k]) == false) {
+                                    whitespace = false;
+                                    break;
+                                }
+                            }
+                            if (whitespace == false) {
+                                return new Complete(Key, this);
+                            }
                         }
+                        return new KeyBuilder(Sep);
                     }
-                    else {
-                        Line.Append(WhiteSpace);
-                        Line.Append(c);
-                        WhiteSpace.Clear();
-                    }
-                    return this;
+                }
+                String.Append(Line);
+                Line.Clear();
             }
+            Line.Append(c);
+            return this;
         }
     }
 }
