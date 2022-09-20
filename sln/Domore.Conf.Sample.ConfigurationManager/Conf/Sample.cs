@@ -20,10 +20,6 @@ namespace Domore.Conf.Sample {
             Console.WriteLine($"V: Thanks! I also toured {string.Join(", ", visitor.TourDestinations.Values)}");
             Console.WriteLine($"V: on a {string.Join(", ", visitor.ShipModelsAndMakes.Select(pair => $"{pair.Value} {pair.Key}"))}");
             Console.WriteLine();
-            Conf.Container.Contents?.ToString().Split('\n')
-                .ToList()
-                .ForEach(item => Console.WriteLine(item.TrimEnd()));
-            Console.WriteLine();
             Console.WriteLine("[Enter] to exit");
             Console.ReadLine();
         }

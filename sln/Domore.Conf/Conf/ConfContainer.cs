@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf {
-    using Text;
-
     public class ConfContainer : IConf {
         private ConfPopulator Populator =>
             _Populator ?? (
@@ -17,7 +15,7 @@ namespace Domore.Conf {
         private ConfContent _Content;
 
         public IConfContentProvider ContentProvider {
-            get => _ContentProvider ?? (_ContentProvider = new TextContentProvider());
+            get => _ContentProvider ?? (_ContentProvider = new ConfContentProvider());
             set {
                 _ContentProvider = value;
                 _Content = null;
