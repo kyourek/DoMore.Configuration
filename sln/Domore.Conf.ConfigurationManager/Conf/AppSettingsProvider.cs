@@ -43,7 +43,7 @@ namespace Domore.Conf {
             return GetSettings(content?.ToString());
         }
 
-        public ConfContent GetConfContent(object content) {
+        public IConfContent GetConfContent(object content) {
             var settings = GetSettings($"{content}");
             var text = string.Join(Environment.NewLine, settings.Select(set => string.Join(" = ", set.Key, set.Value)));
             var conf = TextParser.GetConfContent(text);

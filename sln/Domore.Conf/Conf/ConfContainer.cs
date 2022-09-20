@@ -9,10 +9,10 @@ namespace Domore.Conf {
             _Populator = new ConfPopulator());
         private ConfPopulator _Populator;
 
-        private ConfContent Content =>
+        private IConfContent Content =>
             _Content ?? (
             _Content = ContentProvider.GetConfContent(Contents));
-        private ConfContent _Content;
+        private IConfContent _Content;
 
         public IConfContentProvider ContentProvider {
             get => _ContentProvider ?? (_ContentProvider = new ConfContentProvider());
@@ -35,7 +35,7 @@ namespace Domore.Conf {
         public T Configure<T>(T target, string key = null) {
             if (null == target) throw new ArgumentNullException(nameof(target));
             var k = key ?? typeof(T).Name;
-            var p = k == "" ? Content.Pairs : Content.PairsOf(k);
+            var p = k == "" ? Content.Pairs : Content.Pairs.Where(pair => pair.Key.StartsWith(k)).Select(pair => new ConfPair(pair.Key.Skip(), pair.Value));
             Populator.Populate(target, this, p);
             return target;
         }
