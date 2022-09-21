@@ -418,8 +418,7 @@ namespace Domore.Conf {
             var expected =
 @"                    Nurse and
                     chauffeur and
-                    cook
-";
+                    cook";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -451,8 +450,7 @@ namespace Domore.Conf {
 
                     cook                             
 
-        
-";
+        ";
             Assert.That(actual, Is.EqualTo(expected));
         }
 

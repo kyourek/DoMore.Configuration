@@ -4,76 +4,68 @@ namespace Domore.Conf.Text.Parsing.Tokens {
     internal sealed class MultilineValueBuilder : ValueBuilder {
         private readonly StringBuilder Line = new StringBuilder();
 
+        private void Cleanup() {
+            if (String.Length > 0) {
+                if (Sep == '\n') {
+                    if (String[String.Length - 1] == '\r') {
+                        String.Remove(String.Length - 1, 1);
+                    }
+                }
+                var whitespace = true;
+                for (var i = 0; i < String.Length; i++) {
+                    var ws = whitespace = whitespace && char.IsWhiteSpace(String[i]);
+                    if (ws == false) {
+                        break;
+                    }
+                }
+                if (whitespace) {
+                    String.Clear();
+                }
+            }
+        }
+
         public MultilineValueBuilder(KeyBuilder key) : base(key) {
         }
 
         public override Token Build(string s, ref int i) {
             var c = s[i];
+            var lastChar = i == s.Length - 1;
+            var lastCharIsClosingTag = lastChar && c == '}';
+            if (lastCharIsClosingTag) {
+                Cleanup();
+                return new Complete(Key, this);
+            }
             if (c == Sep) {
+                var tags = 0;
                 var whitespace = true;
-                var bracketCount = 0;
                 for (var j = 0; j < Line.Length; j++) {
                     if (Line[j] == '}') {
-                        bracketCount++;
+                        var t = ++tags;
+                        if (t > 1) {
+                            break;
+                        }
                     }
                     else {
-                        whitespace = char.IsWhiteSpace(Line[j]);
+                        var ws = whitespace = whitespace && char.IsWhiteSpace(Line[j]);
+                        if (ws == false) {
+                            break;
+                        }
                     }
                 }
-                if (whitespace && bracketCount == 1) {
-                    if ('\n' == Sep) {
-
+                if (whitespace && tags == 1) {
+                    Cleanup();
+                    if (String.Length > 0) {
+                        return new Complete(Key, this);
                     }
-                    return new Complete(Key, this);
+                    else {
+                        return new KeyBuilder(Sep);
+                    }
                 }
                 String.Append(Line);
                 Line.Clear();
             }
             Line.Append(c);
             return this;
-
-            //var c = s[i];
-            //if (c == Sep) {
-            //    if (Line.Length > 0) {
-            //        var closing = false;
-            //        for (var j = 0; j < Line.Length; j++) {
-            //            var l = Line[j];
-            //            if (l == '}') {
-            //                if (closing) {
-            //                    closing = false;
-            //                    break;
-            //                }
-            //                closing = true;
-            //            }
-            //            else {
-            //                if (char.IsWhiteSpace(l) == false) {
-            //                    closing = false;
-            //                    break;
-            //                }
-            //            }
-            //        }
-            //        if (closing) {
-            //            if (String.Length > 0) {
-            //                String.Append(c);
-            //                var whitespace = true;
-            //                for (var k = 0; k < String.Length; k++) {
-            //                    if (char.IsWhiteSpace(String[k]) == false) {
-            //                        whitespace = false;
-            //                        break;
-            //                    }
-            //                }
-            //                if (whitespace == false) {
-            //                    return new Complete(Key, this);
-            //                }
-            //            }
-            //            return new KeyBuilder(Sep);
-            //        }
-            //    }
-            //    String.Append(Line);
-            //    Line.Clear();
-            //}
-            //Line.Append(c);
-            //return this;
         }
     }
 }
