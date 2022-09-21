@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Domore.Conf.Text.Reversing {
-    using Domore.Conf.Extensions;
+namespace Domore.Conf.Text {
+    using Extensions;
 
-    internal class Reverse {
+    internal class TextSourceProvider {
         private static string Multiline(string s) {
             if (s != null) {
                 if (s.Contains('\n')) {
@@ -118,7 +118,7 @@ namespace Domore.Conf.Text.Reversing {
             }
         }
 
-        public IEnumerable<KeyValuePair<string, string>> ConfContents(object source, string key = null) {
+        private IEnumerable<KeyValuePair<string, string>> ConfContents(object source, string key = null) {
             if (null == source) throw new ArgumentNullException(nameof(source));
 
             var list = source as IList;
@@ -134,10 +134,10 @@ namespace Domore.Conf.Text.Reversing {
             return DefaultConfContents(source, key);
         }
 
-        public string ConfText(object source, string key = null, bool? multiline = null) {
+        public string GetConfSource(object obj, string key = null, bool? multiline = null) {
             var equals = multiline == false ? "=" : " = ";
             var separator = multiline == false ? ";" : Environment.NewLine;
-            var confContents = ConfContents(source, key);
+            var confContents = ConfContents(obj, key);
             return string.Join(separator, confContents
                 .Select(pair => string.Join(equals, pair.Key, pair.Value)));
         }

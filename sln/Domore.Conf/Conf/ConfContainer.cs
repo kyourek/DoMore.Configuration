@@ -11,7 +11,7 @@ namespace Domore.Conf {
 
         private IConfContent Content =>
             _Content ?? (
-            _Content = ContentProvider.GetConfContent(Contents));
+            _Content = ContentProvider.GetConfContent(Source));
         private IConfContent _Content;
 
         public IConfContentProvider ContentProvider {
@@ -23,14 +23,14 @@ namespace Domore.Conf {
         }
         private IConfContentProvider _ContentProvider;
 
-        public object Contents {
-            get => _Contents;
+        public object Source {
+            get => _Source;
             set {
-                _Contents = value;
+                _Source = value;
                 _Content = null;
             }
         }
-        private object _Contents;
+        private object _Source;
 
         public T Configure<T>(T target, string key = null) {
             if (null == target) throw new ArgumentNullException(nameof(target));

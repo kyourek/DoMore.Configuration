@@ -10,7 +10,7 @@ namespace Domore.Conf {
         private object Content;
 
         private ConfContainer Subject {
-            get => _Subject ?? (_Subject = new ConfContainer { Contents = Content });
+            get => _Subject ?? (_Subject = new ConfContainer { Source = Content });
             set => _Subject = value;
         }
         private ConfContainer _Subject;

@@ -9,8 +9,8 @@ namespace Domore.Conf.IO {
             _Text = new TextContentProvider());
         private TextContentProvider _Text;
 
-        public IConfContent GetConfContent(object contents) {
-            var path = $"{contents}";
+        public IConfContent GetConfContent(object source) {
+            var path = $"{source}";
             var text = File.ReadAllText(path);
             return Text.GetConfContent(text);
         }

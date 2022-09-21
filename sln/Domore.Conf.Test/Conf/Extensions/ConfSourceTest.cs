@@ -71,7 +71,7 @@ namespace Domore.Conf.Extensions {
             expected.Child.StringProp = "My other str";
 
             var text = expected.GetConfText();
-            var conf = new ConfContainer { Contents = text };
+            var conf = new ConfContainer { Source = text };
             var actual = conf.Configure(new ComplexClass());
             assert(actual, expected);
         }
@@ -102,7 +102,7 @@ namespace Domore.Conf.Extensions {
             expected.Child.StringProp = "My other str";
 
             var text = expected.GetConfText();
-            var conf = new ConfContainer { Contents = text };
+            var conf = new ConfContainer { Source = text };
             var actual = conf.Configure(new ComplexClass());
             Assert.That(actual.StringProp, Is.EqualTo(expected.StringProp));
         }
@@ -129,7 +129,7 @@ namespace Domore.Conf.Extensions {
             subject.DictOfStrings[0] = "hello";
             subject.DictOfStrings[1] = "world";
             var text = subject.GetConfText();
-            var conf = new ConfContainer { Contents = text };
+            var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new DictedClass());
             var actual = copy.DictOfStrings;
             var expected = subject.DictOfStrings;
@@ -173,7 +173,7 @@ namespace Domore.Conf.Extensions {
             subject.Dict[1].DoubleProp = 2.34;
             subject.Dict[1].StringProp = "WORLD";
             var text = subject.GetConfText();
-            var conf = new ConfContainer { Contents = text };
+            var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexDictedClass());
             Assert.That(copy.Dict[0].Child.StringProp, Is.EqualTo(subject.Dict[0].Child.StringProp));
             Assert.That(copy.Dict[0].DoubleProp, Is.EqualTo(subject.Dict[0].DoubleProp));
@@ -232,7 +232,7 @@ namespace Domore.Conf.Extensions {
             subject.List[1].DoubleProp = 2.34;
             subject.List[1].StringProp = "WORLD";
             var text = subject.GetConfText(multiline: multiline);
-            var conf = new ConfContainer { Contents = text };
+            var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexListedClass());
             Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
             Assert.That(copy.List[0].DoubleProp, Is.EqualTo(subject.List[0].DoubleProp));
@@ -259,7 +259,7 @@ line";
             subject.List[1].DoubleProp = 2.34;
             subject.List[1].StringProp = "WORLD";
             var text = subject.GetConfText();
-            var conf = new ConfContainer { Contents = text };
+            var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexListedClass());
             Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
             Assert.That(copy.List[0].DoubleProp, Is.EqualTo(subject.List[0].DoubleProp));
@@ -293,7 +293,7 @@ WORLD   and
             stuff}
 }...";
             var text = subject.GetConfText();
-            var conf = new ConfContainer { Contents = text };
+            var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexListedClass());
             Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
             Assert.That(copy.List[0].DoubleProp, Is.EqualTo(subject.List[0].DoubleProp));
@@ -426,7 +426,7 @@ more lines{
                 { "obj2", obj2 }
             };
             var text = dict.GetConfText("item");
-            var conf = new ConfContainer { Contents = text };
+            var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(key => new ClassWithListExposedAsICollection(), "item")
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
 

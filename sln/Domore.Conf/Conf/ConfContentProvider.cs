@@ -33,10 +33,10 @@ namespace Domore.Conf {
             return "";
         }
 
-        public IConfContent GetConfContent(object contents) {
-            contents = contents?.ToString()?.Trim() ?? "";
-            contents = contents.Equals("") ? ConfFile : contents;
-            return FileOrText.GetConfContent(contents);
+        public IConfContent GetConfContent(object source) {
+            source = source?.ToString()?.Trim() ?? "";
+            source = source.Equals("") ? ConfFile : source;
+            return FileOrText.GetConfContent(source);
         }
     }
 }
