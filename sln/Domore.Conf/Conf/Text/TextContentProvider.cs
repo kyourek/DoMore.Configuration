@@ -7,7 +7,7 @@ namespace Domore.Conf.Text {
     public class TextContentProvider : IConfContentProvider {
         private readonly TokenParser Parser = new TokenParser();
 
-        public IConfContent GetConfContent(object source) {
+        public ConfContent GetConfContent(object source) {
             var s = $"{source}";
             var d = s.Contains("\n") ? '\n' : ';';
             var p = Parser.Parse(d, s);

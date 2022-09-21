@@ -14,7 +14,7 @@ namespace Domore.Conf.IO {
             _File = new FileContentProvider());
         private FileContentProvider _File;
 
-        public IConfContent GetConfContent(object contents) {
+        public ConfContent GetConfContent(object contents) {
             return FILE.Exists($"{contents}")
                 ? File.GetConfContent(contents)
                 : Text.GetConfContent(contents);

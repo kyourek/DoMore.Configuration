@@ -9,10 +9,10 @@ namespace Domore.Conf {
             _Populator = new ConfPopulator());
         private ConfPopulator _Populator;
 
-        private IConfContent Content =>
+        private ConfContent Content =>
             _Content ?? (
             _Content = ContentProvider.GetConfContent(Source));
-        private IConfContent _Content;
+        private ConfContent _Content;
 
         public IConfContentProvider ContentProvider {
             get => _ContentProvider ?? (_ContentProvider = new ConfContentProvider());

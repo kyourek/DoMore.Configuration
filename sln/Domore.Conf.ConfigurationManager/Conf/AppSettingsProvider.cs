@@ -8,10 +8,10 @@ namespace Domore.Conf {
     using Text;
 
     public class AppSettingsProvider : IConfContentProvider {
-        private static TextContentProvider TextParser =>
-            _TextParser ?? (
-            _TextParser = new TextContentProvider());
-        private static TextContentProvider _TextParser;
+        private static TextContentProvider Text =>
+            _Text ?? (
+            _Text = new TextContentProvider());
+        private static TextContentProvider _Text;
 
         private static IEnumerable<KeyValuePair<string, string>> EmptySettings {
             get { yield break; }
@@ -39,14 +39,14 @@ namespace Domore.Conf {
                 : GetSettings(ConfigurationManager.OpenExeConfiguration(exePath)?.AppSettings);
         }
 
-        public IEnumerable<KeyValuePair<string, string>> GetConfContents(object content) {
+        private IEnumerable<KeyValuePair<string, string>> GetConfContents(object content) {
             return GetSettings(content?.ToString());
         }
 
-        public IConfContent GetConfContent(object source) {
+        public ConfContent GetConfContent(object source) {
             var settings = GetSettings($"{source}");
             var text = string.Join(Environment.NewLine, settings.Select(set => string.Join(" = ", set.Key, set.Value)));
-            var conf = TextParser.GetConfContent(text);
+            var conf = Text.GetConfContent(text);
             return conf;
         }
     }
