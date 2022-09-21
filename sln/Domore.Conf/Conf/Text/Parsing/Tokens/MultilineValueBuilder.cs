@@ -10,46 +10,70 @@ namespace Domore.Conf.Text.Parsing.Tokens {
         public override Token Build(string s, ref int i) {
             var c = s[i];
             if (c == Sep) {
-                if (Line.Length > 0) {
-                    var closing = false;
-                    for (var j = 0; j < Line.Length; j++) {
-                        var l = Line[j];
-                        if (l == '}') {
-                            if (closing) {
-                                closing = false;
-                                break;
-                            }
-                            closing = true;
-                        }
-                        else {
-                            if (char.IsWhiteSpace(l) == false) {
-                                closing = false;
-                                break;
-                            }
-                        }
+                var whitespace = true;
+                var bracketCount = 0;
+                for (var j = 0; j < Line.Length; j++) {
+                    if (Line[j] == '}') {
+                        bracketCount++;
                     }
-                    if (closing) {
-                        if (String.Length > 0) {
-                            String.Append(c);
-                            var whitespace = true;
-                            for (var k = 0; k < String.Length; k++) {
-                                if (char.IsWhiteSpace(String[k]) == false) {
-                                    whitespace = false;
-                                    break;
-                                }
-                            }
-                            if (whitespace == false) {
-                                return new Complete(Key, this);
-                            }
-                        }
-                        return new KeyBuilder(Sep);
+                    else {
+                        whitespace = char.IsWhiteSpace(Line[j]);
                     }
+                }
+                if (whitespace && bracketCount == 1) {
+                    if ('\n' == Sep) {
+
+                    }
+                    return new Complete(Key, this);
                 }
                 String.Append(Line);
                 Line.Clear();
             }
             Line.Append(c);
             return this;
+
+            //var c = s[i];
+            //if (c == Sep) {
+            //    if (Line.Length > 0) {
+            //        var closing = false;
+            //        for (var j = 0; j < Line.Length; j++) {
+            //            var l = Line[j];
+            //            if (l == '}') {
+            //                if (closing) {
+            //                    closing = false;
+            //                    break;
+            //                }
+            //                closing = true;
+            //            }
+            //            else {
+            //                if (char.IsWhiteSpace(l) == false) {
+            //                    closing = false;
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //        if (closing) {
+            //            if (String.Length > 0) {
+            //                String.Append(c);
+            //                var whitespace = true;
+            //                for (var k = 0; k < String.Length; k++) {
+            //                    if (char.IsWhiteSpace(String[k]) == false) {
+            //                        whitespace = false;
+            //                        break;
+            //                    }
+            //                }
+            //                if (whitespace == false) {
+            //                    return new Complete(Key, this);
+            //                }
+            //            }
+            //            return new KeyBuilder(Sep);
+            //        }
+            //    }
+            //    String.Append(Line);
+            //    Line.Clear();
+            //}
+            //Line.Append(c);
+            //return this;
         }
     }
 }
