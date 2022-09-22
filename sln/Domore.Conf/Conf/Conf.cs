@@ -4,8 +4,7 @@ using System.Collections.Generic;
 namespace Domore.Conf {
     public class Conf : IConf {
         private static readonly Dictionary<string, ConfContainer> ContainerCache = new Dictionary<string, ConfContainer>();
-
-        private static ConfContainer Container { get; } = new ConfContainer();
+        private static readonly ConfContainer Container = new ConfContainer();
 
         public static object Source {
             get => Container.Source;
