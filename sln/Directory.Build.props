@@ -8,7 +8,7 @@
         <AssemblyVersion>5.1.0.44</AssemblyVersion>
         <InformationalVersion>5.1.0.44</InformationalVersion>
         <FileVersion>6.0.0.44</FileVersion>
-        <PackageVersion>5.1.0.44</PackageVersion>
+        <PackageVersion>6.1.0.44</PackageVersion>
         <PackageProjectUrl>https://github.com/kyourek/Domore.Conf</PackageProjectUrl>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/kyourek/domore-conf.git</RepositoryUrl>
