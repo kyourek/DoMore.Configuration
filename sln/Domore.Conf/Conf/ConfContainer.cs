@@ -17,8 +17,10 @@ namespace Domore.Conf {
         public IConfContentProvider ContentProvider {
             get => _ContentProvider ?? (_ContentProvider = new ConfContentProvider());
             set {
-                _ContentProvider = value;
-                _Content = null;
+                if (_ContentProvider != value) {
+                    _ContentProvider = value;
+                    _Content = null;
+                }
             }
         }
         private IConfContentProvider _ContentProvider;
@@ -26,8 +28,10 @@ namespace Domore.Conf {
         public object Source {
             get => _Source;
             set {
-                _Source = value;
-                _Content = null;
+                if (_Source != value) {
+                    _Source = value;
+                    _Content = null;
+                }
             }
         }
         private object _Source;
