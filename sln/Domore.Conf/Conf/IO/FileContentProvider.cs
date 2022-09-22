@@ -12,7 +12,7 @@ namespace Domore.Conf.IO {
         public ConfContent GetConfContent(object source) {
             var path = $"{source}";
             var text = File.ReadAllText(path);
-            return Text.GetConfContent(text);
+            return Text.GetConfContent(text, new[] { path });
         }
     }
 }

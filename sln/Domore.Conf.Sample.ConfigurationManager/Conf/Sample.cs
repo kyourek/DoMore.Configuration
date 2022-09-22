@@ -20,6 +20,10 @@ namespace Domore.Conf.Sample {
             Console.WriteLine($"V: Thanks! I also toured {string.Join(", ", visitor.TourDestinations.Values)}");
             Console.WriteLine($"V: on a {string.Join(", ", visitor.ShipModelsAndMakes.Select(pair => $"{pair.Value} {pair.Key}"))}");
             Console.WriteLine();
+            Console.WriteLine(nameof(Conf.Sources));
+            Console.WriteLine("-------");
+            Console.WriteLine(string.Join(Environment.NewLine, Conf.Sources));
+            Console.WriteLine();
             Console.WriteLine("[Enter] to exit");
             Console.ReadLine();
         }

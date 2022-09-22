@@ -2,10 +2,12 @@
 
 namespace Domore.Conf {
     public sealed class ConfContent {
+        internal IEnumerable<object> Sources { get; }
         internal IEnumerable<IConfPair> Pairs { get; }
 
-        internal ConfContent(params IConfPair[] pairs) {
-            Pairs = new List<IConfPair>(pairs);
+        internal ConfContent(IEnumerable<object> sources, IEnumerable<IConfPair> pairs) {
+            Pairs = pairs;
+            Sources = sources;
         }
     }
 }

@@ -5,6 +5,9 @@ namespace Domore.Conf {
     public class Conf : IConf {
         private static readonly ConfContainer Container = new ConfContainer();
 
+        public static IEnumerable<object> Sources =>
+            Container.Sources;
+
         public static object Source {
             get => Container.Source;
             set => Container.Source = value;
@@ -32,6 +35,7 @@ namespace Domore.Conf {
         }
 
         object IConf.Source => Source;
+        IEnumerable<object> IConf.Sources => Sources;
 
         T IConf.Configure<T>(T target, string key) {
             return Configure(target, key);

@@ -17,7 +17,7 @@ namespace Domore.Conf.IO {
         public ConfContent GetConfContent(object contents) {
             return FILE.Exists($"{contents}")
                 ? File.GetConfContent(contents)
-                : Text.GetConfContent(contents);
+                : Text.GetConfContent(contents, null);
         }
     }
 }

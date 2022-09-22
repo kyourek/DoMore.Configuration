@@ -36,6 +36,9 @@ namespace Domore.Conf {
         }
         private object _Source;
 
+        public IEnumerable<object> Sources =>
+            Content.Sources;
+
         public T Configure<T>(T target, string key = null) {
             if (null == target) throw new ArgumentNullException(nameof(target));
             var k = key ?? typeof(T).Name;
