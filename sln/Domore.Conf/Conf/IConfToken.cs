@@ -1,5 +1,5 @@
 ﻿namespace Domore.Conf {
-    public interface IConfToken {
+    internal interface IConfToken {
         string Content { get; }
     }
 }

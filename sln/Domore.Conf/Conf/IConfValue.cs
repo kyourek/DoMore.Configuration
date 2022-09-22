@@ -1,4 +1,4 @@
 ﻿namespace Domore.Conf {
-    public interface IConfValue : IConfToken {
+    internal interface IConfValue : IConfToken {
     }
 }

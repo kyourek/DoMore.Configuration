@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 
 namespace Domore.Conf {
-    using Domore.Conf.Extensions;
+    using Extensions;
 
     internal class ConfProperty {
         private static PropertyInfo From(string name, Type type) {

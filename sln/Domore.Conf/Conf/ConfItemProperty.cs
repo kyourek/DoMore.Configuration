@@ -1,15 +1,4 @@
-﻿
-/* Unmerged change from project 'Domore.Conf (net6.0)'
-Before:
-using System;
-After:
-using Domore;
-using Domore.Conf;
-using Domore.Conf;
-using Domore.Conf.Future;
-using System;
-*/
-using System;
+﻿using System;
 using System.Collections;
 using System.Reflection;
 

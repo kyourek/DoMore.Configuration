@@ -1,5 +1,5 @@
 ﻿namespace Domore.Conf {
-    public interface IConfKey : IConfToken {
+    internal interface IConfKey : IConfToken {
         IConfCollection<IConfKeyPart> Parts { get; }
         IConfKey Skip();
     }

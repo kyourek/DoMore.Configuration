@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Domore.Conf {
-    public interface IConfKeyIndex : IConfToken {
+    internal interface IConfKeyIndex : IConfToken {
         IEnumerable<IConfKeyIndexPart> Parts { get; }
     }
 }
