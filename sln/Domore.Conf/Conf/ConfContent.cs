@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Domore.Conf {
-    public class ConfContent {
+    public sealed class ConfContent {
         internal IEnumerable<IConfPair> Pairs { get; }
 
         internal ConfContent(params IConfPair[] pairs) {

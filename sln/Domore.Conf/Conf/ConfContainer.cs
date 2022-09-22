@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf {
-    public class ConfContainer : IConf {
+    internal class ConfContainer : IConfContainer {
         private ConfPopulator Populator =>
             _Populator ?? (
             _Populator = new ConfPopulator());
