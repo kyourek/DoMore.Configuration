@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Domore.Conf {
     public class Conf : IConf {
-        private static readonly Dictionary<string, ConfContainer> ContainerCache = new Dictionary<string, ConfContainer>();
         private static readonly ConfContainer Container = new ConfContainer();
 
         public static object Source {
@@ -30,14 +29,6 @@ namespace Domore.Conf {
 
         public static IConfContainer Contain(object source) {
             return new ConfContainer { Source = source };
-        }
-
-        public static IConfContainer Contain(string source) {
-            var cache = ContainerCache;
-            if (cache.TryGetValue(source, out var container) == false) {
-                cache[source] = container = new ConfContainer { Source = source };
-            }
-            return container;
         }
 
         object IConf.Source => Source;
