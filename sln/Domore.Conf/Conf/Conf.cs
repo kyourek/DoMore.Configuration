@@ -40,6 +40,8 @@ namespace Domore.Conf {
             return container;
         }
 
+        object IConf.Source => Source;
+
         T IConf.Configure<T>(T target, string key) {
             return Configure(target, key);
         }
