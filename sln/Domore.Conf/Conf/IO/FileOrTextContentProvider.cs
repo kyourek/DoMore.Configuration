@@ -15,9 +15,11 @@ namespace Domore.Conf.IO {
         private FileContentProvider _File;
 
         public ConfContent GetConfContent(object contents) {
-            return FILE.Exists($"{contents}")
-                ? File.GetConfContent(contents)
-                : Text.GetConfContent(contents, null);
+            var file = $"{contents}".Trim();
+            if (FILE.Exists(file)) {
+                return File.GetConfContent(file);
+            }
+            return Text.GetConfContent(contents, null);
         }
     }
 }

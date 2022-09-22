@@ -34,8 +34,10 @@ namespace Domore.Conf {
         }
 
         public ConfContent GetConfContent(object source) {
-            source = source?.ToString()?.Trim() ?? "";
-            source = source.Equals("") ? ConfFile : source;
+            var s = source?.ToString()?.Trim() ?? "";
+            if (s == "") {
+                source = ConfFile;
+            }
             return FileOrText.GetConfContent(source);
         }
     }

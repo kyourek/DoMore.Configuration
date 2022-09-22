@@ -43,6 +43,27 @@ namespace Domore.Conf.IO {
         }
 
         [Test]
+        public void Sources_IncludesFileIfFileExists() {
+            var path = Path.GetTempFileName();
+            var container = new ConfContainer { ContentProvider = Subject, Source = path };
+            File.WriteAllText(path, @"
+                item.inners[0].value = 1.1
+                item.inners[1].value = 1.2
+                item.inners[2].value = 1.3
+            ");
+            var obj = container.Configure(new ClassWithListExposedAsICollection(), "item");
+            var expected = new string[] {
+                path,
+                @"
+                item.inners[0].value = 1.1
+                item.inners[1].value = 1.2
+                item.inners[2].value = 1.3
+            " };
+            var actual = container.Sources;
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [Test]
         public void Configure_UsesTextIfFileDoesNotExist() {
             var container = new ConfContainer {
                 ContentProvider = Subject,

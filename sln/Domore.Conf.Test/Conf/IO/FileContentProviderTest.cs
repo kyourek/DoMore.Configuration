@@ -60,5 +60,24 @@ namespace Domore.Conf.IO {
             var obj = Container.Configure(new ClassWithListExposedAsICollection(), "item");
             CollectionAssert.AreEqual(new[] { 1.1, 1.2, 1.3 }, obj.Inners.Select(i => i.Value));
         }
+
+        [Test]
+        public void Sources_IncludesFile() {
+            File.WriteAllText(FilePath, @"
+                item.inners[0].value = 1.1
+                item.inners[1].value = 1.2
+                item.inners[2].value = 1.3
+            ");
+            var obj = Container.Configure(new ClassWithListExposedAsICollection(), "item");
+            var expected = new string[] {
+                FilePath,
+                @"
+                item.inners[0].value = 1.1
+                item.inners[1].value = 1.2
+                item.inners[2].value = 1.3
+            " };
+            var actual = Container.Sources;
+            CollectionAssert.AreEqual(expected, actual);
+        }
     }
 }
