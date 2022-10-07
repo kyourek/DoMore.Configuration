@@ -41,7 +41,7 @@ namespace Domore.Conf {
 
         public T Configure<T>(T target, string key = null) {
             if (null == target) throw new ArgumentNullException(nameof(target));
-            var k = key ?? typeof(T).Name;
+            var k = key ?? target?.GetType()?.Name ?? typeof(T).Name;
             var p = k == "" ? Content.Pairs : Content.Pairs.Where(pair => pair.Key.StartsWith(k)).Select(pair => new ConfPair(pair.Key.Skip(), pair.Value));
             Populator.Populate(target, this, p);
             return target;
