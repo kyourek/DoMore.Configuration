@@ -588,5 +588,13 @@ namespace Domore.Conf {
             var obj = Subject.Configure(new ClassWithNamedListExposedAsICollection(), "item");
             CollectionAssert.AreEqual(new[] { 1.1, 1.2, 1.3 }, obj.Inners.Select(i => i.Value));
         }
+
+        [Test]
+        public void Configure_GetsNameOfActualObjectType() {
+            Content = "Cat.Color = plaid";
+            var pet = Subject.Configure<Pet>(new Cat());
+            var cat = (Cat)pet;
+            Assert.That(cat.Color, Is.EqualTo("plaid"));
+        }
     }
 }
