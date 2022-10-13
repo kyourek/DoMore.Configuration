@@ -565,6 +565,26 @@ namespace Domore.Conf {
             Assert.That(obj.StrProp, Is.EqualTo("hello world"));
         }
 
+        [TestCase("sp")]
+        [TestCase("strprop")]
+        [TestCase("stringproperty")]
+        [TestCase("STRINGproperty")]
+        public void Configure_RespectsConfAttributeNamesWithoutKey(string name) {
+            Content = $"{name} = hello world";
+            var obj = Subject.Configure(new ObjWithOptionalNames(), "");
+            Assert.That(obj.StrProp, Is.EqualTo("hello world"));
+        }
+
+        [TestCase("spp")]
+        [TestCase("sstrprop")]
+        [TestCase("stringroperty")]
+        [TestCase("STINGproperty")]
+        public void Configure_DoesNotUseNameNotInAttributeList(string name) {
+            Content = $"{name} = hello world";
+            var obj = Subject.Configure(new ObjWithOptionalNames(), "");
+            Assert.That(obj.StrProp, Is.Not.EqualTo("hello world"));
+        }
+
         private class ClassWithNamedListExposedAsICollection {
             [Conf("Inner")]
             public ICollection<Inner> Inners {
