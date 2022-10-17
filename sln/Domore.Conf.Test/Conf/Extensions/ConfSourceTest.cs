@@ -469,5 +469,21 @@ more lines{
                 "MyValue = 3.21");
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        private class GetConfText_IsEmptyForObjectWithEmptyList_Object {
+            public List<string> ListProp {
+                get => _ListProp ?? (_ListProp = new List<string>());
+                set => _ListProp = value;
+            }
+            private List<string> _ListProp;
+        }
+
+        [Test]
+        public void GetConfText_IsEmptyForObjectWithEmptyList() {
+            var subject = new GetConfText_IsEmptyForObjectWithEmptyList_Object();
+            var actual = subject.GetConfText(key: "");
+            var expected = "";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }
