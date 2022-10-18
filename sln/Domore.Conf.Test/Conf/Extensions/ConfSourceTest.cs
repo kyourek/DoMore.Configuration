@@ -15,8 +15,8 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_GetsTwoProperties() {
-            var contents = new TwoPropertyClass { StringProp = "Hello World", DoubleProp = 1.23 }.GetConfText("Settings");
+        public void ConfText_GetsTwoProperties() {
+            var contents = new TwoPropertyClass { StringProp = "Hello World", DoubleProp = 1.23 }.ConfText("Settings");
             var expected = string.Join(Environment.NewLine, "Settings.DoubleProp = 1.23", "Settings.StringProp = Hello World");
             Assert.That(contents, Is.EqualTo(expected));
         }
@@ -26,12 +26,12 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_GetsComplexText() {
+        public void ConfText_GetsComplexText() {
             var subject = new ComplexClass();
             subject.StringProp = "mystr";
             subject.DoubleProp = 4.321;
             subject.Child.StringProp = "My other str";
-            var actual = subject.GetConfText();
+            var actual = subject.ConfText();
             var expected = string.Join(Environment.NewLine,
                 "ComplexClass.Child.StringProp = My other str",
                 "ComplexClass.DoubleProp = 4.321",
@@ -40,12 +40,12 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_GetsComplexTextOnSingleLine() {
+        public void ConfText_GetsComplexTextOnSingleLine() {
             var subject = new ComplexClass();
             subject.StringProp = "mystr";
             subject.DoubleProp = 4.321;
             subject.Child.StringProp = "My other str";
-            var actual = subject.GetConfText(multiline: false);
+            var actual = subject.ConfText(multiline: false);
             var expected = string.Join(";",
                 "ComplexClass.Child.StringProp=My other str",
                 "ComplexClass.DoubleProp=4.321",
@@ -54,54 +54,54 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_GetsComplexTextOnSingleLineWithEmptyKey() {
+        public void ConfText_GetsComplexTextOnSingleLineWithEmptyKey() {
             var subject = new ComplexClass();
             subject.StringProp = "mystr";
             subject.DoubleProp = 4.321;
             subject.Child.StringProp = "My other str";
-            var actual = subject.GetConfText(key: "", multiline: false);
+            var actual = subject.ConfText(key: "", multiline: false);
             var expected = "Child.StringProp=My other str;DoubleProp=4.321;StringProp=mystr";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        private static void GetConfText_CanRoundTripComplexClass(Action<ComplexClass, ComplexClass> assert) {
+        private static void ConfText_CanRoundTripComplexClass(Action<ComplexClass, ComplexClass> assert) {
             var expected = new ComplexClass();
             expected.StringProp = "mystr";
             expected.DoubleProp = 4.321;
             expected.Child.StringProp = "My other str";
 
-            var text = expected.GetConfText();
+            var text = expected.ConfText();
             var conf = new ConfContainer { Source = text };
             var actual = conf.Configure(new ComplexClass());
             assert(actual, expected);
         }
 
         [Test]
-        public void GetConfText_CanRoundTripComplexClassStringProp() {
-            GetConfText_CanRoundTripComplexClass((actual, expected) =>
+        public void ConfText_CanRoundTripComplexClassStringProp() {
+            ConfText_CanRoundTripComplexClass((actual, expected) =>
                 Assert.That(actual.StringProp, Is.EqualTo(expected.StringProp)));
         }
 
         [Test]
-        public void GetConfText_CanRoundTripComplexClassDoubleProp() {
-            GetConfText_CanRoundTripComplexClass((actual, expected) =>
+        public void ConfText_CanRoundTripComplexClassDoubleProp() {
+            ConfText_CanRoundTripComplexClass((actual, expected) =>
                 Assert.That(actual.DoubleProp, Is.EqualTo(expected.DoubleProp)));
         }
 
         [Test]
-        public void GetConfText_CanRoundTripComplexClassChild() {
-            GetConfText_CanRoundTripComplexClass((actual, expected) =>
+        public void ConfText_CanRoundTripComplexClassChild() {
+            ConfText_CanRoundTripComplexClass((actual, expected) =>
                 Assert.That(actual.Child.StringProp, Is.EqualTo(expected.Child.StringProp)));
         }
 
         [Test]
-        public void GetConfText_CanRoundTripComplexClassMultiline() {
+        public void ConfText_CanRoundTripComplexClassMultiline() {
             var expected = new ComplexClass();
             expected.StringProp = string.Join("\n", "mystr", "on", "", "multiple", "lines");
             expected.DoubleProp = 4.321;
             expected.Child.StringProp = "My other str";
 
-            var text = expected.GetConfText();
+            var text = expected.ConfText();
             var conf = new ConfContainer { Source = text };
             var actual = conf.Configure(new ComplexClass());
             Assert.That(actual.StringProp, Is.EqualTo(expected.StringProp));
@@ -112,11 +112,11 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_GetsDictOfStrings() {
+        public void ConfText_GetsDictOfStrings() {
             var subject = new DictedClass();
             subject.DictOfStrings[0] = "hello";
             subject.DictOfStrings[1] = "world";
-            var actual = subject.GetConfText();
+            var actual = subject.ConfText();
             var expected = string.Join(Environment.NewLine,
                 "DictedClass.DictOfStrings[0] = hello",
                 "DictedClass.DictOfStrings[1] = world");
@@ -124,11 +124,11 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_CanRoundTripDictOfStrings() {
+        public void ConfText_CanRoundTripDictOfStrings() {
             var subject = new DictedClass();
             subject.DictOfStrings[0] = "hello";
             subject.DictOfStrings[1] = "world";
-            var text = subject.GetConfText();
+            var text = subject.ConfText();
             var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new DictedClass());
             var actual = copy.DictOfStrings;
@@ -141,7 +141,7 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_GetsComplexDictedClass() {
+        public void ConfText_GetsComplexDictedClass() {
             var subject = new ComplexDictedClass();
             subject.Dict[0] = new ComplexClass();
             subject.Dict[0].Child.StringProp = "hello";
@@ -151,7 +151,7 @@ namespace Domore.Conf.Extensions {
             subject.Dict[1].Child.StringProp = "HELLO";
             subject.Dict[1].DoubleProp = 2.34;
             subject.Dict[1].StringProp = "WORLD";
-            var actual = subject.GetConfText("subj");
+            var actual = subject.ConfText("subj");
             var expected = string.Join(Environment.NewLine,
                 "subj.Dict[0].Child.StringProp = hello",
                 "subj.Dict[0].DoubleProp = 1.23",
@@ -162,7 +162,7 @@ namespace Domore.Conf.Extensions {
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        private void GetConfText_CanRoundTripComplexDictedClass(bool multiline) {
+        private void ConfText_CanRoundTripComplexDictedClass(bool multiline) {
             var subject = new ComplexDictedClass();
             subject.Dict[0] = new ComplexClass();
             subject.Dict[0].Child.StringProp = "hello";
@@ -172,7 +172,7 @@ namespace Domore.Conf.Extensions {
             subject.Dict[1].Child.StringProp = "HELLO";
             subject.Dict[1].DoubleProp = 2.34;
             subject.Dict[1].StringProp = "WORLD";
-            var text = subject.GetConfText();
+            var text = subject.ConfText();
             var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexDictedClass());
             Assert.That(copy.Dict[0].Child.StringProp, Is.EqualTo(subject.Dict[0].Child.StringProp));
@@ -184,13 +184,13 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_CanRoundTripComplexDictedClass() {
-            GetConfText_CanRoundTripComplexDictedClass(true);
+        public void ConfText_CanRoundTripComplexDictedClass() {
+            ConfText_CanRoundTripComplexDictedClass(true);
         }
 
         [Test]
-        public void GetConfText_CanRoundTripComplexDictedClassOnSingleLine() {
-            GetConfText_CanRoundTripComplexDictedClass(false);
+        public void ConfText_CanRoundTripComplexDictedClassOnSingleLine() {
+            ConfText_CanRoundTripComplexDictedClass(false);
         }
 
         private class ComplexListedClass {
@@ -198,7 +198,7 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_GetsComplexListedClass() {
+        public void ConfText_GetsComplexListedClass() {
             var subject = new ComplexListedClass();
             subject.List.Add(new ComplexClass());
             subject.List[0].Child.StringProp = "hello";
@@ -208,7 +208,7 @@ namespace Domore.Conf.Extensions {
             subject.List[1].Child.StringProp = "HELLO";
             subject.List[1].DoubleProp = 2.34;
             subject.List[1].StringProp = "WORLD";
-            var actual = subject.GetConfText();
+            var actual = subject.ConfText();
             var expected = string.Join(Environment.NewLine,
                 "ComplexListedClass.List[0].Child.StringProp = hello",
                 "ComplexListedClass.List[0].DoubleProp = 1.23",
@@ -221,7 +221,7 @@ namespace Domore.Conf.Extensions {
 
         [TestCase(true)]
         [TestCase(false)]
-        public void GetConfText_CanRoundTripComplexListedClass(bool multiline) {
+        public void ConfText_CanRoundTripComplexListedClass(bool multiline) {
             var subject = new ComplexListedClass();
             subject.List.Add(new ComplexClass());
             subject.List[0].Child.StringProp = "hello";
@@ -231,7 +231,7 @@ namespace Domore.Conf.Extensions {
             subject.List[1].Child.StringProp = "HELLO";
             subject.List[1].DoubleProp = 2.34;
             subject.List[1].StringProp = "WORLD";
-            var text = subject.GetConfText(multiline: multiline);
+            var text = subject.ConfText(multiline: multiline);
             var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexListedClass());
             Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
@@ -243,7 +243,7 @@ namespace Domore.Conf.Extensions {
         }
 
         [Test]
-        public void GetConfText_CanRoundTripComplexListedClassWithBracketedContent1() {
+        public void ConfText_CanRoundTripComplexListedClassWithBracketedContent1() {
             var subject = new ComplexListedClass();
             subject.List.Add(new ComplexClass());
             subject.List[0].Child.StringProp = "hello";
@@ -258,7 +258,7 @@ line";
             how's it going?";
             subject.List[1].DoubleProp = 2.34;
             subject.List[1].StringProp = "WORLD";
-            var text = subject.GetConfText();
+            var text = subject.ConfText();
             var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexListedClass());
             Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
@@ -270,7 +270,7 @@ line";
         }
 
         [Test]
-        public void GetConfText_CanRoundTripComplexListedClassWithBracketedContent2() {
+        public void ConfText_CanRoundTripComplexListedClassWithBracketedContent2() {
             var subject = new ComplexListedClass();
             subject.List.Add(new ComplexClass());
             subject.List[0].Child.StringProp = @"hello
@@ -292,7 +292,7 @@ WORLD   and
             some other
             stuff}
 }...";
-            var text = subject.GetConfText();
+            var text = subject.ConfText();
             var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexListedClass());
             Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
@@ -316,12 +316,12 @@ WORLD   and
         }
 
         [Test]
-        public void GetConfText_GetsConfFromListExposedAsICollection() {
+        public void ConfText_GetsConfFromListExposedAsICollection() {
             var obj = new ClassWithListExposedAsICollection();
             obj.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.1 });
             obj.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.2 });
             obj.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.3 });
-            var actual = obj.GetConfText("item");
+            var actual = obj.ConfText("item");
             var expected = string.Join(Environment.NewLine,
                 "item.Inners[0].Value = 1.1",
                 "item.Inners[1].Value = 1.2",
@@ -330,9 +330,9 @@ WORLD   and
         }
 
         [Test]
-        public void GetConfText_GetsConfOfList() {
+        public void ConfText_GetsConfOfList() {
             var list = new List<string> { "hello", "world", "hey", "earth" };
-            var actual = list.GetConfText();
+            var actual = list.ConfText();
             var expected = string.Join(Environment.NewLine,
                 "String[0] = hello",
                 "String[1] = world",
@@ -342,7 +342,7 @@ WORLD   and
         }
 
         [Test]
-        public void GetConfText_GetsConfOfListWithBracketedText() {
+        public void ConfText_GetsConfOfListWithBracketedText() {
             var list = new List<string> { "hello", "world", "hey", @"
 earth
             is on   
@@ -351,7 +351,7 @@ MANY
 
 lines
 " };
-            var actual = list.GetConfText();
+            var actual = list.ConfText();
             var expected = string.Join(Environment.NewLine,
                 "String[0] = hello",
                 "String[1] = world",
@@ -370,9 +370,9 @@ lines
         }
 
         [Test]
-        public void GetConfText_GetsConfOfDictionary() {
+        public void ConfText_GetsConfOfDictionary() {
             var dict = new Dictionary<string, double> { { "hello", 1.23 }, { "World", 4.56 } };
-            var actual = dict.GetConfText();
+            var actual = dict.ConfText();
             var expected = string.Join(Environment.NewLine,
                 "Double[hello] = 1.23",
                 "Double[World] = 4.56");
@@ -380,7 +380,7 @@ lines
         }
 
         [Test]
-        public void GetConfText_GetsConfOfDictionaryWithBracketedText() {
+        public void ConfText_GetsConfOfDictionaryWithBracketedText() {
             var dict = new Dictionary<string, string> {
                 { "hello", @"here's{
 }some
@@ -391,7 +391,7 @@ text...
                 { "World", @"
 }                      some
 more lines{" } };
-            var actual = dict.GetConfText();
+            var actual = dict.ConfText();
 
             var expected = @"String[hello] = {
 here's{
@@ -410,7 +410,7 @@ more lines{
         }
 
         [Test]
-        public void GetConfText_CanRoundTripDictionary() {
+        public void ConfText_CanRoundTripDictionary() {
             var obj1 = new ClassWithListExposedAsICollection();
             obj1.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.1 });
             obj1.Inners.Add(new ClassWithListExposedAsICollection.Inner { Value = 1.2 });
@@ -425,7 +425,7 @@ more lines{
                 { "obj1", obj1 },
                 { "obj2", obj2 }
             };
-            var text = dict.GetConfText("item");
+            var text = dict.ConfText("item");
             var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(key => new ClassWithListExposedAsICollection(), "item")
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
@@ -439,14 +439,14 @@ more lines{
             Assert.That(copy["obj2"].Inners.ElementAt(2).Value, Is.EqualTo(2.3));
         }
 
-        private class GetConfText_CanBePassedEmptyStringForKey_Helper : ComplexListedClass {
+        private class ConfText_CanBePassedEmptyStringForKey_Helper : ComplexListedClass {
             public string MyName { get; set; }
             public float MyValue { get; set; }
         }
 
         [Test]
-        public void GetConfText_CanBePassedEmptyStringForKey() {
-            var subject = new GetConfText_CanBePassedEmptyStringForKey_Helper();
+        public void ConfText_CanBePassedEmptyStringForKey() {
+            var subject = new ConfText_CanBePassedEmptyStringForKey_Helper();
             subject.MyName = "thename";
             subject.MyValue = 3.21F;
             subject.List.Add(new ComplexClass());
@@ -457,7 +457,7 @@ more lines{
             subject.List[1].Child.StringProp = "HELLO";
             subject.List[1].DoubleProp = 2.34;
             subject.List[1].StringProp = "WORLD";
-            var actual = subject.GetConfText(key: "");
+            var actual = subject.ConfText(key: "");
             var expected = string.Join(Environment.NewLine,
                 "List[0].Child.StringProp = hello",
                 "List[0].DoubleProp = 1.23",
@@ -470,7 +470,7 @@ more lines{
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        private class GetConfText_IsEmptyForObjectWithEmptyList_Object {
+        private class ConfText_IsEmptyForObjectWithEmptyList_Object {
             public List<string> ListProp {
                 get => _ListProp ?? (_ListProp = new List<string>());
                 set => _ListProp = value;
@@ -479,9 +479,9 @@ more lines{
         }
 
         [Test]
-        public void GetConfText_IsEmptyForObjectWithEmptyList() {
-            var subject = new GetConfText_IsEmptyForObjectWithEmptyList_Object();
-            var actual = subject.GetConfText(key: "");
+        public void ConfText_IsEmptyForObjectWithEmptyList() {
+            var subject = new ConfText_IsEmptyForObjectWithEmptyList_Object();
+            var actual = subject.ConfText(key: "");
             var expected = "";
             Assert.That(actual, Is.EqualTo(expected));
         }

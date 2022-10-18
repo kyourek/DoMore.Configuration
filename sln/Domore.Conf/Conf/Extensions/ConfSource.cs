@@ -7,7 +7,7 @@
             _TextProvider = new TextSourceProvider());
         private static TextSourceProvider _TextProvider;
 
-        public static string GetConfText(this object obj, string key = null, bool? multiline = null) {
+        public static string ConfText(this object obj, string key = null, bool? multiline = null) {
             return TextProvider.GetConfSource(obj, key, multiline);
         }
     }
