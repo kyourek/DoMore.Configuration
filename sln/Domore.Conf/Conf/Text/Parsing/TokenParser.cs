@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace Domore.Conf.Text.Parsing {
-    using Domore.Conf;
     using Tokens;
 
     internal class TokenParser {

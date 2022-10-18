@@ -2,7 +2,6 @@
 using System.Linq;
 
 namespace Domore.Conf.Text {
-    using Domore.Conf;
     using Parsing;
 
     public class TextContentProvider : IConfContentProvider {

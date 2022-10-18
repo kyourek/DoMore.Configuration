@@ -107,6 +107,18 @@ namespace Domore.Conf.Extensions {
             Assert.That(actual.StringProp, Is.EqualTo(expected.StringProp));
         }
 
+        [Test]
+        public void ConfFrom_CanRoundTripComplexClassMultiline() {
+            var expected = new ComplexClass();
+            expected.StringProp = string.Join("\n", "mystr", "on", "", "multiple", "lines");
+            expected.DoubleProp = 4.321;
+            expected.Child.StringProp = "My other str";
+
+            var text = expected.ConfText();
+            var actual = new ComplexClass().ConfFrom(text);
+            Assert.That(actual.StringProp, Is.EqualTo(expected.StringProp));
+        }
+
         private class DictedClass {
             public Dictionary<int, string> DictOfStrings { get; } = new Dictionary<int, string>();
         }
@@ -131,6 +143,18 @@ namespace Domore.Conf.Extensions {
             var text = subject.ConfText();
             var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new DictedClass());
+            var actual = copy.DictOfStrings;
+            var expected = subject.DictOfStrings;
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void ConfFrom_CanRoundTripDictOfStrings() {
+            var subject = new DictedClass();
+            subject.DictOfStrings[0] = "hello";
+            subject.DictOfStrings[1] = "world";
+            var text = subject.ConfText();
+            var copy = new DictedClass().ConfFrom(text);
             var actual = copy.DictOfStrings;
             var expected = subject.DictOfStrings;
             CollectionAssert.AreEqual(expected, actual);
@@ -175,6 +199,26 @@ namespace Domore.Conf.Extensions {
             var text = subject.ConfText();
             var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexDictedClass());
+            Assert.That(copy.Dict[0].Child.StringProp, Is.EqualTo(subject.Dict[0].Child.StringProp));
+            Assert.That(copy.Dict[0].DoubleProp, Is.EqualTo(subject.Dict[0].DoubleProp));
+            Assert.That(copy.Dict[0].StringProp, Is.EqualTo(subject.Dict[0].StringProp));
+            Assert.That(copy.Dict[1].Child.StringProp, Is.EqualTo(subject.Dict[1].Child.StringProp));
+            Assert.That(copy.Dict[1].DoubleProp, Is.EqualTo(subject.Dict[1].DoubleProp));
+            Assert.That(copy.Dict[1].StringProp, Is.EqualTo(subject.Dict[1].StringProp));
+        }
+
+        private void ConfFrom_CanRoundTripComplexDictedClass(bool multiline) {
+            var subject = new ComplexDictedClass();
+            subject.Dict[0] = new ComplexClass();
+            subject.Dict[0].Child.StringProp = "hello";
+            subject.Dict[0].DoubleProp = 1.23;
+            subject.Dict[0].StringProp = "world";
+            subject.Dict[1] = new ComplexClass();
+            subject.Dict[1].Child.StringProp = "HELLO";
+            subject.Dict[1].DoubleProp = 2.34;
+            subject.Dict[1].StringProp = "WORLD";
+            var text = subject.ConfText();
+            var copy = new ComplexDictedClass().ConfFrom(text);
             Assert.That(copy.Dict[0].Child.StringProp, Is.EqualTo(subject.Dict[0].Child.StringProp));
             Assert.That(copy.Dict[0].DoubleProp, Is.EqualTo(subject.Dict[0].DoubleProp));
             Assert.That(copy.Dict[0].StringProp, Is.EqualTo(subject.Dict[0].StringProp));
@@ -242,6 +286,28 @@ namespace Domore.Conf.Extensions {
             Assert.That(copy.List[1].StringProp, Is.EqualTo(subject.List[1].StringProp));
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ConfFrom_CanRoundTripComplexListedClass(bool multiline) {
+            var subject = new ComplexListedClass();
+            subject.List.Add(new ComplexClass());
+            subject.List[0].Child.StringProp = "hello";
+            subject.List[0].DoubleProp = 1.23;
+            subject.List[0].StringProp = "world";
+            subject.List.Add(new ComplexClass());
+            subject.List[1].Child.StringProp = "HELLO";
+            subject.List[1].DoubleProp = 2.34;
+            subject.List[1].StringProp = "WORLD";
+            var text = subject.ConfText(multiline: multiline);
+            var copy = new ComplexListedClass().ConfFrom(text);
+            Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
+            Assert.That(copy.List[0].DoubleProp, Is.EqualTo(subject.List[0].DoubleProp));
+            Assert.That(copy.List[0].StringProp, Is.EqualTo(subject.List[0].StringProp));
+            Assert.That(copy.List[1].Child.StringProp, Is.EqualTo(subject.List[1].Child.StringProp));
+            Assert.That(copy.List[1].DoubleProp, Is.EqualTo(subject.List[1].DoubleProp));
+            Assert.That(copy.List[1].StringProp, Is.EqualTo(subject.List[1].StringProp));
+        }
+
         [Test]
         public void ConfText_CanRoundTripComplexListedClassWithBracketedContent1() {
             var subject = new ComplexListedClass();
@@ -295,6 +361,39 @@ WORLD   and
             var text = subject.ConfText();
             var conf = new ConfContainer { Source = text };
             var copy = conf.Configure(new ComplexListedClass());
+            Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
+            Assert.That(copy.List[0].DoubleProp, Is.EqualTo(subject.List[0].DoubleProp));
+            Assert.That(copy.List[0].StringProp, Is.EqualTo(subject.List[0].StringProp));
+            Assert.That(copy.List[1].Child.StringProp, Is.EqualTo(subject.List[1].Child.StringProp));
+            Assert.That(copy.List[1].DoubleProp, Is.EqualTo(subject.List[1].DoubleProp));
+            Assert.That(copy.List[1].StringProp, Is.EqualTo(subject.List[1].StringProp));
+        }
+
+        [Test]
+        public void ConfFrom_CanRoundTripComplexListedClassWithBracketedContent2() {
+            var subject = new ComplexListedClass();
+            subject.List.Add(new ComplexClass());
+            subject.List[0].Child.StringProp = @"hello
+            here's
+            some more }
+            {lines}";
+            subject.List[0].DoubleProp = 1.23;
+            subject.List[0].StringProp = @"world
+on more than one
+
+line";
+            subject.List.Add(new ComplexClass());
+            subject.List[1].Child.StringProp = @"HELLO there
+
+            how's it going?";
+            subject.List[1].DoubleProp = 2.34;
+            subject.List[1].StringProp = @"{
+WORLD   and    
+            some other
+            stuff}
+}...";
+            var text = subject.ConfText();
+            var copy = new ComplexListedClass().ConfFrom(text);
             Assert.That(copy.List[0].Child.StringProp, Is.EqualTo(subject.List[0].Child.StringProp));
             Assert.That(copy.List[0].DoubleProp, Is.EqualTo(subject.List[0].DoubleProp));
             Assert.That(copy.List[0].StringProp, Is.EqualTo(subject.List[0].StringProp));
