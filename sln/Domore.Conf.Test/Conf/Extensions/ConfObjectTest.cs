@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Domore.Conf.Extensions {
     [TestFixture]
-    internal class ConfSourceTest {
+    internal class ConfObjectTest {
         private class OnePropertyClass {
             public string StringProp { get; set; }
         }
