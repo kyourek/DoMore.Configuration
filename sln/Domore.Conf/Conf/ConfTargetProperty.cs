@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reflection;
 
 namespace Domore.Conf {
+    using Extensions;
+
     internal class ConfTargetProperty {
         public object Target { get; }
         public IConfKeyPart Key { get; }
@@ -53,7 +55,7 @@ namespace Domore.Conf {
 
         public ConfAttribute Attribute =>
             _Attribute ?? (
-            _Attribute = PropertyInfo.GetCustomAttributes(typeof(ConfAttribute), inherit: true)?.FirstOrDefault() as ConfAttribute);
+            _Attribute = PropertyInfo.GetConfAttribute());
         private ConfAttribute _Attribute;
 
         public bool Exists =>

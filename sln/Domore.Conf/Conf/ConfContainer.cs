@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace Domore.Conf {
     internal class ConfContainer : IConfContainer {
-        private ConfPopulator Populator =>
-            _Populator ?? (
-            _Populator = new ConfPopulator());
-        private ConfPopulator _Populator;
-
         private ConfContent Content =>
             _Content ?? (
             _Content = ContentProvider.GetConfContent(Source));
         private ConfContent _Content;
+
+        private ConfPopulator Populator =>
+            _Populator ?? (
+            _Populator = ConfPopulator.Cached);
+        private ConfPopulator _Populator;
 
         public IConfContentProvider ContentProvider {
             get => _ContentProvider ?? (_ContentProvider = new ConfContentProvider());

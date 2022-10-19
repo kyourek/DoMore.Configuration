@@ -7,6 +7,9 @@ namespace Domore.Conf {
         private readonly ConfValueConverter ConverterDefault = new ConfValueConverter();
         private readonly ConfValueConverterCache ConverterCache = new ConfValueConverterCache();
 
+        private ConfPopulator() {
+        }
+
         private object Convert(IConfValue value, ConfTargetProperty property, IConf conf) {
             if (null == property) throw new ArgumentNullException(nameof(property));
             var converterType = property.Attribute?.Converter;
@@ -55,6 +58,8 @@ namespace Domore.Conf {
                 }
             }
         }
+
+        public static ConfPopulator Cached { get; } = new ConfPopulator();
 
         public void Populate(object target, IConf conf, IEnumerable<IConfPair> pairs) {
             if (null == pairs) throw new ArgumentNullException(nameof(pairs));
