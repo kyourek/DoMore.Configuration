@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 
 namespace Domore.Conf {
-    internal class ConfValueConverterState {
+    public class ConfValueConverterState {
         public object Target { get; }
         public IConf Conf { get; }
         public PropertyInfo Property { get; }

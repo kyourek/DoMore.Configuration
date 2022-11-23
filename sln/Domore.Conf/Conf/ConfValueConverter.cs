@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Domore.Conf {
-    internal class ConfValueConverter {
+    public class ConfValueConverter {
         public virtual object Convert(string value, ConfValueConverterState state) {
             if (null == state) throw new ArgumentNullException(nameof(state));
             var converter = state.TypeConverter;

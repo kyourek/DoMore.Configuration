@@ -616,5 +616,57 @@ namespace Domore.Conf {
             var cat = (Cat)pet;
             Assert.That(cat.Color, Is.EqualTo("plaid"));
         }
+
+        private class ClassWithStringPropertiesForConverterTest {
+            [Conf(converter: typeof(Converter))]
+            public string Foo { get; set; }
+
+            [Conf(converter: typeof(Converter))]
+            public string[] Bar { get; set; }
+
+            private class Converter : ConfValueConverter {
+                private string Convert(string value) {
+                    if (value == "\\r") return "\r";
+                    if (value == "\\n") return "\n";
+                    if (value == "\\r\\n") return "\r\n";
+                    return value;
+                }
+
+                public override object Convert(string value, ConfValueConverterState state) {
+                    if (state.Property.Name == nameof(Foo)) {
+                        return Convert(value);
+                    }
+                    if (state.Property.Name == nameof(Bar)) {
+                        if (value != null) {
+                            return value
+                                .Split()
+                                .Where(s => !string.IsNullOrWhiteSpace(s))
+                                .Select(s => Convert(s))
+                                .ToArray();
+                        }
+                        return value;
+                    }
+                    throw new ArgumentException();
+                }
+            }
+        }
+
+        [TestCase("Foo = \\r", "\r")]
+        [TestCase("Foo = \\n", "\n")]
+        [TestCase("Foo = \\r\\n", "\r\n")]
+        public void Configure_UsesPrivateConverterClassInstance(string content, string expected) {
+            Content = content;
+            var inst = Subject.Configure(new ClassWithStringPropertiesForConverterTest(), key: "");
+            var actual = inst.Foo;
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Configure_UsesPrivateConverterClassInstanceToConvertToArray() {
+            Content = "Bar = \\r \\n";
+            var inst = Subject.Configure(new ClassWithStringPropertiesForConverterTest(), key: "");
+            var actual = inst.Bar;
+            CollectionAssert.AreEqual(new[] { "\r", "\n" }, actual);
+        }
     }
 }
