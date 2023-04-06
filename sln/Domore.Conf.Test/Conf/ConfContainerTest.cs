@@ -22,7 +22,7 @@ namespace Domore.Conf {
         }
 
         private class Man {
-            [Conf(converter: typeof(DogConfValueConverter))]
+            [ConfConverter(typeof(DogConfValueConverter))]
             public Dog BestFriend { get; set; }
         }
 
@@ -618,10 +618,10 @@ namespace Domore.Conf {
         }
 
         private class ClassWithStringPropertiesForConverterTest {
-            [Conf(converter: typeof(Converter))]
+            [ConfConverter(typeof(Converter))]
             public string Foo { get; set; }
 
-            [Conf(converter: typeof(Converter))]
+            [ConfConverter(typeof(Converter))]
             public string[] Bar { get; set; }
 
             private class Converter : ConfValueConverter {

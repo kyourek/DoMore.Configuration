@@ -53,10 +53,15 @@ namespace Domore.Conf {
             _PropertyType = PropertyInfo.PropertyType);
         private Type _PropertyType;
 
-        public ConfAttribute Attribute =>
-            _Attribute ?? (
-            _Attribute = PropertyInfo.GetConfAttribute());
-        private ConfAttribute _Attribute;
+        public ConfAttribute ConfAttribute =>
+            _ConfAttribute ?? (
+            _ConfAttribute = PropertyInfo.GetConfAttribute());
+        private ConfAttribute _ConfAttribute;
+
+        public ConfConverterAttribute ConverterAttribute =>
+            _ConverterAttribute ?? (
+            _ConverterAttribute = PropertyInfo.GetConverterAttribute());
+        private ConfConverterAttribute _ConverterAttribute;
 
         public bool Exists =>
             _Exists ?? (
@@ -65,7 +70,7 @@ namespace Domore.Conf {
 
         public bool Populate =>
             _Populate ?? (
-            _Populate = Attribute?.IgnoreSet != true).Value;
+            _Populate = ConfAttribute?.IgnoreSet != true).Value;
         private bool? _Populate;
 
         public ConfItemProperty Item {
@@ -91,7 +96,7 @@ namespace Domore.Conf {
             Target = target ?? throw new ArgumentNullException(nameof(target));
         }
 
-        private class ItemKey : IConfKeyPart {
+        private sealed class ItemKey : IConfKeyPart {
             public string Content { get; }
             public IConfKeyIndex Index { get; }
             public IConfCollection<IConfKeyIndex> Indices { get; }

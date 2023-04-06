@@ -10,7 +10,7 @@ namespace Domore.Conf {
             return (ConfValueConverter)Activator.CreateInstance(type);
         }
 
-        public ConfValueConverter ConverterFor(ConfAttribute attribute) {
+        public ConfValueConverter ConverterFor(ConfConverterAttribute attribute) {
             if (attribute == null) {
                 return Default;
             }
@@ -18,7 +18,7 @@ namespace Domore.Conf {
             if (@internal != null) {
                 return @internal;
             }
-            var type = attribute.Converter;
+            var type = attribute.ConverterType;
             if (type == null) {
                 return Default;
             }

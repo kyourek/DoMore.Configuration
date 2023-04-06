@@ -2,14 +2,11 @@
 using System.Linq;
 
 namespace Domore.Conf.Converters {
-    public sealed class ConfEnumFlagsAttribute : ConfAttribute {
+    public sealed class ConfEnumFlagsAttribute : ConfConverterAttribute {
         internal sealed override ConfValueConverter ConverterInstance =>
             _ConverterInstance ?? (
             _ConverterInstance = new ValueConverter(null));
         private ConfValueConverter _ConverterInstance;
-
-        public ConfEnumFlagsAttribute(params string[] names) : base(names) {
-        }
 
         private sealed class ValueConverter : ConfValueConverter.Internal {
             private static readonly string DefaultSeparators = "+|&,/\\";

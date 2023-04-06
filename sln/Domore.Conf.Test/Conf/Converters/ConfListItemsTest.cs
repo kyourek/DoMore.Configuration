@@ -13,7 +13,7 @@ namespace Domore.Conf.Converters {
             [ConfListItems]
             public List<string> FavoriteColors { get; set; }
 
-            [ConfListItems("&", "pets")]
+            [ConfListItems(Separator = "&"), Conf("pets")]
             public List<string> PetNames { get; set; }
         }
 
@@ -90,7 +90,7 @@ namespace Domore.Conf.Converters {
         }
 
         private class PairWithSpecifiedTypeConverters {
-            [ConfListItems(typeof(PairWithSpecifiedTypeConverter.Converter), "Things")]
+            [ConfListItems(ItemConverter = typeof(PairWithSpecifiedTypeConverter.Converter)), Conf("Things")]
             public List<PairWithSpecifiedTypeConverter> Items { get; set; }
         }
 
@@ -119,7 +119,7 @@ namespace Domore.Conf.Converters {
         }
 
         private class PairWithConfValueConverters {
-            [ConfListItems(typeof(PairWithConfValueConverter.Converter))]
+            [ConfListItems(ItemConverter = typeof(PairWithConfValueConverter.Converter))]
             public List<PairWithConfValueConverter> Items { get; set; }
         }
 
@@ -133,7 +133,7 @@ namespace Domore.Conf.Converters {
 
 
         private class PairWithConfValueConvertersAndSeparator {
-            [ConfListItems("|", typeof(PairWithConfValueConverter.Converter))]
+            [ConfListItems(Separator = "|", ItemConverter = typeof(PairWithConfValueConverter.Converter))]
             public List<PairWithConfValueConverter> Items { get; set; }
         }
 

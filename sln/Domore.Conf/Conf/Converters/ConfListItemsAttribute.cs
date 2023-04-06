@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 
 namespace Domore.Conf.Converters {
-    public sealed class ConfListItemsAttribute : ConfAttribute {
+    public sealed class ConfListItemsAttribute : ConfConverterAttribute {
         internal sealed override ConfValueConverter ConverterInstance =>
             _ConverterInstance ?? (
             _ConverterInstance = new ValueConverter {
@@ -15,22 +15,27 @@ namespace Domore.Conf.Converters {
             });
         private ConfValueConverter _ConverterInstance;
 
-        public string Separator { get; }
-        public Type ItemConverter { get; }
-
-        public ConfListItemsAttribute() : this(separator: null, itemConverter: null, names: new string[] { }) {
+        public string Separator {
+            get => _Separator;
+            set {
+                if (_Separator != value) {
+                    _Separator = value;
+                    _ConverterInstance = null;
+                }
+            }
         }
+        private string _Separator;
 
-        public ConfListItemsAttribute(string separator, params string[] names) : this(separator, itemConverter: null, names) {
+        public Type ItemConverter {
+            get => _ItemConverter;
+            set {
+                if (_ItemConverter != value) {
+                    _ItemConverter = value;
+                    _ConverterInstance = null;
+                }
+            }
         }
-
-        public ConfListItemsAttribute(Type itemConverter, params string[] names) : this(separator: null, itemConverter, names) {
-        }
-
-        public ConfListItemsAttribute(string separator, Type itemConverter, params string[] names) : base(names) {
-            Separator = separator;
-            ItemConverter = itemConverter;
-        }
+        private Type _ItemConverter;
 
         private sealed class ValueConverter : ConfValueConverter.Internal {
             protected sealed override object Convert(bool @internal, string value, ConfValueConverterState state) {

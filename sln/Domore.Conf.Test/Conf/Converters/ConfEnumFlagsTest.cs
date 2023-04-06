@@ -17,7 +17,7 @@ namespace Domore.Conf.Converters {
             [ConfEnumFlags]
             public Colors FavoriteColors { get; set; }
 
-            [ConfEnumFlags("favs")]
+            [ConfEnumFlags, Conf("favs")]
             public Colors FavoriteColorsWithShortName { get; set; }
         }
 

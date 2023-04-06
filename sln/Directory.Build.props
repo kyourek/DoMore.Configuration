@@ -2,12 +2,12 @@
 <Project>
   <PropertyGroup>
     <Authors>Ken Yourek</Authors>
-    <Copyright>Copyright © Ken Yourek 2019-2022</Copyright>
+    <Copyright>Copyright © Ken Yourek 2019-2023</Copyright>
     <VersionPrefix>6.1.0.55</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <AssemblyVersion>6.1.0.55</AssemblyVersion>
     <InformationalVersion>6.1.0.55</InformationalVersion>
-    <FileVersion>6.1.0.55</FileVersion>
+    <FileVersion>7.0.0.55</FileVersion>
     <PackageVersion>6.1.0.55</PackageVersion>
     <PackageProjectUrl>https://github.com/kyourek/Domore.Conf</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
