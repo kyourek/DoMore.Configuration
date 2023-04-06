@@ -19,6 +19,9 @@ namespace Domore.Conf.Converters {
 
             [ConfEnumFlags, Conf("favs")]
             public Colors FavoriteColorsWithShortName { get; set; }
+
+            [ConfEnumFlags(Separators = "#")]
+            public Colors FavoriteColorsSeparatedByHash { get; set; }
         }
 
         [TestCase("red", Colors.Red)]
@@ -41,6 +44,13 @@ namespace Domore.Conf.Converters {
         [TestCase("green + blue", Colors.Blue | Colors.Green)]
         public void ConvertsEnumFlagsWithDifferentName(string s, int expected) {
             var actual = new Kid().ConfFrom($"kid.FAVs = {s}").FavoriteColorsWithShortName;
+            Assert.That(actual, Is.EqualTo((Colors)expected));
+        }
+
+        [Test]
+        public void ConvertsWithSpecifiedSeparators() {
+            var actual = new Kid().ConfFrom($"kid.favoritecolorsseparatedByHash = Green # blue").FavoriteColorsSeparatedByHash;
+            var expected = Colors.Green | Colors.Blue;
             Assert.That(actual, Is.EqualTo((Colors)expected));
         }
     }

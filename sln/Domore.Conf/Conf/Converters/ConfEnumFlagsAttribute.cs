@@ -5,8 +5,19 @@ namespace Domore.Conf.Converters {
     public sealed class ConfEnumFlagsAttribute : ConfConverterAttribute {
         internal sealed override ConfValueConverter ConverterInstance =>
             _ConverterInstance ?? (
-            _ConverterInstance = new ValueConverter(null));
+            _ConverterInstance = new ValueConverter { Separators = Separators });
         private ConfValueConverter _ConverterInstance;
+
+        public string Separators {
+            get => _Separators;
+            set {
+                if (_Separators != value) {
+                    _Separators = value;
+                    _ConverterInstance = null;
+                }
+            }
+        }
+        private string _Separators;
 
         private sealed class ValueConverter : ConfValueConverter.Internal {
             private static readonly string DefaultSeparators = "+|&,/\\";
@@ -30,11 +41,7 @@ namespace Domore.Conf.Converters {
                 return Default(value, state);
             }
 
-            public string Separators { get; }
-
-            public ValueConverter(string separators) {
-                Separators = separators;
-            }
+            public string Separators { get; set; }
         }
     }
 }
