@@ -4,9 +4,9 @@ using System.Linq;
 namespace Domore.Conf.Converters {
     public sealed class ConfEnumFlagsAttribute : ConfAttribute {
         internal sealed override ConfValueConverter ConverterInstance =>
-            _InternalConverter ?? (
-            _InternalConverter = new ValueConverter(null));
-        private ConfValueConverter _InternalConverter;
+            _ConverterInstance ?? (
+            _ConverterInstance = new ValueConverter(null));
+        private ConfValueConverter _ConverterInstance;
 
         public ConfEnumFlagsAttribute(params string[] names) : base(names) {
         }
