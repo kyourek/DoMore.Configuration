@@ -34,11 +34,11 @@ namespace Domore.Conf {
             return new ConfItemProperty(target, key, cache);
         }
 
-        private class ListProperty : ConfItemProperty {
+        private sealed class ListProperty : ConfItemProperty {
             public IList List { get; }
             public new int Index => (int)base.Index[0];
 
-            public override object PropertyValue {
+            public sealed override object PropertyValue {
                 get => List.Count > Index ? List[Index] : null;
                 set {
                     var type = PropertyType;
@@ -65,11 +65,11 @@ namespace Domore.Conf {
             }
         }
 
-        private class DictionaryProperty : ConfItemProperty {
+        private sealed class DictionaryProperty : ConfItemProperty {
             public IDictionary Dictionary { get; }
             public new object Index => base.Index[0];
 
-            public override object PropertyValue {
+            public sealed override object PropertyValue {
                 get => Dictionary[Index];
                 set => Dictionary[Index] = value;
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Domore.Conf {
-    internal class ConfValueConverterCache {
+    internal sealed class ConfValueConverterCache {
         private readonly Dictionary<Type, ConfValueConverter> Cache = new Dictionary<Type, ConfValueConverter>();
 
         private static ConfValueConverter Create(Type type) {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Domore.Conf {
-    internal class ConfPropertyCache {
+    internal sealed class ConfPropertyCache {
         private readonly Dictionary<Type, Dictionary<string, ConfProperty>> Cache = new Dictionary<Type, Dictionary<string, ConfProperty>>();
 
         public StringComparer StringComparer { get; } = StringComparer.OrdinalIgnoreCase;

@@ -27,7 +27,7 @@ namespace Domore.Conf.Text.Parsing.Tokens {
         public MultilineValueBuilder(KeyBuilder key) : base(key) {
         }
 
-        public override Token Build(string s, ref int i) {
+        public sealed override Token Build(string s, ref int i) {
             var c = s[i];
             var lastChar = i == s.Length - 1;
             var lastCharIsClosingTag = lastChar && c == '}';

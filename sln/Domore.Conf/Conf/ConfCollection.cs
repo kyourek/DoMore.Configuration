@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Domore.Conf {
-    internal class ConfCollection<T> : IConfCollection<T> {
+    internal sealed class ConfCollection<T> : IConfCollection<T> {
         private readonly List<T> List;
 
         public ConfCollection() {

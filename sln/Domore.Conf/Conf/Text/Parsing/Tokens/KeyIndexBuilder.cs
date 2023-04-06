@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domore.Conf.Text.Parsing.Tokens {
     internal sealed class KeyIndexBuilder : TokenBuilder, IConfKeyIndex {
-        protected override string Create() {
+        protected sealed override string Create() {
             return string.Join(",", Parts);
         }
 
@@ -15,7 +15,7 @@ namespace Domore.Conf.Text.Parsing.Tokens {
             KeyPart.Indices.Add(this);
         }
 
-        public override Token Build(string s, ref int i) {
+        public sealed override Token Build(string s, ref int i) {
             var c = Next(s, ref i);
             if (c == null) return null;
             if (c == Sep) return new KeyBuilder(Sep);

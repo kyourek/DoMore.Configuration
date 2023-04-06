@@ -5,7 +5,7 @@ namespace Domore.Conf.Text.Parsing.Tokens {
     internal sealed class KeyIndexPartBuilder : TokenBuilder, IConfKeyIndexPart {
         private StringBuilder WhiteSpace { get; } = new StringBuilder();
 
-        protected override string Create() {
+        protected sealed override string Create() {
             return String.ToString();
         }
 
@@ -18,7 +18,7 @@ namespace Domore.Conf.Text.Parsing.Tokens {
             KeyIndex.Parts.Add(this);
         }
 
-        public override Token Build(string s, ref int i) {
+        public sealed override Token Build(string s, ref int i) {
             var c = s[i];
             if (c == Sep) return new KeyBuilder(Sep);
             switch (c) {

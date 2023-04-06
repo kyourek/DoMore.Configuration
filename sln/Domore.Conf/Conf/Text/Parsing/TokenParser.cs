@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Domore.Conf.Text.Parsing {
     using Tokens;
 
-    internal class TokenParser {
+    internal sealed class TokenParser {
         public IEnumerable<IConfPair> Parse(char sep, string text) {
             if (null == text) throw new ArgumentNullException(nameof(text));
             var token = new KeyBuilder(sep) as Token;

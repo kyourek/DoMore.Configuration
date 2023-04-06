@@ -7,7 +7,7 @@ namespace Domore.Conf.Text.Parsing.Tokens {
         public SingleLineValueBuilder(KeyBuilder key) : base(key) {
         }
 
-        public override Token Build(string s, ref int i) {
+        public sealed override Token Build(string s, ref int i) {
             var c = s[i];
             if (c == Sep) {
                 if (String.Length > 0) {

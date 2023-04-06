@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Domore.Conf {
-    internal class ConfPopulator {
+    internal sealed class ConfPopulator {
         private readonly ConfPropertyCache PropertyCache = new ConfPropertyCache();
         private readonly ConfValueConverter ConverterDefault = new ConfValueConverter();
         private readonly ConfValueConverterCache ConverterCache = new ConfValueConverterCache();
@@ -25,34 +25,34 @@ namespace Domore.Conf {
                     if (property.Populate) {
                         switch (key.Parts.Count) {
                             case 1: {
-                                    var item = property.Item;
-                                    if (item != null && item.Exists) {
-                                        if (item.Populate) {
-                                            item.PropertyValue = Convert(value, item, conf);
-                                        }
+                                var item = property.Item;
+                                if (item != null && item.Exists) {
+                                    if (item.Populate) {
+                                        item.PropertyValue = Convert(value, item, conf);
                                     }
-                                    else {
-                                        property.PropertyValue = Convert(value, property, conf);
-                                    }
-                                    break;
                                 }
+                                else {
+                                    property.PropertyValue = Convert(value, property, conf);
+                                }
+                                break;
+                            }
                             default: {
-                                    var keys = key.Skip();
-                                    var propertyValue = property.PropertyValue;
-                                    if (propertyValue == null) {
-                                        propertyValue = property.PropertyValue = Activator.CreateInstance(property.PropertyType);
-                                    }
-                                    var propertyItem = property.Item;
-                                    if (propertyItem != null) {
-                                        var itemValue = propertyItem.PropertyValue;
-                                        if (itemValue == null) {
-                                            itemValue = propertyItem.PropertyValue = Activator.CreateInstance(propertyItem.PropertyType);
-                                        }
-                                        propertyValue = itemValue;
-                                    }
-                                    Populate(keys, value, propertyValue, conf);
-                                    break;
+                                var keys = key.Skip();
+                                var propertyValue = property.PropertyValue;
+                                if (propertyValue == null) {
+                                    propertyValue = property.PropertyValue = Activator.CreateInstance(property.PropertyType);
                                 }
+                                var propertyItem = property.Item;
+                                if (propertyItem != null) {
+                                    var itemValue = propertyItem.PropertyValue;
+                                    if (itemValue == null) {
+                                        itemValue = propertyItem.PropertyValue = Activator.CreateInstance(propertyItem.PropertyType);
+                                    }
+                                    propertyValue = itemValue;
+                                }
+                                Populate(keys, value, propertyValue, conf);
+                                break;
+                            }
                         }
                     }
                 }

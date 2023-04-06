@@ -2,7 +2,7 @@
 
 namespace Domore.Conf.Text.Parsing.Tokens {
     internal sealed class Complete : Token, IConfPair {
-        protected override string Create() {
+        protected sealed override string Create() {
             return $"{Key}={Value}";
         }
 

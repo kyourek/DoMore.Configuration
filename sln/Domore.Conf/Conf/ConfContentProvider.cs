@@ -4,7 +4,7 @@ using System.IO;
 namespace Domore.Conf {
     using IO;
 
-    internal class ConfContentProvider : IConfContentProvider {
+    internal sealed class ConfContentProvider : IConfContentProvider {
         private FileOrTextContentProvider FileOrText =>
             _FileOrText ?? (
             _FileOrText = new FileOrTextContentProvider());

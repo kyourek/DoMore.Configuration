@@ -7,7 +7,7 @@ using System.Reflection;
 namespace Domore.Conf.Text {
     using Extensions;
 
-    internal class TextSourceProvider {
+    internal sealed class TextSourceProvider {
         private static string Multiline(string s) {
             if (s != null) {
                 if (s.Contains('\n')) {

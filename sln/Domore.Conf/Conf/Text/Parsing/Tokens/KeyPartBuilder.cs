@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Domore.Conf.Text.Parsing.Tokens {
     internal sealed class KeyPartBuilder : TokenBuilder, IConfKeyPart {
-        protected override string Create() {
+        protected sealed override string Create() {
             return String.ToString();
         }
 
@@ -17,7 +17,7 @@ namespace Domore.Conf.Text.Parsing.Tokens {
             Key.Parts.Add(this);
         }
 
-        public override Token Build(string s, ref int i) {
+        public sealed override Token Build(string s, ref int i) {
             var c = Next(s, ref i);
             if (c == null) return null;
             if (c == Sep) return new KeyBuilder(Sep);

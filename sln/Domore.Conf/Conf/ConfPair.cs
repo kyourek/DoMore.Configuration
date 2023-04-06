@@ -1,5 +1,5 @@
 ﻿namespace Domore.Conf {
-    internal class ConfPair : IConfPair {
+    internal sealed class ConfPair : IConfPair {
         public string Content =>
             _Content ?? (
             _Content = $"{Key}={Value}");

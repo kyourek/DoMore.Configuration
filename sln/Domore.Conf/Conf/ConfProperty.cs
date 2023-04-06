@@ -5,7 +5,7 @@ using System.Reflection;
 namespace Domore.Conf {
     using Extensions;
 
-    internal class ConfProperty {
+    internal sealed class ConfProperty {
         private static PropertyInfo From(string name, Type type) {
             if (name == null) return null;
             if (type == null) return null;

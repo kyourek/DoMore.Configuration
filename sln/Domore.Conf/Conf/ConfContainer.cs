@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf {
-    internal class ConfContainer : IConfContainer {
+    internal sealed class ConfContainer : IConfContainer {
         private ConfContent Content =>
             _Content ?? (
             _Content = ContentProvider.GetConfContent(Source));

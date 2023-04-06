@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Domore.Conf.Text.Parsing.Tokens {
     internal sealed class KeyBuilder : TokenBuilder, IConfKey {
-        protected override string Create() {
+        protected sealed override string Create() {
             return string.Join(".", Parts);
         }
 
@@ -14,7 +14,7 @@ namespace Domore.Conf.Text.Parsing.Tokens {
         public KeyBuilder(char sep) : base(sep) {
         }
 
-        public override Token Build(string s, ref int i) {
+        public sealed override Token Build(string s, ref int i) {
             var c = Next(s, ref i);
             if (c == null) return null;
             if (c == Sep) return new KeyBuilder(Sep);
@@ -32,7 +32,7 @@ namespace Domore.Conf.Text.Parsing.Tokens {
             return new Skip(1, Parts);
         }
 
-        private class Skip : IConfKey, IConfCollection<IConfKeyPart> {
+        private sealed class Skip : IConfKey, IConfCollection<IConfKeyPart> {
             public string Content =>
                 _Content ?? (
                 _Content = string.Join(".", Parts.Skip(Count)));
