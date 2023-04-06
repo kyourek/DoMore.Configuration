@@ -1,11 +1,11 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
 
 namespace Domore.Conf.Converters {
     using Extensions;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Linq;
 
     [TestFixture]
     public class ConfListItemsTest {
@@ -13,7 +13,7 @@ namespace Domore.Conf.Converters {
             [ConfListItems]
             public List<string> FavoriteColors { get; set; }
 
-            [ConfListItems("pets")]
+            [ConfListItems("&", "pets")]
             public List<string> PetNames { get; set; }
         }
 
@@ -26,7 +26,7 @@ namespace Domore.Conf.Converters {
 
         [Test]
         public void ConvertsItemsIntoListWithSpecifiedName() {
-            var actual = new Kid().ConfFrom($"kid.pets= Little Bit, Penny").PetNames;
+            var actual = new Kid().ConfFrom($"kid.pets= Little Bit & Penny").PetNames;
             var expected = new[] { "Little Bit", "Penny" };
             CollectionAssert.AreEqual(expected, actual);
         }
@@ -126,6 +126,20 @@ namespace Domore.Conf.Converters {
         [Test]
         public void ConvertsUsingConfValueConverter() {
             var items = new PairWithConfValueConverters().ConfFrom($"ITEMS = str1&1.2, str2&2.3 ,str3&3.4", key: "").Items;
+            var actual = items.SelectMany(item => new object[] { item.Thing1, item.Thing2 }).ToArray();
+            var expected = new object[] { items[0].Thing1, items[0].Thing2, items[1].Thing1, items[1].Thing2, items[2].Thing1, items[2].Thing2 };
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+
+        private class PairWithConfValueConvertersAndSeparator {
+            [ConfListItems("|", typeof(PairWithConfValueConverter.Converter))]
+            public List<PairWithConfValueConverter> Items { get; set; }
+        }
+
+        [Test]
+        public void ConvertsUsingSpecifiedSeparator() {
+            var items = new PairWithConfValueConvertersAndSeparator().ConfFrom($"ITEMS = str1&1.2| str2&2.3 |str3&3.4", key: "").Items;
             var actual = items.SelectMany(item => new object[] { item.Thing1, item.Thing2 }).ToArray();
             var expected = new object[] { items[0].Thing1, items[0].Thing2, items[1].Thing1, items[1].Thing2, items[2].Thing1, items[2].Thing2 };
             CollectionAssert.AreEqual(expected, actual);

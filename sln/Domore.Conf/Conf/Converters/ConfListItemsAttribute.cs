@@ -4,22 +4,31 @@ using System.ComponentModel;
 using System.Linq;
 
 namespace Domore.Conf.Converters {
-    internal sealed class ConfListItemsAttribute : ConfAttribute {
+    public sealed class ConfListItemsAttribute : ConfAttribute {
         internal sealed override ConfValueConverter ConverterInstance =>
             _ConverterInstance ?? (
             _ConverterInstance = new ValueConverter {
+                Separator = Separator,
                 ItemConverter = ItemConverter == null
                     ? null
                     : Activator.CreateInstance(ItemConverter)
             });
         private ConfValueConverter _ConverterInstance;
 
+        public string Separator { get; }
         public Type ItemConverter { get; }
 
-        public ConfListItemsAttribute(params string[] names) : base(names) {
+        public ConfListItemsAttribute() : this(separator: null, itemConverter: null, names: new string[] { }) {
         }
 
-        public ConfListItemsAttribute(Type itemConverter, params string[] names) : this(names) {
+        public ConfListItemsAttribute(string separator, params string[] names) : this(separator, itemConverter: null, names) {
+        }
+
+        public ConfListItemsAttribute(Type itemConverter, params string[] names) : this(separator: null, itemConverter, names) {
+        }
+
+        public ConfListItemsAttribute(string separator, Type itemConverter, params string[] names) : base(names) {
+            Separator = separator;
             ItemConverter = itemConverter;
         }
 
@@ -42,7 +51,8 @@ namespace Domore.Conf.Converters {
                 }
                 var typeConverter = itemConverter as TypeConverter;
                 var valueConverter = itemConverter as ConfValueConverter;
-                var itemStrings = value.Split(',').Select(s => s?.Trim() ?? "").Where(s => s != "");
+                var itemSeparator = Separator ?? ",";
+                var itemStrings = value.Split(new[] { itemSeparator }, StringSplitOptions.RemoveEmptyEntries).Select(s => s?.Trim() ?? "").Where(s => s != "");
                 foreach (var itemString in itemStrings) {
                     if (typeConverter != null) {
                         list.Add(typeConverter.ConvertFromString(itemString));
@@ -57,6 +67,7 @@ namespace Domore.Conf.Converters {
                 return list;
             }
 
+            public string Separator { get; set; }
             public object ItemConverter { get; set; }
         }
     }
