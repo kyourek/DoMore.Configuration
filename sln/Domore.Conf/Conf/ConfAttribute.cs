@@ -13,6 +13,8 @@ namespace Domore.Conf {
             Names = new ReadOnlyCollection<string>(new List<string>(names ?? new string[] { }));
         }
 
+        internal virtual ConfValueConverter ConverterInstance { get; }
+
         public bool Ignore { get; }
         public bool IgnoreGet { get; }
         public bool IgnoreSet { get; }

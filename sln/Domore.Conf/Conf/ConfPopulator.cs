@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace Domore.Conf {
     internal sealed class ConfPopulator {
         private readonly ConfPropertyCache PropertyCache = new ConfPropertyCache();
-        private readonly ConfValueConverter ConverterDefault = new ConfValueConverter();
         private readonly ConfValueConverterCache ConverterCache = new ConfValueConverterCache();
 
         private ConfPopulator() {
@@ -12,8 +11,7 @@ namespace Domore.Conf {
 
         private object Convert(IConfValue value, ConfTargetProperty property, IConf conf) {
             if (null == property) throw new ArgumentNullException(nameof(property));
-            var converterType = property.Attribute?.Converter;
-            var converter = converterType == null ? ConverterDefault : ConverterCache.Get(converterType);
+            var converter = ConverterCache.Get(property.Attribute);
             var converted = converter.Convert(value?.Content, new ConfValueConverterState(property.Target, property.PropertyInfo, conf));
             return converted;
         }

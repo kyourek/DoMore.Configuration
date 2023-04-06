@@ -2,7 +2,7 @@
 
 namespace Domore.Conf {
     public class ConfValueConverter {
-        public virtual object Convert(string value, ConfValueConverterState state) {
+        internal static object Default(string value, ConfValueConverterState state) {
             if (null == state) throw new ArgumentNullException(nameof(state));
             var converter = state.TypeConverter;
             try {
@@ -17,6 +17,23 @@ namespace Domore.Conf {
                     return Activator.CreateInstance(type);
                 }
                 throw;
+            }
+        }
+
+        public virtual object Convert(string value, ConfValueConverterState state) {
+            return Default(value, state);
+        }
+
+        internal abstract class Internal : ConfValueConverter {
+            protected abstract object Convert(bool @internal, string value, ConfValueConverterState state);
+
+            public sealed override object Convert(string value, ConfValueConverterState state) {
+                try {
+                    return Convert(@internal: true, value, state);
+                }
+                catch (Exception ex) {
+                    throw new ConfValueConverterException(this, value, state, ex);
+                }
             }
         }
     }
