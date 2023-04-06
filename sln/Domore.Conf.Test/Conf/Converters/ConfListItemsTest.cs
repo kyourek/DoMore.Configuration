@@ -43,8 +43,8 @@ namespace Domore.Conf.Converters {
             CollectionAssert.AreEqual(expected, actual);
         }
 
-        [TypeConverter(typeof(PairWithTypeConverter.Converter))]
-        private class PairWithTypeConverter {
+        [TypeConverter(typeof(PairWithDefaultTypeConverter.Converter))]
+        private class PairWithDefaultTypeConverter {
             public string Thing1 { get; set; }
             public double Thing2 { get; set; }
 
@@ -52,7 +52,7 @@ namespace Domore.Conf.Converters {
                 public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
                     var s = $"{value}";
                     var p = s.Split('&');
-                    return new PairWithTypeConverter {
+                    return new PairWithDefaultTypeConverter {
                         Thing1 = p[0],
                         Thing2 = double.Parse(p[1])
                     };
@@ -60,14 +60,72 @@ namespace Domore.Conf.Converters {
             }
         }
 
-        private class PairWithTypeConverters {
+        private class PairWithDefaultTypeConverters {
             [ConfListItems]
-            public List<PairWithTypeConverter> Items { get; set; }
+            public List<PairWithDefaultTypeConverter> Items { get; set; }
         }
 
         [Test]
         public void ConvertsUsingDefaultItemTypeConverter() {
-            var items = new PairWithTypeConverters().ConfFrom($"Items = str1&1.2 , str2&2.3 , str3&3.4", key: "").Items;
+            var items = new PairWithDefaultTypeConverters().ConfFrom($"Items = str1&1.2 , str2&2.3 , str3&3.4", key: "").Items;
+            var actual = items.SelectMany(item => new object[] { item.Thing1, item.Thing2 }).ToArray();
+            var expected = new object[] { items[0].Thing1, items[0].Thing2, items[1].Thing1, items[1].Thing2, items[2].Thing1, items[2].Thing2 };
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        private class PairWithSpecifiedTypeConverter {
+            public string Thing1 { get; set; }
+            public double Thing2 { get; set; }
+
+            public class Converter : TypeConverter {
+                public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
+                    var s = $"{value}";
+                    var p = s.Split('&');
+                    return new PairWithSpecifiedTypeConverter {
+                        Thing1 = p[0],
+                        Thing2 = double.Parse(p[1])
+                    };
+                }
+            }
+        }
+
+        private class PairWithSpecifiedTypeConverters {
+            [ConfListItems(typeof(PairWithSpecifiedTypeConverter.Converter), "Things")]
+            public List<PairWithSpecifiedTypeConverter> Items { get; set; }
+        }
+
+        [Test]
+        public void ConvertsUsingSpecifiedItemTypeConverter() {
+            var items = new PairWithSpecifiedTypeConverters().ConfFrom($"things = str1&1.2 , str2&2.3 , str3&3.4", key: "").Items;
+            var actual = items.SelectMany(item => new object[] { item.Thing1, item.Thing2 }).ToArray();
+            var expected = new object[] { items[0].Thing1, items[0].Thing2, items[1].Thing1, items[1].Thing2, items[2].Thing1, items[2].Thing2 };
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        private class PairWithConfValueConverter {
+            public string Thing1 { get; set; }
+            public double Thing2 { get; set; }
+
+            public class Converter : ConfValueConverter {
+                public override object Convert(string value, ConfValueConverterState state) {
+                    var s = $"{value}";
+                    var p = s.Split('&');
+                    return new PairWithConfValueConverter {
+                        Thing1 = p[0],
+                        Thing2 = double.Parse(p[1])
+                    };
+                }
+            }
+        }
+
+        private class PairWithConfValueConverters {
+            [ConfListItems(typeof(PairWithConfValueConverter.Converter))]
+            public List<PairWithConfValueConverter> Items { get; set; }
+        }
+
+        [Test]
+        public void ConvertsUsingConfValueConverter() {
+            var items = new PairWithConfValueConverters().ConfFrom($"ITEMS = str1&1.2, str2&2.3 ,str3&3.4", key: "").Items;
             var actual = items.SelectMany(item => new object[] { item.Thing1, item.Thing2 }).ToArray();
             var expected = new object[] { items[0].Thing1, items[0].Thing2, items[1].Thing1, items[1].Thing2, items[2].Thing1, items[2].Thing2 };
             CollectionAssert.AreEqual(expected, actual);
