@@ -10,7 +10,7 @@ namespace Domore.Conf {
             return (ConfValueConverter)Activator.CreateInstance(type);
         }
 
-        public ConfValueConverter Get(ConfAttribute attribute) {
+        public ConfValueConverter ConverterFor(ConfAttribute attribute) {
             if (attribute == null) {
                 return Default;
             }
@@ -19,6 +19,9 @@ namespace Domore.Conf {
                 return @internal;
             }
             var type = attribute.Converter;
+            if (type == null) {
+                return Default;
+            }
             lock (Cache) {
                 if (Cache.TryGetValue(type, out var value) == false) {
                     Cache[type] = value = Create(type);
