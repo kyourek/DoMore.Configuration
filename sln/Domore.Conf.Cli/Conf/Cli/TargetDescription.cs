@@ -21,6 +21,24 @@ namespace Domore.Conf.Cli {
                 .ToList());
         private IEnumerable<TargetPropertyDescription> _Properties;
 
+        public string CommandName =>
+            _CommandName ?? (
+            _CommandName = TargetType.Name.ToLowerInvariant());
+        private string _CommandName;
+
+        public string Display =>
+            _Display ?? (
+            _Display = TargetDisplay.For(this));
+        private string _Display;
+
+        public bool DisplayDefault =>
+            _DisplayDefault ?? (
+            _DisplayDefault =
+                Properties.Any(p => p.DisplayAttribute.Include == true) ? false :
+                Properties.Any(p => p.DisplayAttribute.Include == false) ? true :
+                true).Value;
+        private bool? _DisplayDefault;
+
         public static TargetDescription Describe(Type targetType) {
             if (Cache.TryGetValue(targetType, out var targetDescription) == false) {
                 Cache[targetType] = targetDescription = new TargetDescription(targetType);
@@ -44,13 +62,13 @@ namespace Domore.Conf.Cli {
                     continue;
                 }
                 if (value == "") {
+                    value = key;
                     if (arguments.Count > 0) {
-                        value = key;
                         key = arguments[0].ArgumentName;
                         arguments.RemoveAt(0);
                     }
                     else {
-                        throw new CliArgumentNotFoundException();
+                        throw new CliArgumentNotFoundException(value);
                     }
                 }
                 if (required.Count > 0) {

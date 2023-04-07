@@ -22,13 +22,18 @@ namespace Domore.Conf.Cli {
             _ArgumentName ?? (
             _ArgumentName = ArgumentOrder < 0
                 ? ""
-                : (ConfNames.FirstOrDefault() ?? PropertyName));
+                : (DisplayName));
         private string _ArgumentName;
 
         public string PropertyName =>
             _PropertyName ?? (
             _PropertyName = PropertyInfo.Name);
         private string _PropertyName;
+
+        public Type PropertyType =>
+            _PropertyType ?? (
+            _PropertyType = PropertyInfo.PropertyType);
+        private Type _PropertyType;
 
         public ReadOnlyCollection<string> ConfNames =>
             _ConfNames ?? (
@@ -46,10 +51,28 @@ namespace Domore.Conf.Cli {
                 .ToList()));
         private ReadOnlyCollection<string> _AllNames;
 
+        public CliDisplayAttribute DisplayAttribute =>
+            _DisplayAttribute ?? (
+            _DisplayAttribute = PropertyInfo
+                .GetCustomAttributes(typeof(CliDisplayAttribute), inherit: true)
+                .OfType<CliDisplayAttribute>()
+                .FirstOrDefault() ?? new CliDisplayAttribute());
+        private CliDisplayAttribute _DisplayAttribute;
+
         public string DisplayName =>
             _DisplayName ?? (
-            _DisplayName = ConfNames.FirstOrDefault() ?? PropertyName);
+            _DisplayName = ConfNames.FirstOrDefault() ?? PropertyName.ToLowerInvariant());
         private string _DisplayName;
+
+        public string DisplayKind =>
+            _DisplayKind ?? (
+            _DisplayKind = TargetPropertyKind.For(PropertyType) ?? PropertyType.Name.ToLowerInvariant());
+        private string _DisplayKind;
+
+        public string Display =>
+            _Display ?? (
+            _Display = TargetPropertyDisplay.For(this));
+        private string _Display;
 
         public PropertyInfo PropertyInfo { get; }
 

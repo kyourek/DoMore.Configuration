@@ -2,7 +2,7 @@
 
 namespace Domore.Conf.Cli {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class CliArgumentAttribute : Attribute {
+    public sealed class CliArgumentAttribute : Attribute {
         public int Order { get; }
 
         public CliArgumentAttribute(int order) {

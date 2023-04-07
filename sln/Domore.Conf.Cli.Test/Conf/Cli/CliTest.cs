@@ -11,6 +11,9 @@ namespace Domore.Conf.Cli {
 
             [CliArgument(order: 1)]
             public double Speed { get; set; }
+
+            [CliDisplay(false)]
+            public object DoNotDisplay { get; set; }
         }
 
         private enum MoveDirection {
@@ -36,6 +39,19 @@ namespace Domore.Conf.Cli {
             Assert.That(ex.NotFound
                 .Select(notFound => notFound.PropertyInfo)
                 .Contains(typeof(Move).GetProperty(nameof(Move.Direction))));
+        }
+
+        [Test]
+        public void Configure_ThrowsExceptionIfTooManyArgumentsGiven() {
+            var ex = Assert.Throws<CliArgumentNotFoundException>(() => Cli.Configure(new Move(), "RIGHT 55.5 extra"));
+            Assert.That(ex.Argument == "extra");
+        }
+
+        [Test]
+        public void Display_DescribesCommand() {
+            var actual = Cli.Display(new Move());
+            var expected = "move direction<up|down|left|right> [speed<num>]";
+            Assert.That(actual, Is.EqualTo(expected));
         }
     }
 }

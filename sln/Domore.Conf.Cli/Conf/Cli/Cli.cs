@@ -10,5 +10,10 @@ namespace Domore.Conf.Cli {
             var conf = string.Join(Environment.NewLine, confLines);
             return target.ConfFrom(conf, key: "");
         }
+
+        public static string Display<T>(T target) {
+            var description = TargetDescription.Describe(typeof(T));
+            return description.Display;
+        }
     }
 }
