@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Domore.Conf {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class ConfAttribute : Attribute {
         private ConfAttribute(bool ignore, bool ignoreGet, bool ignoreSet, string[] names) {
             Ignore = ignore;

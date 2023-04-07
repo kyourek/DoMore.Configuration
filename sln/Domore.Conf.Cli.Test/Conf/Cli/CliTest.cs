@@ -90,6 +90,11 @@ namespace Domore.Conf.Cli {
             [CliArgument]
             [CliRequired]
             public List<string> Fruits { get; set; }
+            public List<NutKind> Nuts { get; set; }
+        }
+
+        private enum NutKind {
+            Peanuts, Almonds, Cashews
         }
 
         [Test]
@@ -99,10 +104,39 @@ namespace Domore.Conf.Cli {
         }
 
         [Test]
+        public void Configure_SetsListItemsOfType() {
+            var blend = Cli.Configure(new Blend(), "apples,bananas nuts=cashews,almonds");
+            CollectionAssert.AreEqual(new[] { NutKind.Cashews, NutKind.Almonds }, blend.Nuts);
+        }
+
+        [Test]
         public void Display_ShowsList() {
             var actual = Cli.Display(new Blend());
-            var expected = "blend fruits<list>";
+            var expected = "blend fruits<,> [nuts=<,<peanuts|almonds|cashews>>]";
             Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        private class Copy {
+            [CliArgument]
+            [CliRequired]
+            public NextOrPrevious Where { get; set; }
+        }
+
+        private enum NextOrPrevious {
+            [Conf("n")]
+            Next,
+            [Conf("p", "prev")]
+            Previous
+        }
+
+        [TestCase("n", NextOrPrevious.Next)]
+        [TestCase("NEXT", NextOrPrevious.Next)]
+        [TestCase("p", NextOrPrevious.Previous)]
+        [TestCase("Prev", NextOrPrevious.Previous)]
+        [TestCase("previous", NextOrPrevious.Previous)]
+        public void Configure_SetsEnumWithAlias(string alias, object expected) {
+            var copy = Cli.Configure(new Copy(), alias);
+            Assert.That(copy.Where, Is.EqualTo(expected));
         }
     }
 }

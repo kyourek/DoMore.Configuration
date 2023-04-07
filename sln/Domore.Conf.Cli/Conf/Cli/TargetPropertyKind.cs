@@ -23,8 +23,8 @@ namespace Domore.Conf.Cli {
                 var itemType = type.GetGenericArguments().FirstOrDefault();
                 var itemKind = For(itemType);
                 return itemKind == null
-                    ? "list"
-                    : "list<" + itemKind + ">";
+                    ? ","
+                    : ",<" + itemKind + ">";
             }
             return null;
         }

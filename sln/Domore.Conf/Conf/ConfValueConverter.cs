@@ -6,6 +6,7 @@ namespace Domore.Conf {
 
     public class ConfValueConverter {
         private static readonly ConfValueConverter DefaultListItemsConverter = new ConfListItemsAttribute().ConverterInstance;
+        private static readonly ConfValueConverter DefaultEnumFlagsConverter = new ConfEnumFlagsAttribute().ConverterInstance;
 
         internal static object Default(string value, ConfValueConverterState state) {
             if (null == state) throw new ArgumentNullException(nameof(state));
@@ -14,15 +15,19 @@ namespace Domore.Conf {
                 return converter.ConvertFromString(value);
             }
             catch {
-                if (state.Property.PropertyType == typeof(Type)) {
+                var type = state.Property.PropertyType;
+                if (type == typeof(Type)) {
                     return Type.GetType(value, throwOnError: true, ignoreCase: true);
                 }
-                if (typeof(IList).IsAssignableFrom(state.Property.PropertyType)) {
+                if (type.IsEnum) {
+                    return DefaultEnumFlagsConverter.Convert(value, state);
+                }
+                if (typeof(IList).IsAssignableFrom(type)) {
                     return DefaultListItemsConverter.Convert(value, state);
                 }
-                var type = Type.GetType(value, throwOnError: false, ignoreCase: true);
-                if (type != null) {
-                    return Activator.CreateInstance(type);
+                var instanceType = Type.GetType(value, throwOnError: false, ignoreCase: true);
+                if (instanceType != null) {
+                    return Activator.CreateInstance(instanceType);
                 }
                 throw;
             }
