@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.156
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Conf", "Domore.Conf\Domore.Conf.csproj", "{3D54AE19-F7A4-414F-81B0-26D6AB344F4B}"
 EndProject
@@ -26,7 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "release", "release", "{26ED
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Release", "Domore.Release\Domore.Release.csproj", "{D606E5D5-309E-4F8B-BC1D-FB0A4A0B7479}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Conf.Sample.ConfigurationManager", "Domore.Conf.Sample.ConfigurationManager\Domore.Conf.Sample.ConfigurationManager.csproj", "{E542E041-D52D-4A4F-BF5D-42DEFA234BCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Conf.Sample.ConfigurationManager", "Domore.Conf.Sample.ConfigurationManager\Domore.Conf.Sample.ConfigurationManager.csproj", "{E542E041-D52D-4A4F-BF5D-42DEFA234BCF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domore.Conf.Cli", "Domore.Conf.Cli\Domore.Conf.Cli.csproj", "{3AA33CEA-FE1C-42CA-8CC1-AF781E4A16E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domore.Conf.Cli.Test", "Domore.Conf.Cli.Test\Domore.Conf.Cli.Test.csproj", "{58CB6B40-3177-4ECC-9962-434D1CEDA46F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +65,14 @@ Global
 		{E542E041-D52D-4A4F-BF5D-42DEFA234BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E542E041-D52D-4A4F-BF5D-42DEFA234BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E542E041-D52D-4A4F-BF5D-42DEFA234BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AA33CEA-FE1C-42CA-8CC1-AF781E4A16E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AA33CEA-FE1C-42CA-8CC1-AF781E4A16E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AA33CEA-FE1C-42CA-8CC1-AF781E4A16E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AA33CEA-FE1C-42CA-8CC1-AF781E4A16E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58CB6B40-3177-4ECC-9962-434D1CEDA46F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58CB6B40-3177-4ECC-9962-434D1CEDA46F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58CB6B40-3177-4ECC-9962-434D1CEDA46F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58CB6B40-3177-4ECC-9962-434D1CEDA46F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +83,7 @@ Global
 		{6930A094-5660-4F43-B953-FE2D91DCDD89} = {86FD2F1F-060C-4A94-ABD6-CD8DCC10A364}
 		{D606E5D5-309E-4F8B-BC1D-FB0A4A0B7479} = {26ED64FD-A7E4-4852-AD8E-5CA32365E18F}
 		{E542E041-D52D-4A4F-BF5D-42DEFA234BCF} = {86FD2F1F-060C-4A94-ABD6-CD8DCC10A364}
+		{58CB6B40-3177-4ECC-9962-434D1CEDA46F} = {3CBA17DE-C21F-49E9-B3DF-BA8D9FE18619}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0CCF879-418A-463A-BCD6-96DEFBD56F6F}
