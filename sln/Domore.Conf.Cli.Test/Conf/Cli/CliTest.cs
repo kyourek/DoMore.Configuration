@@ -48,9 +48,38 @@ namespace Domore.Conf.Cli {
         }
 
         [Test]
+        public void Configure_ThrowsExceptionIfValueCannotBeConverted() {
+            var ex = Assert.Throws<CliConversionException>(() => Cli.Configure(new Move(), "backwards"));
+            Assert.That(ex.InnerException, Is.InstanceOf(typeof(ConfValueConverterException)));
+            var ie = (ConfValueConverterException)ex.InnerException;
+            Assert.That(ie.Value, Is.EqualTo("backwards"));
+            Assert.That(ie.State.Property == typeof(Move).GetProperty(nameof(Move.Direction)));
+        }
+
+        [Test]
         public void Display_DescribesCommand() {
             var actual = Cli.Display(new Move());
             var expected = "move direction<up|down|left|right> [speed<num>]";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        private class Bike {
+            [CliRequired]
+            public MoveDirection Move { get; set; }
+            public double Speed { get; set; }
+        }
+
+        [Test]
+        public void Configure_SetsCliProperties() {
+            var bike = Cli.Configure(new Bike(), "move=down speed=32.1");
+            Assert.That(bike.Move, Is.EqualTo(MoveDirection.Down));
+            Assert.That(bike.Speed, Is.EqualTo(32.1));
+        }
+
+        [Test]
+        public void Display_ShowsPropertyNames() {
+            var actual = Cli.Display(new Bike());
+            var expected = "bike move=<up|down|left|right> [speed=<num>]";
             Assert.That(actual, Is.EqualTo(expected));
         }
     }

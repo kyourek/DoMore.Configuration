@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Domore.Conf {
-    internal sealed class ConfValueConverterException : ConfException {
+    public sealed class ConfValueConverterException : ConfException {
         private static string GetMessage(ConfValueConverter converter, string value, ConfValueConverterState state, Exception innerException) {
             return "";
         }

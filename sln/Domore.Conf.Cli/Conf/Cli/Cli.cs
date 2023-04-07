@@ -8,7 +8,12 @@ namespace Domore.Conf.Cli {
             var description = TargetDescription.Describe(typeof(T));
             var confLines = description.Conf(line);
             var conf = string.Join(Environment.NewLine, confLines);
-            return target.ConfFrom(conf, key: "");
+            try {
+                return target.ConfFrom(conf, key: "");
+            }
+            catch (ConfValueConverterException ex) {
+                throw new CliConversionException(ex);
+            }
         }
 
         public static string Display<T>(T target) {

@@ -21,7 +21,12 @@ namespace Domore.Conf {
         }
 
         public virtual object Convert(string value, ConfValueConverterState state) {
-            return Default(value, state);
+            try {
+                return Default(value, state);
+            }
+            catch (Exception ex) {
+                throw new ConfValueConverterException(this, value, state, ex);
+            }
         }
 
         internal abstract class Internal : ConfValueConverter {
