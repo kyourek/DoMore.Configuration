@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections;
 
 namespace Domore.Conf {
+    using Converters;
+
     public class ConfValueConverter {
+        private static readonly ConfValueConverter DefaultListItemsConverter = new ConfListItemsAttribute().ConverterInstance;
+
         internal static object Default(string value, ConfValueConverterState state) {
             if (null == state) throw new ArgumentNullException(nameof(state));
             var converter = state.TypeConverter;
@@ -11,6 +16,9 @@ namespace Domore.Conf {
             catch {
                 if (state.Property.PropertyType == typeof(Type)) {
                     return Type.GetType(value, throwOnError: true, ignoreCase: true);
+                }
+                if (typeof(IList).IsAssignableFrom(state.Property.PropertyType)) {
+                    return DefaultListItemsConverter.Convert(value, state);
                 }
                 var type = Type.GetType(value, throwOnError: false, ignoreCase: true);
                 if (type != null) {

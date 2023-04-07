@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf.Cli {
@@ -82,6 +83,25 @@ namespace Domore.Conf.Cli {
         public void Display_ShowsPropertyNames() {
             var actual = Cli.Display(new Bike());
             var expected = "bike move=<up|down|left|right> [speed=<num>]";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        private class Blend {
+            [CliArgument]
+            [CliRequired]
+            public List<string> Fruits { get; set; }
+        }
+
+        [Test]
+        public void Configure_SetsListItems() {
+            var blend = Cli.Configure(new Blend(), "apples,bananas");
+            CollectionAssert.AreEqual(new[] { "apples", "bananas" }, blend.Fruits);
+        }
+
+        [Test]
+        public void Display_ShowsList() {
+            var actual = Cli.Display(new Blend());
+            var expected = "blend fruits<list>";
             Assert.That(actual, Is.EqualTo(expected));
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,6 +18,13 @@ namespace Domore.Conf.Cli {
             }
             if (type.IsEnum) {
                 return string.Join("|", type.GetEnumNames().Select(n => n.ToLowerInvariant()));
+            }
+            if (typeof(IList).IsAssignableFrom(type)) {
+                var itemType = type.GetGenericArguments().FirstOrDefault();
+                var itemKind = For(itemType);
+                return itemKind == null
+                    ? "list"
+                    : "list<" + itemKind + ">";
             }
             return null;
         }
