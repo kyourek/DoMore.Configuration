@@ -69,9 +69,11 @@ namespace Domore.Conf.Cli {
             public double Speed { get; set; }
         }
 
-        [Test]
-        public void Configure_SetsCliProperties() {
-            var bike = Cli.Configure(new Bike(), "move=down speed=32.1");
+        [TestCase("move=down speed=32.1")]
+        [TestCase("bike move=down speed=32.1")]
+        [TestCase("BIKE Move=doWN SPEED=32.1")]
+        public void Configure_SetsCliProperties(string cli) {
+            var bike = Cli.Configure(new Bike(), cli);
             Assert.That(bike.Move, Is.EqualTo(MoveDirection.Down));
             Assert.That(bike.Speed, Is.EqualTo(32.1));
         }

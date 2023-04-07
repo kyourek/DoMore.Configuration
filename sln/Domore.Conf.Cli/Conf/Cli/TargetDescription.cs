@@ -48,36 +48,39 @@ namespace Domore.Conf.Cli {
 
         public IEnumerable<string> Conf(string cli) {
             var properties = Properties;
-            var required = properties
+            var req = properties
                 .Where(p => p.Required)
                 .ToList();
-            var arguments = properties
+            var arg = properties
                 .Where(p => p.ArgumentOrder >= 0)
                 .OrderBy(p => p.ArgumentOrder)
                 .ToList();
             foreach (var token in Token.Parse(cli)) {
                 var key = token.Key?.Trim() ?? "";
-                var value = token.Value?.Trim() ?? "";
-                if (value == "" && key == "") {
+                var val = token.Value?.Trim() ?? "";
+                if (val == "" && key == "") {
                     continue;
                 }
-                if (value == "") {
-                    value = key;
-                    if (arguments.Count > 0) {
-                        key = arguments[0].ArgumentName;
-                        arguments.RemoveAt(0);
+                if (val == "") {
+                    if (key.Equals(CommandName, StringComparison.OrdinalIgnoreCase)) {
+                        continue;
+                    }
+                    if (arg.Count > 0) {
+                        val = key;
+                        key = arg[0].ArgumentName;
+                        arg.RemoveAt(0);
                     }
                     else {
-                        throw new CliArgumentNotFoundException(value);
+                        throw new CliArgumentNotFoundException(key);
                     }
                 }
-                if (required.Count > 0) {
-                    required.RemoveAll(p => p.AllNames.Contains(key, StringComparer.OrdinalIgnoreCase));
+                if (req.Count > 0) {
+                    req.RemoveAll(p => p.AllNames.Contains(key, StringComparer.OrdinalIgnoreCase));
                 }
-                yield return key + "=" + value;
+                yield return key + " = " + val;
             }
-            if (required.Count > 0) {
-                throw new CliRequiredNotFoundException(required);
+            if (req.Count > 0) {
+                throw new CliRequiredNotFoundException(req);
             }
         }
     }
