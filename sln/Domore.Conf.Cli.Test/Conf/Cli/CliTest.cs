@@ -179,5 +179,65 @@ namespace Domore.Conf.Cli {
             Assert.That(member.FullName, Is.EqualTo("John Doe"));
             Assert.That(member.Address, Is.EqualTo("down the road"));
         }
+
+        private enum ValueWord {
+            None = 0,
+            [CliDisplay(include: false)]
+            Zero = 0,
+            One = 1,
+            [CliDisplay(include: false)]
+            Single = 1
+        }
+
+        private class ValueWordClass {
+            public ValueWord Word { get; set; }
+        }
+
+        [Test]
+        public void Display_DoesNotIncludeUnincludedEnumMembers() {
+            var actual = Cli.Display(new ValueWordClass());
+            var expected = "valuewordclass [word=<none|one>]";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        private enum ValueWord2 {
+            None = 0,
+            [CliDisplay(include: true)]
+            Zero = 0,
+            One = 1,
+            [CliDisplay(include: true)]
+            Single = 1
+        }
+
+        private class ValueWordClass2 {
+            public ValueWord2 Word { get; set; }
+        }
+
+        [Test]
+        public void Display_DoesNotIncludeEnumMembersByDefault() {
+            var actual = Cli.Display(new ValueWordClass2());
+            var expected = "valuewordclass2 [word=<zero|single>]";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        private enum ValueWord3 {
+            None = 0,
+            [CliDisplay("z")]
+            Zero = 0,
+            One = 1,
+            [CliDisplay("s")]
+            Single = 1
+        }
+
+        private class ValueWordClass3 {
+            public ValueWord3 Word { get; set; }
+        }
+
+        [Test]
+        public void Display_DoesNotIncludeEnumMembersByOverride() {
+            var actual = Cli.Display(new ValueWordClass3());
+            var expected = "valuewordclass3 [word=<z|s>]";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }
