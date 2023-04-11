@@ -124,8 +124,11 @@ namespace Domore.Conf.Cli {
 
         private enum NextOrPrevious {
             [Conf("n")]
+            [CliDisplay("(n)ext")]
             Next,
+
             [Conf("p", "prev")]
+            [CliDisplay("(p)revious")]
             Previous
         }
 
@@ -137,6 +140,37 @@ namespace Domore.Conf.Cli {
         public void Configure_SetsEnumWithAlias(string alias, object expected) {
             var copy = Cli.Configure(new Copy(), alias);
             Assert.That(copy.Where, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Display_DisplaysOverrideOnEnumNames() {
+            var actual = Cli.Display(new Copy());
+            var expected = "copy where<(n)ext|(p)revious>";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        private class Member {
+            [CliArgument]
+            public string FullName { get; set; }
+            public string Address { get; set; }
+        }
+
+        [TestCase("'George Washington Carver'", "George Washington Carver")]
+        [TestCase("'George \"Washington\" Carver'", "George \"Washington\" Carver")]
+        [TestCase("\"George Washington Carver\"", "George Washington Carver")]
+        [TestCase("\"George 'Washington' Carver\"", "George 'Washington' Carver")]
+        public void Configure_RespectsQuotesInArgument(string text, string expected) {
+            var member = Cli.Configure(new Member(), text);
+            Assert.That(member.FullName, Is.EqualTo(expected));
+        }
+
+        [TestCase("address='down the road'", "down the road")]
+        [TestCase("address='\"down the road\"'", "\"down the road\"")]
+        [TestCase("address=\"down the road\"", "down the road")]
+        [TestCase("address=\"'down the road'\"", "'down the road'")]
+        public void Configure_RespectsQuotesInSwitch(string text, string address) {
+            var member = Cli.Configure(new Member(), text);
+            Assert.That(member.Address, Is.EqualTo(address));
         }
     }
 }

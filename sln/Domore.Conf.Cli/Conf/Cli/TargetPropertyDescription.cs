@@ -71,7 +71,7 @@ namespace Domore.Conf.Cli {
 
         public string Display =>
             _Display ?? (
-            _Display = TargetPropertyDisplay.For(this));
+            _Display = DisplayAttribute.Override ?? TargetPropertyDisplay.For(this));
         private string _Display;
 
         public PropertyInfo PropertyInfo { get; }

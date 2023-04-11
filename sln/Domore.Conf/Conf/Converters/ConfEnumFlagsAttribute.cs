@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf.Converters {
+    using Extensions;
+
     public sealed class ConfEnumFlagsAttribute : ConfConverterAttribute {
         internal sealed override ConfValueConverter ConverterInstance =>
             _ConverterInstance ?? (
@@ -24,32 +26,16 @@ namespace Domore.Conf.Converters {
             private static readonly string DefaultSeparators = "+|&,/\\";
             private static readonly Dictionary<Type, Dictionary<string, HashSet<string>>> AliasCache = new Dictionary<Type, Dictionary<string, HashSet<string>>>();
 
-            private static Dictionary<string, HashSet<string>> Alias(Type type) {
-                if (null == type) throw new ArgumentNullException(nameof(type));
-                var dict = new Dictionary<string, HashSet<string>>();
-                var names = type.GetEnumNames();
-                foreach (var name in names) {
-                    var member = type.GetMember(name).FirstOrDefault(m => m.DeclaringType == type);
-                    if (member == null) {
-                        continue;
-                    }
-                    var set = new HashSet<string>(new[] { name }, StringComparer.OrdinalIgnoreCase);
-                    var conf = member.GetCustomAttributes(typeof(ConfAttribute), inherit: true).OfType<ConfAttribute>().FirstOrDefault();
-                    if (conf != null) {
-                        foreach (var alias in conf.Names) {
-                            set.Add(alias);
-                        }
-                    }
-                    dict[name] = set;
-                }
-                return dict;
-            }
-
             protected sealed override object Convert(bool @interna, string value, ConfValueConverterState state) {
                 if (null == value) throw new ArgumentNullException(nameof(value));
                 if (null == state) throw new ArgumentNullException(nameof(state));
                 var type = state.Property.PropertyType;
-                var alias = AliasCache.ContainsKey(type) ? AliasCache[type] : (AliasCache[type] = Alias(type));
+                var aliasCache = AliasCache;
+                if (aliasCache.TryGetValue(type, out var alias) == false) {
+                    aliasCache[type] = alias = type
+                        .GetEnumAlias()
+                        .ToDictionary(pair => pair.Key.Name, pair => pair.Value);
+                }
                 var separators = Separators;
                 if (separators == null || separators.Length == 0) {
                     separators = DefaultSeparators;

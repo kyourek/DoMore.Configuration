@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 
 namespace Domore.Conf.Converters {
+    using Extensions;
+
     public sealed class ConfListItemsAttribute : ConfConverterAttribute {
         internal sealed override ConfValueConverter ConverterInstance =>
             _ConverterInstance ?? (
@@ -48,11 +50,10 @@ namespace Domore.Conf.Converters {
                 var list = (IList)obj;
                 var itemConverter = ItemConverter;
                 if (itemConverter == null) {
-                    var listType = list.GetType();
-                    var itemType = listType.GetGenericArguments().FirstOrDefault();
-                    itemConverter = itemType == null
-                        ? null
-                        : TypeDescriptor.GetConverter(itemType);
+                    var itemType = ConfType.GetItemType(list.GetType());
+                    if (itemType != null) {
+                        itemConverter = TypeDescriptor.GetConverter(itemType);
+                    }
                 }
                 var typeConverter = itemConverter as TypeConverter;
                 var valueConverter = itemConverter as ConfValueConverter;
