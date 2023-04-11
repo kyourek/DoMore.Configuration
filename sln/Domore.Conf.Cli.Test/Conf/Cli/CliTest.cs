@@ -159,9 +159,9 @@ namespace Domore.Conf.Cli {
         [TestCase("'George \"Washington\" Carver'", "George \"Washington\" Carver")]
         [TestCase("\"George Washington Carver\"", "George Washington Carver")]
         [TestCase("\"George 'Washington' Carver\"", "George 'Washington' Carver")]
-        public void Configure_RespectsQuotesInArgument(string text, string expected) {
+        public void Configure_RespectsQuotesInArgument(string text, string fullName) {
             var member = Cli.Configure(new Member(), text);
-            Assert.That(member.FullName, Is.EqualTo(expected));
+            Assert.That(member.FullName, Is.EqualTo(fullName));
         }
 
         [TestCase("address='down the road'", "down the road")]
@@ -171,6 +171,13 @@ namespace Domore.Conf.Cli {
         public void Configure_RespectsQuotesInSwitch(string text, string address) {
             var member = Cli.Configure(new Member(), text);
             Assert.That(member.Address, Is.EqualTo(address));
+        }
+
+        [Test]
+        public void Configure_ArgumentCanFollowQuotedSwitch() {
+            var member = Cli.Configure(new Member(), "address='down the road' \"John Doe\"");
+            Assert.That(member.FullName, Is.EqualTo("John Doe"));
+            Assert.That(member.Address, Is.EqualTo("down the road"));
         }
     }
 }
