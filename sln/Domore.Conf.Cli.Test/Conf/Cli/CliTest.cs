@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf.Cli {
+    using Converters;
+
     [TestFixture]
     public class CliTest {
         private class Move {
@@ -270,6 +272,19 @@ namespace Domore.Conf.Cli {
         public void Display_DisplaysBooleanSwitchAndOptionalArgument() {
             var actual = Cli.Display(new ClassWithBoolAndStr());
             var expected = "classwithboolandstr [<somechars>] option=<true/false>";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        private class ClassWithList {
+            [CliRequired]
+            [ConfListItems(Separator = ";")]
+            public List<string> TheList { get; set; }
+        }
+
+        [Test]
+        public void Display_DisplaysListSeparator() {
+            var actual = Cli.Display(new ClassWithList());
+            var expected = "classwithlist thelist=<;>";
             Assert.That(actual, Is.EqualTo(expected));
         }
     }

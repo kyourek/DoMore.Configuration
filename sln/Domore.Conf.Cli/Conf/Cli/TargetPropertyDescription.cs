@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 
 namespace Domore.Conf.Cli {
+    using Converters;
+
     internal sealed class TargetPropertyDescription {
         public bool Required =>
             _Required ?? (
@@ -59,6 +61,14 @@ namespace Domore.Conf.Cli {
                 .FirstOrDefault() ?? new CliDisplayAttribute());
         private CliDisplayAttribute _DisplayAttribute;
 
+        public ConfListItemsAttribute ConfListItemsAttribute =>
+            _ConfListItemsAttribute ?? (
+            _ConfListItemsAttribute = PropertyInfo
+                .GetCustomAttributes(typeof(ConfListItemsAttribute), inherit: true)
+                .OfType<ConfListItemsAttribute>()
+                .FirstOrDefault() ?? new ConfListItemsAttribute());
+        private ConfListItemsAttribute _ConfListItemsAttribute;
+
         public string DisplayName =>
             _DisplayName ?? (
             _DisplayName = ConfNames.FirstOrDefault() ?? PropertyName.ToLowerInvariant());
@@ -66,7 +76,7 @@ namespace Domore.Conf.Cli {
 
         public string DisplayKind =>
             _DisplayKind ?? (
-            _DisplayKind = TargetPropertyKind.For(PropertyType) ?? PropertyType.Name.ToLowerInvariant());
+            _DisplayKind = TargetPropertyKind.For(this) ?? PropertyType.Name.ToLowerInvariant());
         private string _DisplayKind;
 
         public string Display =>

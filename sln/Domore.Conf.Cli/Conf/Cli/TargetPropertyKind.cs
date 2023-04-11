@@ -10,7 +10,7 @@ namespace Domore.Conf.Cli {
         private static readonly HashSet<Type> Numbers = new HashSet<Type>(new[] { typeof(decimal), typeof(double), typeof(float) });
         private static readonly HashSet<Type> Integers = new HashSet<Type>(new[] { typeof(byte), typeof(sbyte), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(short), typeof(ushort) });
 
-        public static string For(Type type) {
+        private static string For(Type type) {
             if (type == null) {
                 return null;
             }
@@ -39,6 +39,20 @@ namespace Domore.Conf.Cli {
                     : ",<" + itemKind + ">";
             }
             return null;
+        }
+
+        public static string For(TargetPropertyDescription target) {
+            if (null == target) throw new ArgumentNullException(nameof(target));
+            var type = target.PropertyType;
+            if (typeof(IList).IsAssignableFrom(type)) {
+                var itemType = ConfType.GetItemType(type);
+                var itemKind = For(itemType);
+                var itemSeparator = target.ConfListItemsAttribute.Separator;
+                return itemKind == null || itemType == typeof(string) || itemType == typeof(object)
+                    ? (itemSeparator)
+                    : (itemSeparator + '<' + itemKind + '>');
+            }
+            return For(type);
         }
     }
 }

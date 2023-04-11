@@ -18,7 +18,7 @@ namespace Domore.Conf.Converters {
         private ConfValueConverter _ConverterInstance;
 
         public string Separator {
-            get => _Separator;
+            get => _Separator ?? (_Separator = ",");
             set {
                 if (_Separator != value) {
                     _Separator = value;
@@ -57,7 +57,7 @@ namespace Domore.Conf.Converters {
                 }
                 var typeConverter = itemConverter as TypeConverter;
                 var valueConverter = itemConverter as ConfValueConverter;
-                var itemSeparator = Separator ?? ",";
+                var itemSeparator = Separator;
                 var itemStrings = value.Split(new[] { itemSeparator }, StringSplitOptions.RemoveEmptyEntries).Select(s => s?.Trim() ?? "").Where(s => s != "");
                 foreach (var itemString in itemStrings) {
                     if (typeConverter != null) {
