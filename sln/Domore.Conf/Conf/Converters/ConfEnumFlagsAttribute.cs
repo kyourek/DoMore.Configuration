@@ -26,7 +26,7 @@ namespace Domore.Conf.Converters {
             private static readonly string DefaultSeparators = "+|&,/\\";
             private static readonly Dictionary<Type, Dictionary<string, HashSet<string>>> AliasCache = new Dictionary<Type, Dictionary<string, HashSet<string>>>();
 
-            protected sealed override object Convert(bool @interna, string value, ConfValueConverterState state) {
+            protected sealed override object Convert(bool @internal, string value, ConfValueConverterState state) {
                 if (null == value) throw new ArgumentNullException(nameof(value));
                 if (null == state) throw new ArgumentNullException(nameof(state));
                 var type = state.Property.PropertyType;

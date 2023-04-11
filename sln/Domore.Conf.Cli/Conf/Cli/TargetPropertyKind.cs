@@ -11,6 +11,15 @@ namespace Domore.Conf.Cli {
         private static readonly HashSet<Type> Integers = new HashSet<Type>(new[] { typeof(byte), typeof(sbyte), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(short), typeof(ushort) });
 
         public static string For(Type type) {
+            if (type == null) {
+                return null;
+            }
+            if (typeof(bool) == type) {
+                return "true/false";
+            }
+            if (typeof(string) == type) {
+                return "str";
+            }
             if (Numbers.Contains(type)) {
                 return "num";
             }
@@ -18,12 +27,14 @@ namespace Domore.Conf.Cli {
                 return "int";
             }
             if (type.IsEnum) {
-                return string.Join("|", CliType.GetEnumDisplay(type).Select(pair => pair.Value.ToLowerInvariant()));
+                var flags = type.IsEnumFlags();
+                var separator = flags ? "|" : "/";
+                return string.Join(separator, CliType.GetEnumDisplay(type).Select(pair => pair.Value.ToLowerInvariant()));
             }
             if (typeof(IList).IsAssignableFrom(type)) {
                 var itemType = ConfType.GetItemType(type);
                 var itemKind = For(itemType);
-                return itemKind == null
+                return itemKind == null || itemType == typeof(string) || itemType == typeof(object)
                     ? ","
                     : ",<" + itemKind + ">";
             }

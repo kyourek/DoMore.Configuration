@@ -43,6 +43,13 @@ namespace Domore.Conf.Extensions {
                 });
         }
 
+        public static bool IsEnumFlags(this Type type) {
+            if (null == type) throw new ArgumentNullException(nameof(type));
+            return
+                type.IsEnum &&
+                type.GetCustomAttributes(typeof(FlagsAttribute), inherit: true).Any();
+        }
+
         public static Type GetItemType(this Type type) {
             if (null == type) throw new ArgumentNullException(nameof(type));
             for (; ; ) {

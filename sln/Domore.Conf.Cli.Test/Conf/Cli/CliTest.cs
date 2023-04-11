@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -60,7 +61,7 @@ namespace Domore.Conf.Cli {
         [Test]
         public void Display_DescribesCommand() {
             var actual = Cli.Display(new Move());
-            var expected = "move direction<up|down|left|right> [speed<num>]";
+            var expected = "move direction<up/down/left/right> [speed<num>]";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -82,7 +83,7 @@ namespace Domore.Conf.Cli {
         [Test]
         public void Display_ShowsPropertyNames() {
             var actual = Cli.Display(new Bike());
-            var expected = "bike move=<up|down|left|right> [speed=<num>]";
+            var expected = "bike move=<up/down/left/right> [speed=<num>]";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -112,7 +113,7 @@ namespace Domore.Conf.Cli {
         [Test]
         public void Display_ShowsList() {
             var actual = Cli.Display(new Blend());
-            var expected = "blend fruits<,> [nuts=<,<peanuts|almonds|cashews>>]";
+            var expected = "blend fruits<,> [nuts=<,<peanuts/almonds/cashews>>]";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -145,7 +146,7 @@ namespace Domore.Conf.Cli {
         [Test]
         public void Display_DisplaysOverrideOnEnumNames() {
             var actual = Cli.Display(new Copy());
-            var expected = "copy where<(n)ext|(p)revious>";
+            var expected = "copy where<(n)ext/(p)revious>";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -196,7 +197,7 @@ namespace Domore.Conf.Cli {
         [Test]
         public void Display_DoesNotIncludeUnincludedEnumMembers() {
             var actual = Cli.Display(new ValueWordClass());
-            var expected = "valuewordclass [word=<none|one>]";
+            var expected = "valuewordclass [word=<none/one>]";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -216,7 +217,7 @@ namespace Domore.Conf.Cli {
         [Test]
         public void Display_DoesNotIncludeEnumMembersByDefault() {
             var actual = Cli.Display(new ValueWordClass2());
-            var expected = "valuewordclass2 [word=<zero|single>]";
+            var expected = "valuewordclass2 [word=<zero/single>]";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -236,7 +237,39 @@ namespace Domore.Conf.Cli {
         [Test]
         public void Display_DoesNotIncludeEnumMembersByOverride() {
             var actual = Cli.Display(new ValueWordClass3());
-            var expected = "valuewordclass3 [word=<z|s>]";
+            var expected = "valuewordclass3 [word=<z/s>]";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Flags]
+        private enum FlagsEnum {
+            Flag1 = 1,
+            Flag2 = 2,
+            Flag4 = 4
+        }
+
+        private class FlagsEnumClass {
+            public FlagsEnum Flags { get; set; }
+        }
+
+        [Test]
+        public void Display_SeparatesEnumFlagsWithPipe() {
+            var actual = Cli.Display(new FlagsEnumClass());
+            var expected = "flagsenumclass [flags=<flag1|flag2|flag4>]";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        private class ClassWithBoolAndStr {
+            [CliArgument]
+            public string SomeChars { get; set; }
+            [CliRequired]
+            public bool Option { get; set; }
+        }
+
+        [Test]
+        public void Display_DisplaysBooleanSwitchAndOptionalArgument() {
+            var actual = Cli.Display(new ClassWithBoolAndStr());
+            var expected = "classwithboolandstr [<somechars>] option=<true/false>";
             Assert.That(actual, Is.EqualTo(expected));
         }
     }
