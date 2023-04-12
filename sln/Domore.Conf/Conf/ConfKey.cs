@@ -1,6 +1,8 @@
 ﻿using System;
 
 namespace Domore.Conf {
+    using Text.Parsing;
+
     internal static class ConfKey {
         public static bool StartsWith(this IConfKey confKey, string key) {
             if (null == confKey) throw new ArgumentNullException(nameof(confKey));
@@ -15,6 +17,10 @@ namespace Domore.Conf {
             if (name == null) return false;
 
             return name.Equals(key, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static IConfKey Build(string s) {
+            return TokenParser.Key(s);
         }
     }
 }

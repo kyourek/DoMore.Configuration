@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace Domore.Conf.Text.Parsing.Tokens {
@@ -32,6 +33,10 @@ namespace Domore.Conf.Text.Parsing.Tokens {
                     String.Append(c);
                     return this;
             }
+        }
+
+        public sealed override string ToString() {
+            return String.ToString() + string.Join("", Indices.Select(i => $"[{i}]"));
         }
 
         IConfCollection<IConfKeyIndex> IConfKeyPart.Indices =>

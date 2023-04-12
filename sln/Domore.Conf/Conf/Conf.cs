@@ -18,6 +18,9 @@ namespace Domore.Conf {
             set => Container.ContentProvider = value;
         }
 
+        public static IConfLookup Lookup =>
+            Container.Lookup;
+
         public static T Configure<T>(T target, string key = null) {
             return Container.Configure(target, key);
         }
@@ -34,8 +37,14 @@ namespace Domore.Conf {
             return new ConfContainer { Source = source };
         }
 
-        object IConf.Source => Source;
-        IEnumerable<object> IConf.Sources => Sources;
+        object IConf.Source =>
+            Source;
+
+        IEnumerable<object> IConf.Sources =>
+            Sources;
+
+        IConfLookup IConf.Lookup =>
+            Lookup;
 
         T IConf.Configure<T>(T target, string key) {
             return Configure(target, key);

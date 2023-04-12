@@ -20,6 +20,7 @@ namespace Domore.Conf {
                 if (_ContentProvider != value) {
                     _ContentProvider = value;
                     _Content = null;
+                    _Lookup = null;
                 }
             }
         }
@@ -31,6 +32,7 @@ namespace Domore.Conf {
                 if (_Source != value) {
                     _Source = value;
                     _Content = null;
+                    _Lookup = null;
                 }
             }
         }
@@ -38,6 +40,11 @@ namespace Domore.Conf {
 
         public IEnumerable<object> Sources =>
             Content.Sources;
+
+        public IConfLookup Lookup =>
+            _Lookup ?? (
+            _Lookup = new ConfLookup(Content.Pairs));
+        private IConfLookup _Lookup;
 
         public T Configure<T>(T target, string key = null) {
             if (null == target) throw new ArgumentNullException(nameof(target));

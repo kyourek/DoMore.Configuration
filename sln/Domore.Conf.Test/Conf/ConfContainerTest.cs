@@ -46,6 +46,41 @@ namespace Domore.Conf {
             Assert.AreEqual("red", man.BestFriend.Color);
         }
 
+        [TestCase("penny.Color")]
+        [TestCase("man.bestfriend")]
+        [TestCase("Man.Best friend")]
+        public void Lookup_ContainsKeys(string key) {
+            Content = @"
+                Penny.color = red
+                Man.Best friend = Penny
+            ";
+            Assert.That(Subject.Lookup.Contains(key));
+        }
+
+        [TestCase("  penny . Color  \t", "red")]
+        [TestCase("man.best FRIEND ", "Penny")]
+        [TestCase("\tMa n.BestFriend", "Penny")]
+        public void Lookup_ReturnsKeyValue(string key, string value) {
+            Content = @"
+                Penny.color = red
+                Man.Best friend = Penny
+            ";
+            Assert.That(Subject.Lookup.Value(key), Is.EqualTo(value));
+        }
+
+        [Test]
+        public void Lookup_ReturnsAllForKey() {
+            Content = @"
+                Penny.color = red
+                Man.Best friend = Penny
+                penny .  color  = brown
+
+
+                PENNy    .COLOR   = Red and White   
+            ";
+            CollectionAssert.AreEqual(Subject.Lookup.All("penny.color"), new[] { "red", "brown", "Red and White" });
+        }
+
         private class ManWithCat : Man {
             [Conf(ignore: false)]
             public Cat Cat { get; set; }
@@ -550,6 +585,68 @@ namespace Domore.Conf {
             CollectionAssert.AreEqual(expected, actual);
         }
 
+        [TestCase("item.inners[0].value", "1.1")]
+        [TestCase("item.inners[1].value", "1.2")]
+        [TestCase("item.inners[2].value", "1.3")]
+        [TestCase("item  . inners\t[ 0 ]\t.value\t", "1.1")]
+        [TestCase("item.Inners [\t 1\t ]  .value", "1.2")]
+        [TestCase("ITEM.inners[   \t  2  \t  ] . VAlue  ", "1.3")]
+        public void Lookup_GetsValueOfKeyWithIndex(string key, string value) {
+            Content = @"
+                item.inners[0].value = 1.1
+                item.inners[1].value = 1.2
+                item.inners[2].value = 1.3
+            ";
+            var actual = Subject.Lookup.Value(key);
+            var expected = value;
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Lookup_GetsAllValuesWithIndex() {
+            Content = @"
+                item.  inners[1].VALUE = 3.4
+                item.inners[0].value = 1.1
+                item.Inners[1].value = 1.2
+                item.inners[2].value = 1.3
+                item.inners[   1  ].value = 5.6
+                item.inners[ 1  ].value = 7.8
+            ";
+            var actual = Subject.Lookup.All("ITEM . INNERS [ 1 ] . VALUE");
+            var expected = new[] { "3.4", "1.2", "5.6", "7.8" };
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void Lookup_RespectsSpacesInsideIndex() {
+            Content = @"
+                item.  inners[ a b ].VALUE = 3.4
+                item.inners[0].value = 1.1
+                item.Inners[ ab ].value = 1.2
+                item.inners[2].value = 1.3
+                item.inners[a b].value = 5.6
+                item.inners[    a b    ].value = 7.8
+            ";
+            var actual = Subject.Lookup.All("ITEM . INNERS [ a b ] . VALUE");
+            var expected = new[] { "3.4", "5.6", "7.8" };
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void Lookup_RespectsCaseInsideIndex() {
+            Content = @"
+                item.  inners[ a B ].VALUE = 3.4
+                item.inners[0].value = 1.1
+                item.Inners[ ab ].value = 1.2
+                item.inners[2].value = 1.3
+                item.inners[a b].value = 5.6
+                item.inners[    a b    ].value = 7.8
+            ";
+            var actual = Subject.Lookup.All("ITEM . INNERS [ a b ] . VALUE");
+            var expected = new[] { "5.6", "7.8" };
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
         private class ObjWithOptionalNames {
             [Conf("sp", "stringproperty")]
             public string StrProp { get; set; }
@@ -667,6 +764,26 @@ namespace Domore.Conf {
             var inst = Subject.Configure(new ClassWithStringPropertiesForConverterTest(), key: "");
             var actual = inst.Bar;
             CollectionAssert.AreEqual(new[] { "\r", "\n" }, actual);
+        }
+
+        [Test]
+        public void Lookup_GetsMultiLineValue() {
+            Content = @"
+                here is some = {
+
+
+                    text 1
+                    text 2
+                    
+                }
+            ";
+            var actual = Subject.Lookup.Value("HEREISSOME");
+            var expected = @"
+
+                    text 1
+                    text 2
+                    ";
+            Assert.That(actual, Is.EqualTo(expected));
         }
     }
 }

@@ -10,7 +10,6 @@ namespace Domore.Conf.Text.Parsing.Tokens {
         }
 
         public StringBuilder String { get; } = new StringBuilder();
-
         public KeyIndexBuilder KeyIndex { get; }
 
         public KeyIndexPartBuilder(KeyIndexBuilder keyIndex) : base((keyIndex ?? throw new ArgumentNullException(nameof(keyIndex))).Sep) {

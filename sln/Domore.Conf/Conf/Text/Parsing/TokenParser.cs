@@ -5,8 +5,31 @@ namespace Domore.Conf.Text.Parsing {
     using Tokens;
 
     internal sealed class TokenParser {
-        public IEnumerable<IConfPair> Parse(char sep, string text) {
+        public static IConfKey Key(string s) {
+            if (null == s) throw new ArgumentNullException(nameof(s));
+            var sep = s.Contains("\n") ? '\n' : ';';
+            var key = new KeyBuilder(sep);
+            var token = key as Token;
+            for (var i = 0; i < s.Length; i++) {
+                if (token == null) {
+                    return key;
+                }
+                if (token is Invalid) {
+                    return key;
+                }
+                if (token is TokenBuilder builder) {
+                    token = builder.Build(s, ref i);
+                }
+                if (token is Complete complete) {
+                    return key;
+                }
+            }
+            return key;
+        }
+
+        public IEnumerable<IConfPair> Pairs(string text) {
             if (null == text) throw new ArgumentNullException(nameof(text));
+            var sep = text.Contains("\n") ? '\n' : ';';
             var token = new KeyBuilder(sep) as Token;
             for (var i = 0; i < text.Length; i++) {
                 if (token == null) {

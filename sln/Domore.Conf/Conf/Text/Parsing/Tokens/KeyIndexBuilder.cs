@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Domore.Conf.Text.Parsing.Tokens {
     internal sealed class KeyIndexBuilder : TokenBuilder, IConfKeyIndex {
@@ -26,7 +25,7 @@ namespace Domore.Conf.Text.Parsing.Tokens {
             }
         }
 
-        IEnumerable<IConfKeyIndexPart> IConfKeyIndex.Parts =>
+        IConfCollection<IConfKeyIndexPart> IConfKeyIndex.Parts =>
             Parts;
     }
 }
