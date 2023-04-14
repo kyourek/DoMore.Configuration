@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domore.Conf {
-    using Equality;
-
     internal sealed class ConfLookup : IConfLookup {
         private static readonly IEnumerable<string> Empty = new string[] { };
 
@@ -13,7 +11,7 @@ namespace Domore.Conf {
             _Lookup = Pairs.ToLookup(
                 keySelector: p => p.Key,
                 elementSelector: p => p.Value,
-                comparer: new ConfKeyComparer()));
+                comparer: ConfKey.Comparer));
         private ILookup<IConfKey, IConfValue> _Lookup;
 
         private bool Contains(string key, out IConfKey conf) {

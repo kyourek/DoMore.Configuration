@@ -7,7 +7,7 @@ namespace Domore.Conf.Cli {
     using Converters;
 
     [TestFixture]
-    public class CliTest {
+    public partial class CliTest {
         private class Move {
             [CliRequired]
             [CliArgument]

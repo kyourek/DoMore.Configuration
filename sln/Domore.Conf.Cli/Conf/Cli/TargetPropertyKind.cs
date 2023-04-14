@@ -17,6 +17,9 @@ namespace Domore.Conf.Cli {
             if (typeof(bool) == type) {
                 return "true/false";
             }
+            if (typeof(char) == type) {
+                return "chr";
+            }
             if (typeof(string) == type) {
                 return "str";
             }

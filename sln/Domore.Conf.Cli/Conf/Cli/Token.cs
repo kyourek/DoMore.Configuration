@@ -46,10 +46,12 @@ namespace Domore.Conf.Cli {
                     else {
                         if (char.IsWhiteSpace(c)) {
                             if (q == null) {
-                                yield return new Token(k.ToString(), v?.ToString());
-                                k = new StringBuilder();
-                                v = null;
-                                b = k;
+                                if (k.Length > 0 || v?.Length > 0) {
+                                    yield return new Token(k.ToString(), v?.ToString());
+                                    k = new StringBuilder();
+                                    v = null;
+                                    b = k;
+                                }
                             }
                             else {
                                 b.Append(c);
@@ -61,7 +63,35 @@ namespace Domore.Conf.Cli {
                     }
                 }
             }
-            yield return new Token(k.ToString(), v?.ToString());
+            if (k.Length > 0 || v?.Length > 0) {
+                yield return new Token(k.ToString(), v?.ToString());
+            }
+        }
+
+        public static bool Equals(string a, string b) {
+            var ap = Token.Parse(a);
+            var bp = Token.Parse(b);
+            using (var ae = ap.GetEnumerator())
+            using (var be = bp.GetEnumerator()) {
+                for (; ; ) {
+                    var am = ae.MoveNext();
+                    var bm = be.MoveNext();
+                    if (bm == false && am == false) {
+                        return true;
+                    }
+                    if (bm == false || am == false) {
+                        return false;
+                    }
+                    var at = ae.Current;
+                    var bt = be.Current;
+                    if (string.Equals(bt.Value, at.Value) == false) {
+                        return false;
+                    }
+                    if (ConfKey.Equals(bt.Key, at.Key) == false) {
+                        return false;
+                    }
+                }
+            }
         }
     }
 }
