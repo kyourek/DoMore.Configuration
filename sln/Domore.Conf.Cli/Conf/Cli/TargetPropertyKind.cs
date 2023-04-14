@@ -41,6 +41,10 @@ namespace Domore.Conf.Cli {
                     ? ","
                     : ",<" + itemKind + ">";
             }
+            var underlyingType = Nullable.GetUnderlyingType(type);
+            if (underlyingType != null) {
+                return For(underlyingType);
+            }
             return null;
         }
 

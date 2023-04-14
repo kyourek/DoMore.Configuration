@@ -261,6 +261,17 @@ namespace Domore.Conf.Cli {
             Assert.That(actual, Is.EqualTo(expected));
         }
 
+        private class NullableFlagsEnumClass {
+            public FlagsEnum? Flags { get; set; }
+        }
+
+        [Test]
+        public void Display_UsesUnderlyingTypeOfNullable() {
+            var actual = Cli.Display(new NullableFlagsEnumClass());
+            var expected = "nullableflagsenumclass [flags=<flag1|flag2|flag4>]";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
         private class ClassWithBoolAndStr {
             [CliArgument]
             public string SomeChars { get; set; }
