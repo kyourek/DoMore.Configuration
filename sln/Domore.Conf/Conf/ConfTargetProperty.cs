@@ -76,9 +76,13 @@ namespace Domore.Conf {
         public ConfItemProperty Item {
             get {
                 if (_Item == null) {
-                    _Item = Key.Indices.Count == 0
-                        ? null
-                        : ConfItemProperty.Create(PropertyValue, new ItemKey(Key.Indices[0]), Cache);
+                    if (Key.Indices.Count > 0) {
+                        var itemTarget = PropertyValue;
+                        if (itemTarget == null) {
+                            itemTarget = PropertyValue = Activator.CreateInstance(PropertyInfo.PropertyType);
+                        }
+                        _Item = ConfItemProperty.Create(itemTarget, new ItemKey(Key.Indices[0]), Cache);
+                    }
                 }
                 return _Item;
             }

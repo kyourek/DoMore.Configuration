@@ -45,8 +45,13 @@ namespace Domore.Conf.Cli {
             _ArgumentName ?? (
             _ArgumentName = ArgumentOrder < 0
                 ? ""
-                : (DisplayName));
+                : DisplayName);
         private string _ArgumentName;
+
+        public bool ArgumentList =>
+            _ArgumentList ?? (
+            _ArgumentList = PropertyInfo.GetCustomAttributes(typeof(CliArgumentsAttribute), inherit: true).Length > 0).Value;
+        private bool? _ArgumentList;
 
         public string PropertyName =>
             _PropertyName ?? (

@@ -65,29 +65,53 @@ namespace Domore.Conf.Cli {
                 .Where(p => p.ArgumentOrder >= 0)
                 .OrderBy(p => p.ArgumentOrder)
                 .ToList();
+            var argi = 0;
+            var args = properties
+                .Where(p => p.ArgumentList)
+                .ToList();
+            void keyed(string k) {
+                if (req.Count > 0) {
+                    req.RemoveAll(p => p.AllNames.Contains(k, StringComparer.OrdinalIgnoreCase));
+                }
+            }
             foreach (var token in Token.Parse(cli)) {
                 var key = token.Key?.Trim() ?? "";
                 var val = token.Value?.Trim() ?? "";
                 if (val == "" && key == "") {
                     continue;
                 }
-                if (val == "") {
+                if (val != "") {
+                    yield return key + " = " + val;
+                    keyed(key);
+                }
+                else {
                     if (key.Equals(CommandName, StringComparison.OrdinalIgnoreCase)) {
                         continue;
                     }
+                    var argTaken = false;
                     if (arg.Count > 0) {
-                        val = key;
-                        key = arg[0].ArgumentName;
+                        var argKey = arg[0].ArgumentName;
+                        var argVal = key;
+                        yield return argKey + " = " + argVal;
+                        keyed(argKey);
                         arg.RemoveAt(0);
+                        argTaken = true;
                     }
-                    else {
+                    if (args.Count > 0) {
+                        foreach (var list in args) {
+                            var argNam = list.DisplayName;
+                            var argKey = argNam + "[" + argi + "]";
+                            var argVal = key;
+                            yield return argKey + " = " + argVal;
+                            keyed(argNam);
+                        }
+                        argi++;
+                        argTaken = true;
+                    }
+                    if (argTaken == false) {
                         throw new CliArgumentNotFoundException(key);
                     }
                 }
-                if (req.Count > 0) {
-                    req.RemoveAll(p => p.AllNames.Contains(key, StringComparer.OrdinalIgnoreCase));
-                }
-                yield return key + " = " + val;
             }
             if (req.Count > 0) {
                 throw new CliRequiredNotFoundException(req);

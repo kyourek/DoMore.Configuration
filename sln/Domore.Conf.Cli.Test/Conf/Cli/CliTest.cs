@@ -310,5 +310,26 @@ namespace Domore.Conf.Cli {
             var expected = "classwithreadonlyproperties [readwritelist=<,>]";
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        private class ClassWithArgumentsList {
+            [CliArguments]
+            public List<string> Arguments { get; set; }
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Configure_AddsToArguments(bool @switch) {
+            var target = @switch
+                ? new ClassWithArgumentsList { Arguments = null }
+                : new ClassWithArgumentsList { Arguments = new List<string>() };
+            Cli.Configure(target, "Hello World! count 1 2 3 4");
+            CollectionAssert.AreEqual(new[] { "Hello", "World!", "count", "1", "2", "3", "4" }, target.Arguments);
+        }
+
+        [Test]
+        public void Configure_TrimsArguments() {
+            var obj = Cli.Configure(new ClassWithArgumentsList(), " \t 'Hello  World!'  \t  count \" 1 '2\t3 ' \t4  \"  ");
+            CollectionAssert.AreEqual(new[] { "Hello  World!", "count", "1 '2\t3 ' \t4" }, obj.Arguments);
+        }
     }
 }
