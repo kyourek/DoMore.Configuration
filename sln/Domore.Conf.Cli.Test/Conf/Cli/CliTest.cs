@@ -127,11 +127,11 @@ namespace Domore.Conf.Cli {
 
         private enum NextOrPrevious {
             [Conf("n")]
-            [CliDisplay("(n)ext")]
+            [CliDisplayOverride("(n)ext")]
             Next,
 
             [Conf("p", "prev")]
-            [CliDisplay("(p)revious")]
+            [CliDisplayOverride("(p)revious")]
             Previous
         }
 
@@ -225,10 +225,12 @@ namespace Domore.Conf.Cli {
 
         private enum ValueWord3 {
             None = 0,
-            [CliDisplay("z")]
+            [CliDisplay(true)]
+            [CliDisplayOverride("z")]
             Zero = 0,
             One = 1,
-            [CliDisplay("s")]
+            [CliDisplay(true)]
+            [CliDisplayOverride("s")]
             Single = 1
         }
 
@@ -330,6 +332,11 @@ namespace Domore.Conf.Cli {
         public void Configure_TrimsArguments() {
             var obj = Cli.Configure(new ClassWithArgumentsList(), " \t 'Hello  World!'  \t  count \" 1 '2\t3 ' \t4  \"  ");
             CollectionAssert.AreEqual(new[] { "Hello  World!", "count", "1 '2\t3 ' \t4" }, obj.Arguments);
+        }
+
+        [Test]
+        public void Display_ShowsArgumentList() {
+            Assert.That(Cli.Display(new ClassWithArgumentsList()), Is.EqualTo("classwithargumentslist [<arguments>]"));
         }
     }
 }

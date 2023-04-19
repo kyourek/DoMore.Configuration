@@ -1,15 +1,28 @@
-﻿using System;
+﻿using Domore.Conf.Converters;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 
 namespace Domore.Conf.Cli {
-    using Converters;
-
     internal sealed class TargetPropertyDescription {
+        private T Attribute<T>() {
+            return PropertyInfo
+                .GetCustomAttributes(typeof(T), inherit: true)
+                .OfType<T>()
+                .FirstOrDefault();
+        }
+
         private string DisplayFactory() {
             var required = Required;
             var propertyType = PropertyType;
+            var argumentList = ArgumentList;
+            if (argumentList) {
+                var arg = '<' + DisplayName + '>';
+                return required
+                    ? arg
+                    : ('[' + arg + ']');
+            }
             var argumentName = ArgumentName;
             if (argumentName != "" && (propertyType == typeof(string) || propertyType == typeof(object))) {
                 var arg = '<' + argumentName + '>';
@@ -30,15 +43,12 @@ namespace Domore.Conf.Cli {
 
         public bool Required =>
             _Required ?? (
-            _Required = PropertyInfo.GetCustomAttributes(typeof(CliRequiredAttribute), inherit: true).Length > 0).Value;
+            _Required = Attribute<CliRequiredAttribute>() != null).Value;
         private bool? _Required;
 
         public int ArgumentOrder =>
             _ArgumentOrder ?? (
-            _ArgumentOrder = PropertyInfo
-                .GetCustomAttributes(typeof(CliArgumentAttribute), inherit: true)
-                .OfType<CliArgumentAttribute>()
-                .FirstOrDefault()?.Order ?? -1).Value;
+            _ArgumentOrder = Attribute<CliArgumentAttribute>()?.Order ?? -1).Value;
         private int? _ArgumentOrder;
 
         public string ArgumentName =>
@@ -50,7 +60,7 @@ namespace Domore.Conf.Cli {
 
         public bool ArgumentList =>
             _ArgumentList ?? (
-            _ArgumentList = PropertyInfo.GetCustomAttributes(typeof(CliArgumentsAttribute), inherit: true).Length > 0).Value;
+            _ArgumentList = Attribute<CliArgumentsAttribute>() != null).Value;
         private bool? _ArgumentList;
 
         public string PropertyName =>
@@ -81,18 +91,17 @@ namespace Domore.Conf.Cli {
 
         public CliDisplayAttribute DisplayAttribute =>
             _DisplayAttribute ?? (
-            _DisplayAttribute = PropertyInfo
-                .GetCustomAttributes(typeof(CliDisplayAttribute), inherit: true)
-                .OfType<CliDisplayAttribute>()
-                .FirstOrDefault() ?? new CliDisplayAttribute());
+            _DisplayAttribute = Attribute<CliDisplayAttribute>() ?? new CliDisplayAttribute());
         private CliDisplayAttribute _DisplayAttribute;
+
+        public CliDisplayOverrideAttribute DisplayOverrideAttribute =>
+            _DisplayOverrideAttribute ?? (
+            _DisplayOverrideAttribute = Attribute<CliDisplayOverrideAttribute>() ?? new CliDisplayOverrideAttribute());
+        private CliDisplayOverrideAttribute _DisplayOverrideAttribute;
 
         public ConfListItemsAttribute ConfListItemsAttribute =>
             _ConfListItemsAttribute ?? (
-            _ConfListItemsAttribute = PropertyInfo
-                .GetCustomAttributes(typeof(ConfListItemsAttribute), inherit: true)
-                .OfType<ConfListItemsAttribute>()
-                .FirstOrDefault() ?? new ConfListItemsAttribute());
+            _ConfListItemsAttribute = Attribute<ConfListItemsAttribute>() ?? new ConfListItemsAttribute());
         private ConfListItemsAttribute _ConfListItemsAttribute;
 
         public string DisplayName =>
@@ -107,7 +116,7 @@ namespace Domore.Conf.Cli {
 
         public string Display =>
             _Display ?? (
-            _Display = DisplayAttribute.Override ?? DisplayFactory());
+            _Display = DisplayOverrideAttribute.Display ?? DisplayFactory());
         private string _Display;
 
         public PropertyInfo PropertyInfo { get; }
