@@ -7,6 +7,27 @@ namespace Domore.Conf.Cli {
     using Converters;
 
     internal sealed class TargetPropertyDescription {
+        private string DisplayFactory() {
+            var required = Required;
+            var propertyType = PropertyType;
+            var argumentName = ArgumentName;
+            if (argumentName != "" && (propertyType == typeof(string) || propertyType == typeof(object))) {
+                var arg = '<' + argumentName + '>';
+                return required
+                    ? arg
+                    : ('[' + arg + ']');
+            }
+            var key = argumentName;
+            if (key == "") {
+                key = DisplayName + '=';
+            }
+            var val = '<' + DisplayKind + '>';
+            var pair = key + val;
+            return required
+                ? pair
+                : ('[' + pair + ']');
+        }
+
         public bool Required =>
             _Required ?? (
             _Required = PropertyInfo.GetCustomAttributes(typeof(CliRequiredAttribute), inherit: true).Length > 0).Value;
@@ -81,7 +102,7 @@ namespace Domore.Conf.Cli {
 
         public string Display =>
             _Display ?? (
-            _Display = DisplayAttribute.Override ?? TargetPropertyDisplay.For(this));
+            _Display = DisplayAttribute.Override ?? DisplayFactory());
         private string _Display;
 
         public PropertyInfo PropertyInfo { get; }

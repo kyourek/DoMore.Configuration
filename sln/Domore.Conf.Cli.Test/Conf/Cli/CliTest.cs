@@ -298,5 +298,17 @@ namespace Domore.Conf.Cli {
             var expected = "classwithlist thelist=<;>";
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        private class ClassWithReadonlyProperties {
+            public List<string> ReadonlyList { get; } = null;
+            public List<string> ReadWriteList { get; set; }
+        }
+
+        [Test]
+        public void Display_DoesNotShowReadonlyProperties() {
+            var actual = Cli.Display(new ClassWithReadonlyProperties());
+            var expected = "classwithreadonlyproperties [readwritelist=<,>]";
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }

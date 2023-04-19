@@ -11,12 +11,22 @@ namespace Domore.Conf.Cli {
             TargetType = targetType ?? throw new ArgumentNullException(nameof(targetType));
         }
 
+        private string DisplayFactory() {
+            var propertyDisplayDefault = DisplayDefault;
+            var propertyDisplays = Properties
+                .Where(p => p.DisplayAttribute.Include ?? propertyDisplayDefault)
+                .Select(p => p.Display);
+            var properties = string.Join(" ", propertyDisplays);
+            return string.Join(" ", CommandName, properties);
+        }
+
         public Type TargetType { get; }
 
         public IEnumerable<TargetPropertyDescription> Properties =>
             _Properties ?? (
             _Properties = TargetType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(propertyInfo => propertyInfo.CanRead && propertyInfo.CanWrite)
                 .Select(propertyInfo => new TargetPropertyDescription(propertyInfo))
                 .ToList());
         private IEnumerable<TargetPropertyDescription> _Properties;
@@ -28,7 +38,7 @@ namespace Domore.Conf.Cli {
 
         public string Display =>
             _Display ?? (
-            _Display = TargetDisplay.For(this));
+            _Display = DisplayFactory());
         private string _Display;
 
         public bool DisplayDefault =>
