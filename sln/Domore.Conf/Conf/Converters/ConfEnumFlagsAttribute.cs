@@ -29,7 +29,8 @@ namespace Domore.Conf.Converters {
             protected sealed override object Convert(bool @internal, string value, ConfValueConverterState state) {
                 if (null == value) throw new ArgumentNullException(nameof(value));
                 if (null == state) throw new ArgumentNullException(nameof(state));
-                var type = state.Property.PropertyType;
+                var prop = state.Property.PropertyType;
+                var type = Nullable.GetUnderlyingType(prop) ?? prop;
                 var aliasCache = AliasCache;
                 if (aliasCache.TryGetValue(type, out var alias) == false) {
                     aliasCache[type] = alias = type

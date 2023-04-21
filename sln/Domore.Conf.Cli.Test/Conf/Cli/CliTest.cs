@@ -152,6 +152,17 @@ namespace Domore.Conf.Cli {
             Assert.That(actual, Is.EqualTo(expected));
         }
 
+        private class ClassWithNullableEnum {
+            [CliArgument]
+            public NextOrPrevious? Prop { get; set; }
+        }
+
+        [Test]
+        public void Configure_SetsNullableEnumWithAlias() {
+            var obj = Cli.Configure(new ClassWithNullableEnum(), "p");
+            Assert.That(obj.Prop, Is.EqualTo(NextOrPrevious.Previous));
+        }
+
         private class Member {
             [CliArgument]
             public string FullName { get; set; }

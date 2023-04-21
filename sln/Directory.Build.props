@@ -7,7 +7,7 @@
     <VersionSuffix></VersionSuffix>
     <AssemblyVersion>7.3.3.67</AssemblyVersion>
     <InformationalVersion>7.3.3.67</InformationalVersion>
-    <FileVersion>7.3.3.67</FileVersion>
+    <FileVersion>7.3.4.67</FileVersion>
     <PackageVersion>7.3.3.67</PackageVersion>
     <PackageProjectUrl>https://github.com/kyourek/Domore.Conf</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>

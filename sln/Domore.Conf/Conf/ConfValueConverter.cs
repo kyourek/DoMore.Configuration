@@ -19,7 +19,7 @@ namespace Domore.Conf {
                 if (type == typeof(Type)) {
                     return Type.GetType(value, throwOnError: true, ignoreCase: true);
                 }
-                if (type.IsEnum) {
+                if (type.IsEnum || (Nullable.GetUnderlyingType(type)?.IsEnum == true)) {
                     return DefaultEnumFlagsConverter.Convert(value, state);
                 }
                 if (typeof(IList).IsAssignableFrom(type)) {
