@@ -73,12 +73,6 @@ namespace Domore.Conf.Cli {
             return targetDescription;
         }
 
-        public void Validate(object target) {
-            foreach (var validation in Validations) {
-                validation.Run(target);
-            }
-        }
-
         public IEnumerable<string> Conf(string cli) {
             var properties = Properties;
             var req = properties

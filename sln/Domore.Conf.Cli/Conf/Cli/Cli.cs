@@ -5,8 +5,11 @@ namespace Domore.Conf.Cli {
     public static class Cli {
         private static T Validate<T>(T target) {
             var description = TargetDescription.Describe(typeof(T));
+            var validations = description.Validations;
             try {
-                description.Validate(target);
+                foreach (var validation in validations) {
+                    validation.Run(target);
+                }
             }
             catch (CliValidationException) {
                 throw;
