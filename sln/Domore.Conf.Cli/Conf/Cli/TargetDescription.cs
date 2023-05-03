@@ -49,11 +49,34 @@ namespace Domore.Conf.Cli {
                 true).Value;
         private bool? _DisplayDefault;
 
+        public IEnumerable<TargetMethodValidation> Validations =>
+            _Validations ?? (
+            _Validations = TargetType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Select(method => new {
+                    Method = method,
+                    Attribute = method
+                        .GetCustomAttributes(typeof(CliValidationAttribute), inherit: true)
+                        .OfType<CliValidationAttribute>()
+                        .FirstOrDefault()
+                })
+                .Where(item => item.Attribute != null)
+                .OrderBy(item => item.Attribute.Order)
+                .Select(item => new TargetMethodValidation(item.Method, item.Attribute))
+                .ToList());
+        private IEnumerable<TargetMethodValidation> _Validations;
+
         public static TargetDescription Describe(Type targetType) {
             if (Cache.TryGetValue(targetType, out var targetDescription) == false) {
                 Cache[targetType] = targetDescription = new TargetDescription(targetType);
             }
             return targetDescription;
+        }
+
+        public void Validate(object target) {
+            foreach (var validation in Validations) {
+                validation.Run(target);
+            }
         }
 
         public IEnumerable<string> Conf(string cli) {

@@ -349,5 +349,36 @@ namespace Domore.Conf.Cli {
         public void Display_ShowsArgumentList() {
             Assert.That(Cli.Display(new ClassWithArgumentsList()), Is.EqualTo("classwithargumentslist [<arguments>]"));
         }
+
+        private class TargetThatThrowsCliValidationException {
+            public bool One { get; set; }
+            public bool Two { get; set; }
+
+            [CliValidation(2, "Message 2")]
+            public bool ValidateTwo() {
+                return Two;
+            }
+
+            [CliValidation(1, "Message 1")]
+            public bool ValidateOne() {
+                return One;
+            }
+        }
+
+        [Test]
+        public void Configure_ThrowsCliValidationException() {
+            var target = new TargetThatThrowsCliValidationException();
+            var error = Assert.Throws(typeof(CliValidationException), () => Cli.Configure(target, ""));
+            var msg = error.Message;
+            Assert.That(msg, Is.EqualTo("Message 1"));
+        }
+
+        [Test]
+        public void Configure_ThrowsSecondCliValidationException() {
+            var target = new TargetThatThrowsCliValidationException();
+            var error = Assert.Throws(typeof(CliValidationException), () => Cli.Configure(target, "one=true"));
+            var msg = error.Message;
+            Assert.That(msg, Is.EqualTo("Message 2"));
+        }
     }
 }
