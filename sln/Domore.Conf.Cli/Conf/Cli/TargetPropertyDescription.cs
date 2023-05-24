@@ -63,6 +63,11 @@ namespace Domore.Conf.Cli {
             _ArgumentList = Attribute<CliArgumentsAttribute>() != null).Value;
         private bool? _ArgumentList;
 
+        public bool ParameterSet =>
+            _ParameterSet ?? (
+            _ParameterSet = Attribute<CliParametersAttribute>() != null).Value;
+        private bool? _ParameterSet;
+
         public string PropertyName =>
             _PropertyName ?? (
             _PropertyName = PropertyInfo.Name);

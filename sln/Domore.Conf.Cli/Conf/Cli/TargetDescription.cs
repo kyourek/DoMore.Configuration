@@ -75,17 +75,14 @@ namespace Domore.Conf.Cli {
 
         public IEnumerable<string> Conf(string cli) {
             var properties = Properties;
-            var req = properties
-                .Where(p => p.Required)
-                .ToList();
+            var req = properties.Where(p => p.Required).ToList();
             var arg = properties
                 .Where(p => p.ArgumentOrder >= 0)
                 .OrderBy(p => p.ArgumentOrder)
                 .ToList();
             var argi = 0;
-            var args = properties
-                .Where(p => p.ArgumentList)
-                .ToList();
+            var args = properties.Where(p => p.ArgumentList).ToList();
+            var sets = properties.Where(p => p.ParameterSet).ToList();
             void keyed(string k) {
                 if (req.Count > 0) {
                     req.RemoveAll(p => p.AllNames.Contains(k, StringComparer.OrdinalIgnoreCase));
@@ -98,6 +95,12 @@ namespace Domore.Conf.Cli {
                     continue;
                 }
                 if (val != "") {
+                    foreach (var set in sets) {
+                        var setNam = set.DisplayName;
+                        var setKey = setNam + "[" + key + "]";
+                        var setVal = setKey + " = " + val;
+                        yield return setVal;
+                    }
                     yield return key + " = " + val;
                     keyed(key);
                 }

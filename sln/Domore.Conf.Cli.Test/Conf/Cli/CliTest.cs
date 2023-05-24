@@ -380,5 +380,42 @@ namespace Domore.Conf.Cli {
             var msg = error.Message;
             Assert.That(msg, Is.EqualTo("Message 2"));
         }
+
+        private class TargetWithParameterSet {
+            [CliParameters]
+            public object Params {
+                get => _Params ?? (_Params = new Dictionary<string, bool>());
+                set => _Params = value;
+            }
+            private object _Params;
+        }
+
+        [Test]
+        public void Configure_AddsToParameterSet() {
+            var target = new TargetWithParameterSet();
+            var set = (Dictionary<string, bool>)target.Params;
+            Cli.Configure(target, "one=true two=false");
+            CollectionAssert.AreEqual(new[] { true, false }, new[] { set["one"], set["two"] });
+        }
+
+        private class TargetWithParameterSet2 {
+            public bool Flag { get; set; }
+
+            [CliParameters]
+            public Dictionary<string, string> Param {
+                get => _Param ?? (_Param = new Dictionary<string, string>());
+                set => _Param = value;
+            }
+            private Dictionary<string, string> _Param;
+        }
+
+        [Test]
+        public void Configure_SetsPropertyWhileAddingToParameterSet() {
+            var target = new TargetWithParameterSet2();
+            Cli.Configure(target, "not-A-property='Hello World!' FLAG=TRUE");
+            Assert.That(target.Param["not-A-property"], Is.EqualTo("Hello World!"));
+            Assert.That(target.Param["FLAG"], Is.EqualTo("TRUE"));
+            Assert.That(target.Flag, Is.True);
+        }
     }
 }
