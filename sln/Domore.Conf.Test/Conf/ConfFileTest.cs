@@ -41,6 +41,7 @@ namespace Domore.Conf {
 
         private sealed class Foo {
             public string Bar { get; set; }
+            public int Baz { get; set; }
         }
 
         [Test]
@@ -110,6 +111,19 @@ namespace Domore.Conf {
             using (Subject) {
             }
             Assert.That(() => Subject.Configure(), Throws.TypeOf<ObjectDisposedException>());
+        }
+
+        [Test]
+        public void WorksOKAfterLotsOfWrites() {
+            var foo = new Foo();
+            Target = foo;
+            Content = "Foo.Baz = 0";
+            Subject.Configure(watch: true);
+            for (var i = 1; i < 100; i++) {
+                Content = $"Foo.Baz = {i}";
+            }
+            SpinWait.SpinUntil(() => foo.Baz == 99);
+            Assert.Pass();
         }
     }
 }
